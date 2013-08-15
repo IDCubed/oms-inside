@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Perguntus Survey</title>
+	
+	
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.mobile-1.3.0.min.css" />
+	<script src="{{ STATIC_URL }}js/jquery-1.8.2.min.js"></script>
+	<script src="{{ STATIC_URL }}js/jquery.mobile-1.3.0.min.js"></script>
+	
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/mobile.css" />
+	
+    <script src="{{ STATIC_URL }}js/vendor/underscore.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone.0.9.10.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone-tastypie.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/modernizr.2.6.2.custom.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/bootstrap.min.js"></script>
+    
+    <script>
+    var Perguntus_Frontend = '{{ config.PERGUNTUS_FRONTEND }}';
+    var Perguntus_Backend = '{{ config.PERGUNTUS_BACKEND }}';
+    var app_client = '{{ config.APP_CLIENT }}';
+    var app_scope = '{{ config.APP_SCOPE }}';
+    var app_oidc_host = '{{ config.APP_OIDC_HOST }}';
+    </script>
+    <script src="{{ STATIC_URL }}js/OMSOIDC.js"></script>
+	
+	<!-- Application specific javascript -->
+  	<script src="{{ STATIC_URL }}js/PerguntusBackbone.js"></script>
+  	<script src="{{ STATIC_URL }}js/PerguntusQuestion.js"></script>
+  	<script src="{{ STATIC_URL }}js/PerguntusAnswer.js"></script>
+	
+</head>
+
+<body>
+	
+	<div data-role="page" class="jqm-demos jqm-demos-home">
+		<div data-role="header" class="jqm-header">
+				<h1 class="jqm-logo" id="title">Perguntus</h1>
+				<div class="subheader">
+					<script>
+					var now = new Date();
+					document.write(new Date(now.getFullYear(), now.getMonth() + 1, 0, now.getHours(), now.getMinutes(), now.getSeconds()));
+					</script>
+				</div>
+					
+		</div>
+		
+		
+		<div data-role="content" >
+		
+		<form>
+			
+				<div id="questions"></div>
+				<a href="#" data-role="button" data-inline="false" data-theme="b" id="submitbtn">Submit</a>
+			
+							
+		
+		</form>
+		
+		<br />
+		<div data-role="collapsible-set" data-content-theme="d" id="set">
+		    <div data-role="collapsible" id="set1" data-collapsed="true">
+		        <h3>Other Collected Information</h3>
+		        <p id="geoaddress"></p>
+		    </div>
+		</div>
+		
+		</div>
+	
+		<div data-role="footer" class="footer">
+
+		<p>
+		<script>
+		document.write(new Date(now.getFullYear(), now.getMonth() + 1, 0, now.getHours(), now.getMinutes(), now.getSeconds()));
+		</script>
+		</p>
+		<p>A Project by ID3</p>
+		
+		</div>
+	
+	
+	</div>
+
+
+</body>
+</html>

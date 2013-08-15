@@ -1,0 +1,346 @@
+
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/i/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Perguntus Dashboard</title>
+  <meta name="description" content="">
+
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta name="viewport" content="width=device-width">
+
+
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}js/libs/fancybox/jquery.fancybox.css" media="screen" />
+    <link rel="stylesheet" type="text/css" media="screen" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+    
+    <script>
+    var Perguntus_Frontend = '{{ config.PERGUNTUS_FRONTEND }}';
+    var Perguntus_Backend = '{{ config.PERGUNTUS_BACKEND }}';
+    var app_client = '{{ config.APP_CLIENT }}';
+    var app_scope = '{{ config.APP_SCOPE }}';
+    var app_oidc_host = '{{ config.APP_OIDC_HOST }}';
+    </script>
+
+	<link href="{{ STATIC_URL }}css/nvd3/nv.d3.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
+<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+<!-- for the map -->
+<link rel="stylesheet" href="{{ STATIC_URL }}css/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="https://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+<![endif]-->
+
+
+  <script src="{{ STATIC_URL }}js/libs/modernizr-2.5.3.min.js"></script>
+<style>
+.num_pop {
+    background: none repeat scroll 0 0 rgba(231, 105, 105, 0.7);
+    border-radius: 50% 85% 43% 79%;
+    font-size: 12px;
+    margin-top: -21px;
+    padding: 2px;
+    text-align: center;
+}
+#map {
+	height:350px;
+}
+</style>
+
+
+</head>
+<body>
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="https://browsehappy.com/">Upgrade to a different browser</a> or <a href="https://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+
+<div class="all-content-container">
+	 <header class="dashboard-header">
+		<div class="inner-container">
+		<p class="fixed-logo">Perguntus</p>
+		<div class="clearfix"></div>
+		<nav class="nav-fixed">
+			<ul>
+				<li><a href="#" class="active">dashboard</a></li>
+				<li><a href="{{ config.PERGUNTUS_FRONTEND }}edit/">edit questions</a></li>
+				<li><a href="{{ config.PERGUNTUS_FRONTEND }}sharing/">sharing</a></li>
+				<li><a href="{{ config.PERGUNTUS_FRONTEND }}settings/">settings</a></li>
+				
+				
+			</ul>
+		</nav>
+		
+		</div>
+		
+	  </header>
+	<div class="body-container">
+
+
+
+	 
+	  <div role="main">
+		
+		<h2>Dashboard</h2>
+		<div class="dashboard-container">
+			
+			
+		    
+		<ul class="dropdownlist datepicker" style="display: none;">
+				<li><a href="#" class="chooseArea">April 2012</a>
+					<ul id="chooseMenu">
+						<li><a href="#">January 2012</a></li>
+						<li><a href="#">February 2012</a></li>
+						<li><a href="#">March 2012</a></li>
+
+					</ul>
+					</li>
+				</ul>		
+				<br />
+				<div id="chart1" class="nvd3">
+				    <svg> </svg>
+				  </div>
+		</div>
+    	<div class="booleans">
+	
+	
+	
+		</div>
+<!-- 
+		<ul class="true-false">
+			<li class="label">Meditated</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="false">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="none">&nbsp;</li>
+			<li class="none">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="false">&nbsp;</li>
+			<li class="false">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="false">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+			<li class="false">&nbsp;</li>
+			<li class="false">&nbsp;</li>
+			<li class="true">&nbsp;</li>
+				<li class="none">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+			
+
+								
+									<div class="clearfix"></div>
+		</ul>
+
+
+
+			<ul class="true-false">
+				<li class="label">30 minutes reading</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="none">&nbsp;</li>
+				<li class="none">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+				<li class="false">&nbsp;</li>
+				<li class="true">&nbsp;</li>
+					<li class="none">&nbsp;</li>
+					<li class="true">&nbsp;</li>
+					<li class="true">&nbsp;</li>
+					<li class="true">&nbsp;</li>
+					<li class="false">&nbsp;</li>
+
+
+
+										<div class="clearfix"></div>
+			</ul>
+!-->
+
+		<ul class="days-in-month">
+			<li class="month"><div class="num_pop" id="total_answers"></div><script>
+			var currentTime = new Date();
+			var monthNames = [ "January", "February", "March", "April", "May", "June",
+			                   "July", "August", "September", "October", "November", "December" ];
+
+			               document.write(monthNames[currentTime.getMonth()]);
+			</script></li>
+			<li><a href="#" id='s_1' class="1">1</a></li>
+									<li><a href="#" id='s_2' class="2">2</a></li>
+									<li><a href="#" id='s_3' class="3">3</a></li>
+									<li><a href="#" id='s_4' class="4">4</a></li>
+									<li><a href="#" id='s_5' class="5">5</a></li>
+									<li><a href="#" id='s_6' class="6">6</a></li>
+									<li><a href="#" id='s_7' class="7">7</a></li>
+									<li><a href="#" id='s_8' class="8">8</a></li>
+									<li><a href="#" id='s_9' class="9">9</a></li>
+									<li><a href="#" id='s_10' class="10">10</a></li>
+									<li><a href="#" id='s_11' class="11">11</a></li>
+									<li><a href="#" id='s_12' class="12">12</a></li>
+									<li><a href="#" id='s_13' class="13">13</a></li>
+									<li><a href="#" id='s_14' class="14">14</a></li>
+									<li><a href="#" id='s_15' class="15">15</a></li>
+									<li><a href="#" id='s_16' class="16">16</a></li>
+									<li><a href="#" id='s_17' class="17">17</a></li>
+									<li><a href="#" id='s_18' class="18">18</a></li>
+									<li><a href="#" id='s_19' class="19">19</a></li>
+									<li><a href="#" id='s_20' class="20">20</a></li>
+									<li><a href="#" id='s_21' class="21">21</a></li>
+									<li><a href="#" id='s_22' class="22">22</a></li>
+									<li><a href="#" id='s_23' class="23">23</a></li>
+									<li><a href="#" id='s_24' class="24">24</a></li>
+									<li><a href="#" id='s_25' class="25">25</a></li>
+									<li><a href="#" id='s_26' class="26">26</a></li>
+									<li><a href="#" id='s_27' class="27">27</a></li>
+									<li><a href="#" id='s_28' class="28">28</a></li>
+									<li><a href="#" id='s_29' class="29">29</a></li>
+									<li><a href="#" id='s_30' class="30">30</a></li>
+									<li><a href="#" id='s_31' class="31">31</a></li>
+									<div class="clearfix"></div>
+		</ul>
+				<div class="daily-info">
+					
+					
+				</div>
+ <!-- 
+				<br />
+		<div class="line-states">
+			<h2>Stats</h2>
+			<p>High, low and average for each question.
+			
+			<div id="bulletchart-1" class="bulletchart nvd3">
+			    <svg> </svg>
+			  </div>
+			<div id="bulletchart-2" class="bulletchart nvd3">
+			    <svg> </svg>
+			  </div>
+			<div id="bulletchart-3" class="bulletchart nvd3">
+			    <svg> </svg>
+			  </div>
+			
+				<div class="clearfix"></div>
+			
+
+	    </div>
+	    -->
+	
+	<!--  --><div class="map-section">
+		<!-- <h2>Data by location</h2>
+		<form>
+			<p class="checkboxstyle label1"><input type="checkbox" name="stress" value="Stress" checked> Stress</p>
+			<p class="checkboxstyle label2"><input type="checkbox" name="productivity" value="productivity"> Productivity</p>
+				<p class="checkboxstyle label3"><input type="checkbox" name="productivity" value="productivity"> Time with friends</p>
+			</form> -->
+		<div id="map"></div>
+	 
+		</div>
+	
+	
+	
+
+	  </div>
+	</div>
+
+
+<footer>
+		<nav class="footernav">
+			<ul>
+							<li><a href="{{ config.PERGUNTUS_FRONTEND }}" >dashboard</a></li>
+							<li><a href="{{ config.PERGUNTUS_FRONTEND }}edit/">edit questions</a></li>
+								<li><a href="{{ config.PERGUNTUS_FRONTEND }}sharing/">sharing</a></li>
+								<li><a href="{{ config.PERGUNTUS_FRONTEND }}settings/">settings</a></li>
+
+				
+				<div class="clearfix"></div>
+				
+			</ul>
+			
+		</nav>
+</footer>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+	
+	<script src="{{ STATIC_URL }}js/vendor/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/underscore.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone.0.9.10.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone-tastypie.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/modernizr.2.6.2.custom.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/bootstrap.min.js"></script>
+    
+
+  	<script src="{{ STATIC_URL }}js/libs/jquery-ui-1.8.23.js"></script>
+
+
+
+	<script src="{{ STATIC_URL }}js/nvd3/d3.v2.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/nv.d3.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/utils.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/tooltip.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/models/legend.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/models/axis.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/models/scatter.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/models/line.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3/models/lineChart.js"></script>
+	<script src="{{ STATIC_URL }}js/nvd3-chartdata.js"></script>
+
+	
+	<script type="text/javascript" src="{{ STATIC_URL }}js/libs/fancybox/jquery.fancybox.js"></script>
+	
+	<script src="{{ STATIC_URL }}js/OMSOIDC.js"></script>
+  
+  	<script src="{{ STATIC_URL }}js/script.js"></script>
+
+    <!-- Application specific javascript -->
+  	<script src="{{ STATIC_URL }}js/PerguntusBackbone.js"></script>
+  	<script src="{{ STATIC_URL }}js/PerguntusQuestion.js"></script>
+  	<script src="{{ STATIC_URL }}js/PerguntusAnswer.js"></script>
+  	<script src="{{ STATIC_URL }}js/PerguntusDashboard.js"></script>
+
+
+<script src="{{ STATIC_URL }}js/leaflet.js"></script>
+
+<script src="{{ STATIC_URL }}js/geoJSON.js"></script>
+<script src="{{ STATIC_URL }}js/map.js"></script>
+
+
+  <script src="{{ STATIC_URL }}js/plugins.js"></script>
+
+</body>
+</html>
