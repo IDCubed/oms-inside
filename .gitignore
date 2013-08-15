@@ -2,3 +2,11 @@
 *.pot
 *.pyc
 local_settings.py
+*.pyx
+*.pyo
+*.swp
+*.swo
+*.db
+.idea
+docs/build
+node_modules
