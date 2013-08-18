@@ -2,7 +2,8 @@ from django.conf.urls.defaults import *
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from tastypie.api import Api
-from modules.perguntus_backend.api import QuestionResource, AnswerResource 
+from modules.perguntus_backend.api import QuestionResource, AnswerResource, UserDetailsResource
+from modules.state_generator.api import PerguntusStateResource
 from django.views.generic import TemplateView
 
 
@@ -12,7 +13,8 @@ admin.autodiscover()
 v1_api = Api(api_name='v1')
 v1_api.register(QuestionResource())
 v1_api.register(AnswerResource())
-
+v1_api.register(UserDetailsResource())
+v1_api.register(PerguntusStateResource())
 
 urlpatterns = patterns('',
     # Examples:
@@ -29,5 +31,7 @@ urlpatterns = patterns('',
     url(r'^console/$', TemplateView.as_view(template_name='console.html')),
     url(r'^questionform.*', TemplateView.as_view(template_name='questionform.html')),
     url(r'^mobile.*', TemplateView.as_view(template_name='mobile.html')),
-    url(r'^admin/', include(admin.site.urls)),
+    
+    url(r'^send/$', SendQuestionView.as_view(), name='send'),
+    url(r'^check/$', CheckQuestionsView.as_view(), name='check_questions'),
 )

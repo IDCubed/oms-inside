@@ -119,6 +119,17 @@ TEMPLATE_DIRS = (
     '/root/oms-happathon/PerguntusDev/modules/perguntus_ui/templates/',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'constance.context_processors.config',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,8 +140,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django_extensions',
+    'constance',
+    'constance.backends.database',
     'modules.perguntus_ui',
     'modules.perguntus_backend',
+    'modules.state_generator',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -162,7 +176,7 @@ LOGGING = {
     }
 }
 
-
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'OIDC_HOST': ('baset.idhypercubed.org', 'The OIC Host'),
     'APP_SCOPE': ('perguntus_ui', 'The Scope that this application uses'),
