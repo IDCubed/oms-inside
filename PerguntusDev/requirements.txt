@@ -1,0 +1,8 @@
+Django
+django-tastypie
+pytz==2013b
+mimeparse
+raven
+django-constance[database]
+django-extensions
+werkzeug
