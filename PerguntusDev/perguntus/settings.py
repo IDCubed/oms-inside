@@ -76,6 +76,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/root/oms-happathon/PerguntusDev/modules/perguntus_ui/static/',
 )
 
 # List of finder classes that know how to find static files in
@@ -115,6 +116,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/root/oms-happathon/PerguntusDev/modules/perguntus_ui/templates/',
 )
 
 INSTALLED_APPS = (
@@ -158,4 +160,15 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+
+CONSTANCE_CONFIG = {
+    'OIDC_HOST': ('baset.idhypercubed.org', 'The OIC Host'),
+    'APP_SCOPE': ('perguntus_ui', 'The Scope that this application uses'),
+    'APP_CLIENT': ('perguntus_ui', 'The Application Client to be used'),
+    'PERGUNTUS_BACKEND': ('/PerguntusBackend/', 'Perguntus Backend Path for use in templates'),
+    'API_CONSOLE_BACKEND': ('/PerguntusBackend/api/v1/', 'Base URL to the backend API the API Console ought to pull schema from (relative/absolute)'),
+    'EMAIL_RECIPIENT': ('perguntus@idcubed.org', 'email recipient'),
+    'PERGUNTUS_FRONTEND': ('PerguntusUI', 'Perguntus Frontend Path for use in templates (without slashes)'),
 }
