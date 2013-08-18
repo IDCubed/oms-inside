@@ -6,3 +6,4 @@ raven
 django-constance[database]
 django-extensions
 werkzeug
+haversine
