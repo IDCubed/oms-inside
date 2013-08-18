@@ -5,6 +5,7 @@ from tastypie.api import Api
 from modules.perguntus_backend.api import QuestionResource, AnswerResource, UserDetailsResource
 from modules.state_generator.api import PerguntusStateResource
 from django.views.generic import TemplateView
+from modules.perguntus_backend.views import CheckQuestionsView, SendQuestionView
 
 
 # Uncomment the next two lines to enable the admin:
