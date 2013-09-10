@@ -89,7 +89,7 @@
       this.$el
       .find('li')
         .removeClass('active')
-        .children('[href='+linkElem.href.replace(/^.*\//,'')+']')
+        .children('[href="'+linkElem.href.replace(/^.*\//,'')+'"]')
           .parent()
             .addClass('active');
     }
