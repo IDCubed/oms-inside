@@ -53,7 +53,7 @@
         nav.load(this);
       });
       // load a default page
-      nav.load('overview.md');
+      nav.load(nav.$el.find('a[href="overview.md"]')[0]);
     }
   };
 
