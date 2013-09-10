@@ -55,14 +55,14 @@
       markDownContainer.render('<p class="error">Error loading markdown. Please check your console.</p>');
       console.error('Load Error: (jqXHR, textStatus, errorThrown)', jqXHR, textStatus, errorThrown);
     },
-    load:function(urlStr){
+    load:function(linkElem){
       // load the file at an url string and render it
       $.ajax({
-        url:urlStr,
+        url:linkElem.href,
         dataType:'text'
       })
       .done(function(data, textStatus, jqXHR){
-        nav.highlightCurrentNavPosition(this);
+        nav.highlightCurrentNavPosition(linkElem);
         markDownContainer.render(data, textStatus, jqXHR);
       })
       .fail(this.loadFail);
@@ -72,13 +72,17 @@
       nav.$el.on('click','a',function(event){
         event.preventDefault();
         // load the resource based on the link's href
-        self.load(this.href);
+        nav.load(this);
       });
     },
     highlightCurrentNavPosition:function(linkElem){
       // highlight the currently active nav element
-      this.$el.find('li').removeClass('active');
-      $(linkElem).closest('li').addClass('active');
+      this.$el
+      .find('li')
+        .removeClass('active')
+        .children('[href='+linkElem.href.replace(/^.*\//,'')+']')
+          .parent()
+            .addClass('active');
     }
   };
 
