@@ -1,12 +1,47 @@
-# Overview
-# Open Mustard Seed (OMS)
+# Overview: Open Mustard Seed (OMS)
 
-## Assumed Knowledge
+## Starting from what you know
+### I know Python
+
+#### Assumed knowledge:
+* Git
+* Linux command line
+* Virtual machines (at least conceptually)
+* Python
+
+#### Docs tutorial
+* Python tutorial
+
+### I know Python and Django
+
+#### Assumed knowledge:
 * Python
 * MVC Architecture (Model, View, Controller)
 * Virtualenv
 * Git
 * Linux command line
+* Virtual machines (at least conceptually)
+
+#### Docs
+* OMS purpose
+* OMS architecture
+* Django tutorial (requires a VM running OMS)
+* Converting a django app to an oms app
+* Exploring Perguntus
+
+### I know Python, Django, and OMS
+
+#### Assumed knowledge:
+* Python
+* MVC Architecture (Model, View, Controller)
+* Virtualenv
+* Git
+* Linux command line
+* Virtual machines (at least conceptually)
+
+#### Docs
+* Extending OMS: Deployment
+
 
 ## Where to Start
 * I need a simple environment to look around in
@@ -16,12 +51,3 @@
   * Getting a VM image
   * Co-opting an existing vm
   * Installing in a blank VM from scratch
-
-## What to know
-### I know Python
-* Python tutorial
-###  I know Python and Django
-* Django tutorial
-* Converting a django app to an oms app
-* Exploring Perguntus
-###  I know Python, Django, and OMS
