@@ -45,6 +45,15 @@
     failedConversion:function(jqXHR, textStatus, err){
       console.log('Markdown render error: (msg,jqXHR)', jqXHR, textStatus, err);
       return '<p class="error">Error rendering markdown. Please check your console.</p>';
+    },
+    init:function(){
+      // set content link navigation
+      this.$el.on('click','a',function(event){
+        event.preventDefault();
+        nav.load(this);
+      });
+      // load a default page
+      nav.load('overview.md');
     }
   };
 
@@ -88,7 +97,7 @@
 
   // Initialize
   nav.init();
-  // load a default page
-  nav.load('overview.md');
+  markDownContainer.init();
+
 
 })(jQuery);
