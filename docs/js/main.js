@@ -42,12 +42,12 @@
       console.log('Markdown render error: (msg,jqXHR)', jqXHR, textStatus, err);
       return '<p class="error">Error rendering markdown. Please check your console.</p>';
     }
-  }
+  };
 
   var nav = {
     $el : $('#docs-nav'),
-    $navItems : $el.find('li'),
-    loadFail:function(jqXHR, textStatus, errorThrown){
+    $navItems : null,
+    loadFail: function(jqXHR, textStatus, errorThrown){
       if(!console) return;
       if(!console.error) console.error = console.log;
       markDownContainer.render('<p class="error">Error loading markdown. Please check your console.</p>')
@@ -62,7 +62,8 @@
       .fail(self.loadFail)
     },
     init:function(){
-      var self=this;
+      var self = this;
+      this.$navItems = this.$el.find('li');
       this.$el.on('click','a',function(event){
         event.preventDefault();
 
@@ -76,7 +77,7 @@
       this.$navItems.removeClass('active');
       $(linkElem).closest('li').addClass('active');
     }
-  }
+  };
 
   nav.init();
   nav.load('markdowntest.md');
