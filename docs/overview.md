@@ -14,6 +14,10 @@
 * OOP paradigms
 * Sqlite
 
+#### Tutorials
+* Getting a VM with Django Installed and ready to go
+* Django
+
 #### Knowledge at the end of this section
 * virtualenv
 * MVC Architecture
@@ -27,10 +31,6 @@
 * Knowing how to create models, routes, views, etc.
 * More as I finish going through the process
 * Know the directory structure of a django app
-
-#### Tutorials
-* Getting a VM with Django Installed and ready to go
-* Django
 
 ### I know Python and Django
 
