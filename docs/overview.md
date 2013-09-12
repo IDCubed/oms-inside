@@ -79,6 +79,8 @@ Note: I'm sure that these are woefully inadequate. Need help fleshing out all OM
 * How Querying OMS TCCs differs from querying other data stores
 * How to query OMS
 * Whatever other topics illustrate OMS' power and flexibility
+* Understand how static and template files work
+* 
 
 
 
