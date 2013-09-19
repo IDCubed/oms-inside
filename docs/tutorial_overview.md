@@ -32,7 +32,7 @@
 ### Tutorials
 * Developing a django app in OMS
 
-### Knowledge at the end of this section
+### Knowledge at the end of this section (Things the tutorials need to cover)
 * virtualenv
 * MVC Architecture
 * Django
@@ -61,7 +61,7 @@
 * Converting a Ruby/Rails app to OMS (TBD)
 * Creating a Ruby/Rails app from scratch in OMS from scratch (TBD)
 
-## Knowledge at the end of this section
+## Knowledge at the end of this section (Things the tutorials need to cover)
 * Basic OMS architecture - What's the minimum I need to know to get an OMS app running?
 * Know how to create an OMS app from scratch
 * Know how OMS app differs from regular django
@@ -76,7 +76,7 @@
 ### Assumed knowledge:
 * Everything in the above sections
 
-### Tutorials
+### Tutorials (Things the tutorials need to cover)
 * Exploring & Modifying Perguntus
 * Creating an OMS app without Django
 * Alternate deployment options
