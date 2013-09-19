@@ -1,12 +1,27 @@
 # Overview: Open Mustard Seed (OMS)
-* Why OMS for developers? (a.k.a., WIIFM?)
-* Why OMS for sysadmins? (a.k.a., WIIFM?)
-* Why OMS for IT directors? (a.k.a., WIIFM?)
 
-## Get started right where you're at (Branch A, developers)
-### I know Python
+## Developers: Getting Started
 
-#### Assumed knowledge:
+### Assumed knowledge:
+* Linux command line
+* Virtual machines (at least conceptually)
+* Python
+* Others? (we can link to the appropriate sites here)
+* SSH
+
+ 
+### Tutorials
+* Setting up your dev environment
+* Setting up your dev environment (Hackathon Participants)
+
+### Knowledge at the end of this section
+* virtualenv
+
+
+
+## Developers: OMS Basics
+
+### Assumed knowledge:
 * Git
 * Linux command line
 * Virtual machines (at least conceptually)
@@ -14,11 +29,10 @@
 * OOP paradigms
 * Sqlite
 
-#### Tutorials
-* Getting a VM with Django Installed and ready to go
-* Django
+### Tutorials
+* Developing a django app in OMS
 
-#### Knowledge at the end of this section
+### Knowledge at the end of this section
 * virtualenv
 * MVC Architecture
 * Django
@@ -32,16 +46,22 @@
 * More as I finish going through the process
 * Know the directory structure of a django app
 
-### I know Python and Django
 
-#### Assumed knowledge:
+
+## Developers: Intermediate OMS
+
+### Assumed knowledge:
 * All the assumed + end knowledge in the above section
 
-#### Tutorials
-* Converting a Django app to an OMS app
-* Creating a simple OMS app from scratch
+### Tutorials
+* Converting a standard Django app to OMS
+* Creating a Django app in OMS from scratch
+* Converting a node.js app to OMS (TBD)
+* Creating a node.js app from scratch in OMS from scratch (TBD)
+* Converting a Ruby/Rails app to OMS (TBD)
+* Creating a Ruby/Rails app from scratch in OMS from scratch (TBD)
 
-#### Knowledge at the end of this section
+## Knowledge at the end of this section
 * Basic OMS architecture - What's the minimum I need to know to get an OMS app running?
 * Know how to create an OMS app from scratch
 * Know how OMS app differs from regular django
@@ -51,12 +71,12 @@
 * How to create simple OMS queries
 * What else are we assuming if you say you know OMS apps?
 
-### I know Python, Django, and OMS
+## Developers: Advanced OMS
 
-#### Assumed knowledge:
+### Assumed knowledge:
 * Everything in the above sections
 
-#### Tutorials
+### Tutorials
 * Exploring & Modifying Perguntus
 * Creating an OMS app without Django
 * Alternate deployment options
@@ -64,8 +84,10 @@
 * Alternate persistence methods
 * Advanced queries
 * Really advanced Queries
+* Personas
+* Scopes
 
-#### Knowledge at the end of this section
+### Knowledge at the end of this section
 
 Note: I'm sure that these are woefully inadequate. Need help fleshing out all OMS' possibilities.
 
@@ -84,11 +106,9 @@ Note: I'm sure that these are woefully inadequate. Need help fleshing out all OM
 
 
 
-## Get started right where you're at (Branch B, Sysadmins)
+## Sysadmins: OMS Basics
 
-### I know Sysadmin stuff
-
-#### Assumed knowledge
+### Assumed knowledge
 * Python
 * Virtualenv
 * Git
@@ -97,10 +117,10 @@ Note: I'm sure that these are woefully inadequate. Need help fleshing out all OM
 * VMware
 * What else?
 
-#### Tutorials
+### Tutorials
 * ?
 
-#### Knowledge at the end of this section
+### Knowledge at the end of this section
 * Logging
 * Data
 * Security
