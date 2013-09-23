@@ -1,5 +1,4 @@
-List of specs for The H(app)athon App
-
+List of specs for The H(app)athon App. Discussion for them [here](https://github.com/IDCubed/oms-happathon/issues/3).
 
 * City can add city-specific questions.
 * City can change city-specific questions.
