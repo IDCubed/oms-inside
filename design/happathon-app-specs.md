@@ -11,7 +11,7 @@ List of specs for The H(app)athon App. Discussion for them [here](https://github
 * User can customize how many momentary surveys they receive daily. Default is 2.
 * User receives momentary surveys at random times throughout the day.
 * User receives intake survey once.
-* User receives daily diary survey each morning.
+* User receives daily diary survey each evening.
 * User should be interruped (e.g., an alert), when the surveys pop up, to get data reflecting different situations.
 * User sees engaging/interesting updated visualizations after every successful survey completion
 * User can easily get started using the app (needs clearer definition)
