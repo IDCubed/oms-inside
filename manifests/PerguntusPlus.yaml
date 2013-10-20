@@ -1,0 +1,292 @@
+deploy:
+  apps:
+    - perguntus_backend
+    - pds
+    - proximity
+    - connector
+
+
+module_repos:
+  oms-core: https://github.com/IDCubed/oms-core
+  oms-experimental: https://github.com/IDCubed/oms-experimental
+
+
+perguntus_backend:
+  instance: PerguntusBackend
+  django: True
+  enable_ssl: True
+  sentry: False
+  template: sandbox
+
+  fixtures:
+    - oms-core/admin_user
+
+  installed_apps:
+    - django.contrib.auth
+    - django.contrib.contenttypes
+    - django.contrib.sessions
+    - django.contrib.sites
+    - django.contrib.messages
+    - django.contrib.staticfiles
+    - django.contrib.admin
+    - constance
+    - constance.backends.database
+    - modules.perguntus_backend
+
+  modules:
+    - oms-experimental/perguntus_backend
+
+  pip_requirements:
+    - Django==1.5.4
+    - mimeparse
+    - django-tastypie
+    - pytz
+    - django-constance[database]
+    - requests
+
+  settings_snippet: |
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        'django.contrib.auth.context_processors.auth',
+        'django.core.context_processors.debug',
+        'django.core.context_processors.i18n',
+        'django.core.context_processors.media',
+        'django.core.context_processors.static',
+        'django.core.context_processors.tz',
+        'django.contrib.messages.context_processors.messages',
+        'constance.context_processors.config',
+    )
+    CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+    CONSTANCE_CONFIG = {
+        'EMAIL_RECIPIENT': ('perguntus@idcubed.org',
+            'email recipient'),
+        'PERGUNTUS_FRONTEND': ('PerguntusUI',
+            'Perguntus Frontend Path for use in templates (without slashes)'),
+        'PERGUNTUS_PDS_SERVER': ('https://registry.idhypercubed.org',
+            'URL of PDS server'),
+    }
+
+  urls: 
+    - url(r'^check/$', CheckQuestionsView.as_view(), name='check_questions')
+    - url(r'^send/$', SendQuestionView.as_view(), name='send')
+    - url(r'^admin/', include(admin.site.urls))
+
+  urls_snippet: |
+    # all of this could/should be in a pergguntus_backend.urls
+    from modules.perguntus_backend.views import CheckQuestionsView, SendQuestionView
+
+
+pds:
+  instance: PDS
+  django: True
+  enable_ssl: True
+  sentry: False
+  template: sandbox
+
+  pip_requirements:
+    - Django==1.5.4
+    - mimeparse
+    - django-tastypie
+    - requests
+    - python-dateutil
+    - pytz
+    - django-extensions
+    - haversine
+
+  modules:
+    - oms-core/pds_base
+    - oms-core/arbiter
+    - oms-experimental/perguntus_pds
+    - oms-experimental/state_generator
+    - oms-experimental/rules
+    - oms-experimental/transforms
+
+  installed_apps:
+    - django.contrib.auth
+    - django.contrib.contenttypes
+    - django.contrib.sessions
+    - django.contrib.sites
+    - django.contrib.messages
+    - django.contrib.staticfiles
+    - django.contrib.admin
+    - django_extensions
+    - modules.pds_base
+    - modules.perguntus_pds
+    - modules.state_generator
+
+  middleware_classes:
+    - django.middleware.common.CommonMiddleware
+    - django.contrib.sessions.middleware.SessionMiddleware
+    - django.middleware.csrf.CsrfViewMiddleware
+    - django.contrib.auth.middleware.AuthenticationMiddleware
+    - django.contrib.messages.middleware.MessageMiddleware
+
+  urls_snippet: |
+    from tastypie.api import Api
+
+    from modules.state_generator.api import PerguntusStateResource
+    from modules.perguntus_pds.api import QuestionResource, AnswerResource, UserDetailsResource
+
+    v1_api = Api(api_name='v1')
+    v1_api.register(QuestionResource())
+    v1_api.register(AnswerResource())
+    v1_api.register(UserDetailsResource())
+    v1_api.register(PerguntusStateResource())
+
+  urls:
+    - url(r'^admin/', include(admin.site.urls))
+    - (r'^api/', include(v1_api.urls))
+
+  settings_snippet: |
+    ALLOWED_HOSTS = ('.idhypercubed.org',)
+    QUESTION_ENDPOINT = 'https://registry.idhypercubed.org/PDS/api/v1/question/'
+
+  fixtures:
+    - oms-core/admin_user
+    - oms-core/perguntus_state
+
+
+connector:
+  template: sandbox
+  instance: Connector
+  enable_ssl: True
+  sentry: False
+
+  fixtures:
+    - oms-core/admin_user
+
+  installed_apps:
+    - django.contrib.auth
+    - django.contrib.contenttypes
+    - django.contrib.sessions
+    - django.contrib.sites
+    - django.contrib.messages
+    - django.contrib.staticfiles
+    - django.contrib.admin
+    - cn_sandbox
+    - raven.contrib.django.raven_compat
+    - constance
+    - constance.backends.database
+
+  middleware_classes:
+    - django.middleware.common.CommonMiddleware
+    - django.contrib.sessions.middleware.SessionMiddleware
+    - django.middleware.csrf.CsrfViewMiddleware
+    - django.contrib.auth.middleware.AuthenticationMiddleware
+    - django.contrib.messages.middleware.MessageMiddleware
+
+  modules:
+    - oms-core/cn_sandbox
+    - oms-core/oic_validation
+
+  pip_requirements:
+    - Django==1.5.4
+    - mimeparse
+    - django-tastypie
+    - raven
+    - requests
+    - python-dateutil
+    - pytz
+    - django-constance[database]
+
+  settings_snippet: |
+    # I think this can be replaced with modules.templates/cn_sandbox in installed_apps
+    TEMPLATE_DIRS = (os.path.join(DJANGO_ROOT, 'templates'),
+                     os.path.join(MODULE_PATH, 'cn_sandbox', 'templates'),
+    )
+    # host.domain.tld ought to be defined only once and added with format
+    LOCATION_ENDPOINT = 'https://registry.idhypercubed.org/PDS/api/v1/answer/'
+    CONFIG_ENDPOINT  = 'https://registry.idhypercubed.org/Connector/c/'
+    UPLOAD_ENDPOINT = 'https://registry.idhypercubed.org/Connector/u/'
+    FUNF_CONFIG_ENDPOINT = 'https:\\/\\/registry.idhypercubed.org\\/Connector\\/c\\/'
+    FUNF_UPLOAD_ENDPOINT = 'https:\\/\\/registry.idhypercubed.org\\/Connector\\/u\\/'
+    ALLOWED_HOSTS = ('.idhypercubed.org',)
+    CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+    CONSTANCE_CONFIG = {
+        'TOKENSCOPE_ENDPOINT': ('https://baset.idhypercubed.org/idoic/tokenscope?scope=gpsdemo',\
+            'tokenscope endpoint'),
+        'ACCESS_TOKEN': ('eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjEzNzk3MzMzMDYsImF1ZCI6WyJncHMtZGVtby1jbGllbnQiXSwiaXNzIjoiaHR0cHM6XC9cL2Jhc2V0LmlkaHlwZXJjdWJlZC5vcmdcL2lkb2ljXC8iLCJqdGkiOiIxY2I5MGZjMi0wMzdjLTQwNWUtOTNiZS1jNzM3ODZmZWQ5MGUiLCJpYXQiOjEzNzk3Mjk3MDZ9.PJsF6uQExzLHrr-CHGP6cVqMxshbAItN8S8_nnjGg3Up9YD-mIUu2RRiVRXu0BXkFVVqdxZ3RqPkmhZNYyCBPn9l2tRc-BJjT_kJecSr4cPe4Rd-CYlV_KZLsfXLg2RxTIRjhzqSmEIcBWgmMNiWsqB4-d-qT52Ub0xnv6Gx3MA',
+            'access token'),
+    }
+
+  urls:
+    - url(r'^admin/', include(admin.site.urls))
+    - url(r'^c/$', 'cn_sandbox.views.config', name='config')
+    - url(r'^u/$', 'cn_sandbox.views.upload', name='upload')
+
+proximity:
+  instance: Proximity
+  template: sandbox
+  enable_ssl: True
+  sentry: False
+
+  fixtures: 
+    - oms-core/admin_user
+    - oms-core/perguntusplus_servicestate
+
+  installed_apps: 
+    - django.contrib.auth
+    - django.contrib.contenttypes
+    - django.contrib.sessions
+    - django.contrib.sites
+    - django.contrib.messages
+    - django.contrib.staticfiles
+    - django.contrib.admin
+    - prox_sandbox
+    - raven.contrib.django.raven_compat
+    - constance
+    - constance.backends.database
+
+  middleware_classes: 
+    - django.middleware.common.CommonMiddleware
+    - django.contrib.sessions.middleware.SessionMiddleware
+    - django.middleware.csrf.CsrfViewMiddleware
+    - django.contrib.auth.middleware.AuthenticationMiddleware
+    - django.contrib.messages.middleware.MessageMiddleware
+
+  modules:
+    - oms-experimental/prox_sandbox
+    - oms-core/oic_validation
+
+  pip_requirements:
+    - Django==1.5.4
+    - mimeparse
+    - django-tastypie
+    - raven
+    - requests
+    - python-dateutil
+    - pytz
+    - django-constance[database]
+    - haversine
+
+  settings_snippet: |
+    LOCATION_ENDPOINT = 'https://registry.idhypercubed.org/PDS/api/v1/answer/'
+    PROXIMITY_ENDPOINT = 'https://registry.idhypercubed.org/Proximity/proximity/'
+    CLIENT_LOCATION_ENDPOINT = 'https://registry.idhypercubed.org/Proximity/api/v1/clientlocation/'
+    ALLOWED_HOSTS = ('.idhypercubed.org',)
+    CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+    CONSTANCE_CONFIG = {
+        'TOKENSCOPE_ENDPOINT': ('https://baset.idhypercubed.org/idoic/tokenscope?scope=gpsdemo',\
+            'tokenscope endpoint'),
+        'ACCESS_TOKEN': ('eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjEzODA1MTMxNjgsImF1ZCI6WyJncHMtZGVtby1jbGllbnQiXSwiaXNzIjoiaHR0cHM6XC9cL2Jhc2V0LmlkaHlwZXJjdWJlZC5vcmdcL2lkb2ljXC8iLCJqdGkiOiJlM2JlNWE4ZC1kNjhkLTRjMmUtOGZkNS05OWI5NjZiYTRjNWUiLCJpYXQiOjEzODA1MDk1Njh9.KLql7LhRZTisSnfSL0DMqqrewUUIlT4EoPj-abRnV72e0ntxTtXsqM-ofsTJ42fBA1n23qg0zqXzQ00Y7SgrxBOOdn-ZC-PRqEl9hD7eQq2C0QVepijFYW8198ZBISlPtplgvnCRAJTmuR9f0WDIFRx7nilQ6YYgoyhyidwEZfM',
+            'access token'),
+        'EMAIL': ('perguntus@idcubed.org', 'email'),
+    }
+    DEBUG = True
+
+  urls:
+    - url(r'^admin/', include(admin.site.urls))
+    - url(r'^api/', include(v1_api.urls))
+    - url(r'^proximity/$', 'prox_sandbox.views.proximity', name='proximity')
+
+  urls_snippet: |
+    # note that this code ought to be moved to a prox_sandbox.urls
+    from tastypie.api import Api
+    from prox_sandbox.api import ClientLocationResource
+    v1_api = Api(api_name='v1')
+    v1_api.register(ClientLocationResource())
+
+  services:
+    check_proximity:
+      enable: True
+      runas: www-data
+      cron: "minute=-1,unique=1 python manage.py check_proximity"
