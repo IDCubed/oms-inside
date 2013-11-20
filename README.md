@@ -28,10 +28,10 @@ Increase participating Somerville residents' well-being (as each defines it) by 
 ## Philosophy
 
 **Separate Measure from Improve (Engine and Application)**
-There are [many](http://www.happsee.com/) [happiness-related](https://www.happier.com/) applications.  There is no standard way mobile applications measure happiness.  We're building the Happathon Engine, a happiness measurement tool co-designed with psychologists that any mobile happiness app can include.  That way developers can spend less time measuring well-being, and more time improving it.  To [dogfood](http://en.wikipedia.org/wiki/Eating_your_own_dog_food) it, we're also building the Happathon Application designed to measurably improve well-being.
+There are [many](http://www.happsee.com/) [happiness-related](https://www.happier.com/) [applications](http://www.mappiness.org.uk/).  There is no standard way mobile applications measure happiness.  We're building the Happathon Engine, a happiness measurement tool co-designed with psychologists that any mobile happiness app can include.  That way developers can spend less time measuring well-being, and more time improving it.  To [dogfood](http://en.wikipedia.org/wiki/Eating_your_own_dog_food) it, we're also building the Happathon Application designed to measurably improve well-being.
 
 **Empower Community**
-TODO (community visualizations, survey additions, challenges)
+TODO (community visualizations, question additions, challenges)
 
 **Rapid Iteration**
 A web app to run in iPhone and Android to iterate quickly, combined with a mobile sensor library to gain rich data for insights.  On Android, the application runs in a webview paired with the sensor library funf journal or emotionsense libraries.
@@ -43,9 +43,11 @@ Only questions that have obvious usefulness.
 TODO
 
 ## Project Needs
-- Android developer to display html app in webview, set up notifications, and integrate sensor library
+- Android developer(s) to display html app in webview, set up notifications, and integrate sensor library
 - iPhone developer for the same
-
+- UI Developers (HTML/JavaScript/CSS)
+- Data Visualization (Ways to visualize well-being)
+- UI/UX
 
 ## Architecture
 - angular.js for rapid prototyping
@@ -90,6 +92,7 @@ oms-happathon/
   |  |- bootstrap/
   |  |- placeholders/
   |- .bowerrc
+  |- .jshintrc
   |- bower.json
   |- build.config.js
   |- Gruntfile.js
@@ -110,6 +113,7 @@ learn more.
   system.
 - `.bowerrc` - the Bower configuration file. This tells Bower to install
   components into the `vendor/` directory.
+- `.jshintrc` - a configuration file to standardize code linting
 - `bower.json` - this is our project configuration for Bower and it contains the
   list of Bower dependencies we need.
 - `build.config.js` - our customizable build settings; see "The Build System"
@@ -349,15 +353,25 @@ For now, check out [the pilot roadmap](http://www.meetup.com/The-Happathon-Proje
 
 
 ## Contributing
-TODO
-jsdoc
-code style
-issues
+If you're new to open source development, check out jQuery's [Getting Started Contributing](http://contribute.jquery.org/open-source/)
+
+Then check out [Contributing](CONTRIBUTING.md)
+
 
 ### Communication
-TODO IRC
-issues
-See the [issues list](http://github.com/joshdmiller/ng-boilerplate/issues). And
-feel free to submit your own!
+**Chat**
 
+Our IRC channel on freenode is #happathon.  If you're unfamiliar with IRC, use Freenode's webchat.  Go to http://webchat.freenode.net/, pick a nickname, and enter #happathon for the channel, [like so](http://photos1.meetupstatic.com/photos/event/3/8/5/6/highres_305894422.jpeg).  That will connect you to our chat channel.
 
+**Event Coordination**
+
+On [Meetup](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/)
+
+**Application issues/feedback **
+
+Via our [Github Repository](https://github.com/IDCubed/oms-happathon/issues).  Feel free to submit issues if you find bugs or see something that needs doing.  Even better, do it and submit a pull request. :)
+
+### Licensing
+By submitting a patch, you agree to license your work under the same license as that used by the project.
+
+### Licensing
