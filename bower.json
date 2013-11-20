@@ -8,7 +8,7 @@
     "angular-bootstrap": "~0.3.0",
     "angular-ui-router": "~0.0.1",
     "angular-ui-utils": "~0.0.3",
-    "Fakerjs": "~0.5.5"
+    "Faker": "~0.5.11"
   },
   "dependencies": {}
 }
