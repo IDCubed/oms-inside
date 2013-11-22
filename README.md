@@ -18,21 +18,30 @@ $ grunt watch
 Unit tests will run in a new browser window.
 `localhost:8000/index.html` will open in your default browser.
 
-Boom!  You have a dev environment set up for working on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files src/ will reload your page automatically.
+Boom!  You're set up to hack on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files in the src/ directory will also reload your page automatically.  Happy hacking!
 
-For issues to get started on, check out our [issues page](issues)
+##What next?
+
+For issues to get started on, check out our [issues page](issues).  If you don't see one that interests you, ask!  There are other things not on that list.
+
+We're currently looking for:
+- Data Visualizers to make well-being insights intuitive
+- Android developer(s) to display html app in webview, set up notifications, and integrate sensor library
+- iPhone developer(s) for the same
+- UI Developers (HTML/JavaScript/CSS/Angular)
+- UX designers to make the app is useful and enjoyable
 
 To ask questions, check out [Communication](#communication) or join one of the [Meetups](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/).
 
 To Beta test the app when it's ready, join the [Beta Testers Google Group](https://groups.google.com/forum/#!forum/happathon).
 
-Happy hacking!
+Learn more about or the project in general at [Meetup](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/about/), and tech in particular by reading on below.
+
 
 
 ## Pilot Goal
 
 Increase participating Somerville residents' well-being (as each defines it) by 2% over baseline by 12/31/2014.
-
 
 ## Philosophy
 
@@ -51,12 +60,7 @@ Only questions that have obvious usefulness.
 **Self-defined well-being**
 TODO
 
-## Project Needs
-- Android developer(s) to display html app in webview, set up notifications, and integrate sensor library
-- iPhone developer for the same
-- UI Developers (HTML/JavaScript/CSS)
-- Data Visualization (Ways to visualize well-being)
-- UI/UX
+
 
 ## Architecture
 - angular.js for rapid prototyping
