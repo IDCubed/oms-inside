@@ -2,12 +2,12 @@
   "name": "happathon",
   "version": "0.0.1",
   "devDependencies": {
-    "angular": "~1.0.7",
-    "angular-mocks": "~1.0.7",
-    "bootstrap": "~2.3.2",
-    "angular-bootstrap": "~0.3.0",
-    "angular-ui-router": "~0.0.1",
-    "angular-ui-utils": "~0.0.3",
+    "angular": "~1.2.1",
+    "angular-mocks": "~1.2.1",
+    "bootstrap": "~3.0.2",
+    "angular-bootstrap": "~0.6.0",
+    "angular-ui-router": "~0.2.0",
+    "angular-ui-utils": "~0.0.4",
     "Faker": "~0.5.11"
   },
   "dependencies": {}
