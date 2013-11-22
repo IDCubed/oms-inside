@@ -397,8 +397,8 @@ module.exports = function ( grunt ) {
           base:'<%= build_dir %>',
           // keepalive:true,
           // port:8000,
-          livereload:true
-          // open:'http://localhost:8000/'
+          livereload:true,
+          open:'http://localhost:8000/'
         }
       }
     },
