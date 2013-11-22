@@ -1,4 +1,4 @@
-# [The H(app)athon Project](https://github.com/IDCubed/oms-happathon) [![Build Status](https://travis-ci.org/IDcubed/logo.png?branch=master)](https://travis-ci.org/IDcubed/oms-happathon)
+# [The H(app)athon Project](https://github.com/IDCubed/oms-happathon) [![Build Status](https://travis-ci.org/IDCubed/oms-happathon.png?branch=master)](https://travis-ci.org/IDCubed/oms-happathon)
 
 ***
 
@@ -15,12 +15,21 @@ $ bower install
 $ grunt watch
 ```
 
-Finally, open `localhost:8000/index.html` in your browser.
-Making changes to any of the files will reload the page automatically.
+Unit tests will run in a new browser window.
+`localhost:8000/index.html` will open in your default browser.
+
+Boom!  You have a dev environment set up for working on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files src/ will reload your page automatically.
+
+For issues to get started on, check out our [issues page](issues)
+
+To ask questions, check out [Communication](#communication) or join one of the [Meetups](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/).
+
+To Beta test the app when it's ready, join the [Beta Testers Google Group](https://groups.google.com/forum/#!forum/happathon).
 
 Happy hacking!
 
-## Purpose
+
+## Pilot Goal
 
 Increase participating Somerville residents' well-being (as each defines it) by 2% over baseline by 12/31/2014.
 
@@ -76,6 +85,7 @@ At a high level, the structure looks roughly like this:
 
 ```
 oms-happathon/
+  |- e2e-tests/
   |- grunt-tasks/
   |- karma/
   |- src/
@@ -105,6 +115,7 @@ What follows is a brief description of each entry, but most directories contain
 their own `README.md` file with additional documentation, so browse around to
 learn more.
 
+- `e2e-tests/` - contain end-to-end test scripts
 - `karma/` - test configuration.
 - `src/` - our application sources. [Read more &raquo;](src/README.md)
 - `vendor/` - third-party libraries. [Bower](http://bower.io) will install
@@ -357,8 +368,9 @@ If you're new to open source development, check out jQuery's [Getting Started Co
 
 Then check out [Contributing](CONTRIBUTING.md)
 
-
+<a name="communication"></a>
 ### Communication
+
 **Chat**
 
 Our IRC channel on freenode is #happathon.  If you're unfamiliar with IRC, use Freenode's webchat.  Go to http://webchat.freenode.net/, pick a nickname, and enter #happathon for the channel, [like so](http://photos1.meetupstatic.com/photos/event/3/8/5/6/highres_305894422.jpeg).  That will connect you to our chat channel.
