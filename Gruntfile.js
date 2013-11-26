@@ -398,7 +398,7 @@ module.exports = function ( grunt ) {
           // keepalive:true,
           // port:8000,
           livereload:true,
-          open:'http://localhost:8000/'
+          open:'http://localhost:8000/#/'
         }
       }
     },

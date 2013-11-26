@@ -20,7 +20,11 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
+    js: [
+      'src/**/*.js',
+      '!src/**/*.spec.js',
+      '!src/assets/**/*.js'
+    ],
     jsunit: [ 'src/**/*.spec.js' ],
     
     atpl: [ 'src/app/**/*.tpl.html' ],
@@ -63,7 +67,13 @@ module.exports = {
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
-      'vendor/angular-ui-utils/modules/route/route.js'
+      'vendor/angular-ui-utils/modules/route/route.js',
+      // remove mocks when mock backend no longer necessary
+      'vendor/angular-mocks/angular-mocks.js',
+      'vendor/angular-resource/angular-resource.js',
+      'vendor/lodash/dist/lodash.js',
+      'vendor/restangular/dist/restangular.js',
+      'vendor/Faker/Faker.js'
     ],
     css: [
     ],

@@ -111,8 +111,10 @@
  
     "maxerr"        : 100,      // Maximum errors before stopping.
     "predef"        : [         // Extra globals.
-        //"anotherCoolGlobal",
-        //"iLoveDouglas"
+        "angular"
     ],
-    "indent"        : 2         // Specify indentation spacing
+    "indent"        : 2,         // Specify indentation spacing
+
+    // permit trailing commas in objects
+    "es5"           : true
 }

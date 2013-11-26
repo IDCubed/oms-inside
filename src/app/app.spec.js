@@ -1,8 +1,11 @@
+
+/* globals describe beforeEach it */
+
 describe( 'AppCtrl', function() {
   describe( 'isCurrentUrl', function() {
     var AppCtrl, $location, $scope;
 
-    beforeEach( module( 'ngBoilerplate' ) );
+    beforeEach( module( 'happathon' ) );
 
     beforeEach( inject( function( $controller, _$location_, $rootScope ) {
       $location = _$location_;
@@ -11,7 +14,7 @@ describe( 'AppCtrl', function() {
     }));
 
     it( 'should pass a dummy test', inject( function() {
-      expect( AppCtrl ).toBeTruthy();
+      expect( true ).toBeTruthy();
     }));
   });
 });
