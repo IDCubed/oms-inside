@@ -1,0 +1,38 @@
+<!-- <div>Holons: {{holons}}</div> -->
+
+<div ng-repeat="holon in $root.holons">
+  <!-- <div ng-class="'panel panel-default main-menu panel' + $index" ng-hide="holon.menuvis"> -->
+  <div ng-class="'panel panel-default main-menu panel' + $index + ' ' + (holon.menuvis ? '' : 'pseudo-hide')">
+    <div class="panel-heading">
+      {{holon.menu_title}}
+      <span class="btn btn-default settings" ng-click="switchActive('root.settings.all',holon)">*</span>
+    </div>
+    <div class="panel-body">
+      <div class="container" ng-class="'holon-menu-' + $index", >
+        <div class="row">
+          <div class="btn btn-default insights col-xs-4"
+            ng-click="switchActive('root.insight.status',holon)">Insights</div>
+          <div class="btn btn-default challenges col-xs-4"
+            ng-click="switchActive('root.challenge.list',holon)">Challenges</div>
+          <div class="btn btn-default add-ons col-xs-4"
+            ng-click="switchActive('root.plugins.list',holon)">Plugins</div>
+        </div>
+        <div class="row">
+          <div class="btn btn-default add-moment col-xs-4"
+            ng-click="switchActive('root.form.add',holon)">+Moment</div>
+          <div class="btn btn-default add-challenge col-xs-4"
+            ng-click="switchActive('root.challenge.add',holon)">+Challenge</div>
+          <div class="btn btn-default share col-xs-4"
+            ng-click="switchActive('root.plugin.add',holon)">+Plugin</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="holon-bar">
+  <div ng-repeat="holon in $root.holons" hap-size>
+    <div class="btn btn-default menu-toggle " ng-class="'menu-toggle' + $index" ng-click="toggleMenu($index)">{{holon.menu_title}}</div>
+  </div>
+  <div class="btn btn-default menu-toggle new-holon" ng-click="addHolon()">+</div>
+</div>

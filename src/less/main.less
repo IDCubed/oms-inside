@@ -78,13 +78,90 @@ h2 {
 }
 
 
+.main-container{
+  position:absolute;
+  margin:auto;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  border:none;
+  padding:10px;
+}
+.main-menu {
+  width:80%;
+  &.panel {
+    position:absolute;
+    &.panel0 {left:0px}
+    &.panel1 {right:0px}
+  }
+  .panel-body{
+    padding:0px;
+    padding-top:10px;
+  }
+  .btn{
+    margin-left:10px;
+    margin-bottom:10px;
+    padding:0;
+    &.settings{
+      display: block;
+      float: right;
+      width: 25px;
+      height: 25px;
+      font-size: 25px;
+    }
+  }
+}
+
+.btn{
+  border:1px solid #000;
+  font-size:inherit;
+}
+
+.splash{
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+}
+
+.holon-bar{
+  position:absolute;
+  width:100%;
+  bottom:10px;
+  .menu-toggle {
+    float:left;
+    margin-right:10px;
+    &.new-holon {
+      font-size:68px;
+      border-color:#ccc;
+      color:#ccc;
+    }
+  }
+}
+
+
+// .menu-toggle0 {
+//   left:10px;
+// }
+// .menu-toggle1 {
+//   right:10px;
+// }
+
+/* States */
+.pseudo-hide{
+  position:absolute !important;
+  left:-5000px !important;
+}
+
 /**
  * Now that all app-wide styles have been applied, we can load the styles for
- * all the submodules and components we are using. 
+ * all the submodules and components we are using.
  *
  * TODO: In a later version of this boilerplate, I'd like to automate this.
  */
 
-// @import '../app/me/me.less';
-// @import '../app/default-communities/default-communities.less';
+// e.g.
+// @import '../app/insight/status/status.less';
 

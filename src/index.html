@@ -4,8 +4,8 @@
     <title ng-bind="pageTitle"></title>
 
     <!-- font awesome from BootstrapCDN -->
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-
+<!--     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+ -->
     <!-- compiled CSS -->
     <% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" />
@@ -16,12 +16,11 @@
     <script type="text/javascript" src="<%= file %>"></script>
     <% }); %>
   </head>
-  <body>
-<!--     <a ui-sref="insight">Insight</a>
-    <a ui-sref="form">Form</a>
-    <a ui-sref="challenge">Challenge</a> -->
-    <div ui-view></div>
-    <div ui-view="menu1"></div>
-    <div ui-view="menu2"></div>
+  <body ng-cloak>
+    <div class="main-container">
+      <div ui-view="main">main</div>
+      <div ui-view="menus">menus</div>
+    </div>
+    <div class="splash"></div>
   </body>
 </html>

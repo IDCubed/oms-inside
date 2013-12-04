@@ -1,6 +1,5 @@
 module.exports = function ( grunt ) {
-  
-  /** 
+  /**
    * Load required Grunt tasks. These are installed based on the versions listed
    * in `package.json` when you do `npm install` in this directory.
    */
@@ -25,7 +24,7 @@ module.exports = function ( grunt ) {
   var userConfig = require( './build.config.js' );
 
   /**
-   * This is the configuration object Grunt uses to give each plugin its 
+   * This is the configuration object Grunt uses to give each plugin its
    * instructions.
    */
   var taskConfig = {
@@ -36,7 +35,7 @@ module.exports = function ( grunt ) {
     pkg: grunt.file.readJSON("package.json"),
 
     /**
-     * The banner is the comment that is placed at the top of our compiled 
+     * The banner is the comment that is placed at the top of our compiled
      * source files. It is first processed as a Grunt template, where the `<%=`
      * pairs are evaluated based on this very configuration object.
      */
@@ -270,11 +269,14 @@ module.exports = function ( grunt ) {
      * nonetheless inside `src/`.
      */
     jshint: {
+      jshintrc:".jshintrc",
       src: [
-        '<%= app_files.js %>'
+        '<%= app_files.js %>',
+        '!vendor/jquery/**'
       ],
       test: [
-        '<%= app_files.jsunit %>'
+        '<%= app_files.jsunit %>',
+        '!vendor/jquery/**'
       ],
       gruntfile: [
         'Gruntfile.js'
@@ -388,7 +390,7 @@ module.exports = function ( grunt ) {
     /**
      * The default for ng-boilerplate is viewing files with file:// protocol.
      * To view the built with a web server, we'll include grunt-contrib-connect
-     * 
+     *
      */
 
     connect:{
@@ -405,13 +407,13 @@ module.exports = function ( grunt ) {
 
     /**
      * And for rapid development, we have a watch set up that checks to see if
-     * any of the files listed below change, and then to execute the listed 
+     * any of the files listed below change, and then to execute the listed
      * tasks when they do. This just saves us from having to type "grunt" into
      * the command-line every time we want to see what we're working on; we can
      * instead just leave "grunt watch" running in a background terminal. Set it
      * and forget it, as Ron Popeil used to tell us.
      *
-     * But we don't need the same thing to happen for all the files. 
+     * But we don't need the same thing to happen for all the files.
      */
     delta: {
       /**
@@ -553,7 +555,7 @@ module.exports = function ( grunt ) {
     });
   }
 
-  /** 
+  /**
    * The index.html template includes the stylesheet and javascript sources
    * based on dynamic names calculated in this Gruntfile. This task assembles
    * the list into variables for the template to use and then runs the
@@ -588,7 +590,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerMultiTask( 'karmaconfig', 'Process karma config templates', function () {
     var jsFiles = filterForJS( this.filesSrc );
-    
+
     grunt.file.copy( 'karma/karma-unit.tpl.js', grunt.config( 'build_dir' ) + '/karma-unit.js', {
       process: function ( contents, path ) {
         return grunt.template.process( contents, {
