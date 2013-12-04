@@ -6,13 +6,12 @@
 src/
   |- app/
   |  |- challenge/
-  |  |- default-holons/
-  |  |  |- me/
-  |  |  |- somerville/
+  |  |- form/
   |  |- holon/
-  |  |- permissions/
-  |  |- report/
-  |  |- visualization/
+  |  |- insight/
+  |  |- mock-backend/
+  |  |- plugin/
+  |  |- settings/
   |  |- app.js
   |  |- app.spec.js
 ```
@@ -21,14 +20,17 @@ The `src/app` directory contains all code specific to this application. Apart
 from `app.js` and its accompanying tests (discussed below), this directory is
 filled with subdirectories corresponding to high-level objects or sections in the application. Each directory can have as many subdirectories as it needs, and the build system will understand what to do. For example, a top-level route might be "products", which would be a folder within the `src/app` directory that conceptually corresponds to the top-level route `/products`, though this is in no way enforced. Products may then have subdirectories for "create", "view", "search", etc. The "view" submodule may then define a route of `/products/:id`, ad infinitum.
 
+(just updated these.  More details to come tomorrow.)
 ## challenge/
-## default-holons/
+## form/
 ## holon/
-## permissions/
-## report/
-## visualization/
+## insight/
+## mock-backend/
+## plugin/
+## settings/
 
 ## `app.js`
+## `app.spec.js`
 
 This is our main app configuration file. It kickstarts the whole process by
 requiring all the modules from `src/app` that we need. We must load these now to

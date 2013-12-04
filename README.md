@@ -4,21 +4,21 @@
 
 ## Quick Start
 
-Install Node.js and then:
+[Install Node.js](http://nodejs.org/) and then:
 
 ```sh
-$ git clone git@github.com:IDCubed/oms-happathon.git
-$ cd oms-happathon
-$ sudo npm -g install grunt-cli karma bower
-$ npm install
-$ bower install
+$ git clone git@github.com:IDCubed/oms-happathon.git    // copy repo to your computer
+$ cd oms-happathon    // change to happathon directory
+$ npm -g install grunt-cli karma bower    // installs grunt-cli,karma,bower (mac/linux add sudo)
+$ npm install    // installs node dependencies in a /node_modules/ directory
+$ bower install    // installs js/css dependencies in your /app/vendor directory
 $ grunt watch
 ```
 
 Unit tests will run in a new browser window.
-`localhost:8000/index.html` will open in your default browser.
+`localhost:8000/#/` will open in your default browser.
 
-Boom!  You're set up to hack on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files in the src/ directory will also reload your page automatically.  Happy hacking!
+And Boom!  You're set up to hack on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files in the src/ directory will also reload your page automatically.  Happy hacking!
 
 ##What next?
 
@@ -128,7 +128,7 @@ learn more.
   system.
 - `.bowerrc` - the Bower configuration file. This tells Bower to install
   components into the `vendor/` directory.
-- `.jshintrc` - a configuration file to standardize code linting
+- `.jshintrc` - a configuration file to standardize JSHint code linting
 - `bower.json` - this is our project configuration for Bower and it contains the
   list of Bower dependencies we need.
 - `build.config.js` - our customizable build settings; see "The Build System"
