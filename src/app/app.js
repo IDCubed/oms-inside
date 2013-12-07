@@ -6,7 +6,7 @@ var happ = angular.module( 'happathon', [
   'happathon.insight',
   'happathon.settings',
   'happathon.challenge',
-  // 'happathon.form',
+  'happathon.form',
   'happathon.holon'
 ])
 
@@ -88,14 +88,19 @@ var happ = angular.module( 'happathon', [
       template:'<ui-view/>',
       resolve:{
         // waits to resolve the state until the holons list has returned.
-        holonAPI:['holonApiPromise', '$rootScope', '$state','$stateParams',
-          function(holonApiPromise, $rootScope, $state, $stateParams){
-          // console.log('resolving holonApiPromise',holonApiPromise);
+        holonAPI:['holonApiPromise', '$rootScope', '$state','$stateParams','tabsDynamicData', 'tempPluginsObj',
+          function(holonApiPromise, $rootScope, $state, $stateParams,tabsDynamicData, tempPluginsObj){
+          console.log('resolving tabsDynamicData',tabsDynamicData);
+          console.log('resolving tempPluginsObj',tempPluginsObj);
           holonApiPromise.then(function(holonObj){
+            // not especially fond of putting all params on rootscope, but this works for quick prototyping.
+            console.log('resolving holonApiPromise',holonObj);
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
             $rootScope.holons = holonObj.list;
             $rootScope.activeHolon = holonObj.active;
+            $rootScope.tabs = tabsDynamicData;
+            $rootScope.plugs = tempPluginsObj;
 
           });
           return holonApiPromise;
@@ -120,9 +125,11 @@ var happ = angular.module( 'happathon', [
     stateFactory({name:'root.challenge.add',ctrl:'ChallengeCtrl'});
     stateFactory({name:'root.settings'});
     stateFactory({name:'root.settings.all', ctrl:'SettingsCtrl'});
-    stateFactory({name:'root.plugins'});
-    stateFactory({name:'root.plugins.list',ctrl:'PluginsCtrl'});
-    stateFactory({name:'root.plugins.add',ctrl:'PluginsCtrl'});
+    stateFactory({name:'root.plugin'});
+    stateFactory({name:'root.plugin.list',ctrl:'PluginCtrl'});
+    stateFactory({name:'root.plugin.add',ctrl:'PluginCtrl'});
+    stateFactory({name:'root.form'});
+    stateFactory({name:'root.form.moment',ctrl:'FormCtrl'});
 
 
 

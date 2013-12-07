@@ -1,5 +1,4 @@
-
-/* globals describe beforeEach it */
+/* globals describe, beforeEach, inject, it, expect */
 
 describe( 'AppCtrl', function() {
   describe( 'isCurrentUrl', function() {
