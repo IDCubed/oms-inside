@@ -280,7 +280,10 @@ module.exports = function ( grunt ) {
         '<%= app_files.jsunit %>',
         '!vendor/**'
       ],
-      gruntfile: [
+      config_files: [
+        'build.config.js',
+        'package.json',
+        'bower.json',
         'Gruntfile.js'
       ]
     },
@@ -429,12 +432,12 @@ module.exports = function ( grunt ) {
       },
 
       /**
-       * When the Gruntfile changes, we just want to lint it. In fact, when
-       * your Gruntfile changes, it will automatically be reloaded!
+       * When the config_files changes, we just want to lint it. In fact, when
+       * your config_files changes, it will automatically be reloaded!
        */
-      gruntfile: {
-        files: 'Gruntfile.js',
-        tasks: [ 'jshint:gruntfile' ]
+      config_files: {
+        files: '<%= jshint.config_files %>',
+        tasks: [ 'jshint:config_files' ]
       },
 
       /**
