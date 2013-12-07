@@ -269,14 +269,16 @@ module.exports = function ( grunt ) {
      * nonetheless inside `src/`.
      */
     jshint: {
-      jshintrc:".jshintrc",
+      options:{
+        jshintrc: '.jshintrc'
+      },
       src: [
         '<%= app_files.js %>',
-        '!vendor/jquery/**'
+        '!vendor/**'
       ],
       test: [
         '<%= app_files.jsunit %>',
-        '!vendor/jquery/**'
+        '!vendor/**'
       ],
       gruntfile: [
         'Gruntfile.js'
