@@ -12,16 +12,16 @@ angular.module('happathon.holon',[
 // when this runs, it should get the data and extend city holon objects with
 // custom configs from the database
 .service('holonApiPromise', ['Restangular', '$q', function (Restangular,$q) {
-  console.log('running holonData in main', Restangular,$q);
+  // console.log('running holonData in main', Restangular,$q);
   var d = $q.defer();
   var holonsObj = Restangular.all('holons');
-  console.log('holonsObj',holonsObj);
+  // console.log('holonsObj',holonsObj);
   // TODO: Cache last known holonList locally for faster render.
   holonsObj.getList()
   .then(function (holonList) {
     // make copies we can use for modifying/displaying
     // return those in an object along with with functions to update original
-    console.log('resolving');
+    // console.log('resolving');
     var obj = {
       'list':angular.copy(holonList),
       'active':angular.copy(holonList[0]),
@@ -51,7 +51,7 @@ function HolonCtrl ( $scope, $log, $rootScope) {
   var openHolon;
 // toggle menu open - only one at a time
   $scope.toggleMenu=function($index){
-    console.log('toggling $rootScope.holons.list[$index]', $rootScope.holons[$index]);
+    $log.log('toggling $rootScope.holons[$index]', $rootScope.holons[$index]);
     var holon = $rootScope.holons[$index];
     if(openHolon){
       if (openHolon === holon){
@@ -65,6 +65,7 @@ function HolonCtrl ( $scope, $log, $rootScope) {
   };
 
   $scope.switchActive = function(state,holon){
+    $log.log('switchActive state,holon',state,holon);
     $rootScope.activeHolon = holon;
     $rootScope.$state.go(state);
   };

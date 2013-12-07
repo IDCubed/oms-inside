@@ -2,9 +2,9 @@ angular.module('happathon.form', [
   'happathon-engine'
 ])
 // this needs to be moved into the happathon engine
-.controller( 'FormCntrl', ['$scope', '$log',
+.controller( 'FormCtrl', ['$scope', '$log',
   function FormCntrl ( $scope, $log) {
-    $log.log('FormCntrl');
+    $log.log('FormCtrl');
   }
 ])
 
