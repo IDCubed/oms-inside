@@ -2,17 +2,19 @@
   "name": "happathon",
   "version": "0.0.1",
   "devDependencies": {
+  },
+  "dependencies": {
     "angular": "~1.2.2",
     "angular-mocks": "~1.2.2",
     "restangular":"~1.1.8",
     "angular-touch":"~1.2.2",
     "bootstrap": "~3.0.3",
     "angular-bootstrap": "~0.6.0",
+    "angular-gestures": "~0.2.0",
     "angular-ui-router": "~0.2.0",
     "angular-ui-utils": "~0.0.4",
     "angular-resource": "~1.2.2",
     "Faker": "~0.5.11",
     "jQuery": "~2.0.3"
-  },
-  "dependencies": {}
+  }
 }
