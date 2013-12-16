@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en-US" ng-app="myApp" ng-controller="AppController">
+<head>
+<meta charset="utf-8" />
+<title>Demo</title>
+
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<link rel='stylesheet' type='text/css' href='demo.css' />
+</head>
+<body>
+
+  <div id="menuleft" ng-class="{hide:!showmenu,slide:showmenu}">
+    <h1>Demo</h1>
+    <ul>
+      <li><a ng-click="toggleMenu()">Link 1</a></li>
+      <li><a ng-click="toggleMenu()">Link 2</a></li>
+      <li><a ng-click="toggleMenu()">Link 3</a></li>
+    </ul>
+  </div>
+
+  <div id="all" ng-class="{hide:showmenu,slide:!showmenu}">
+    <div class="overlay" ng-class="{show:showmenu}" ng-swipe-left="showmenu=false">
+    </div>
+    <div id="header">
+      <button ng-click="toggleMenu()">
+      </button>
+      <h1>Demo</h1>
+    </div>
+
+    <div id="wrapper">
+      <p>This works best in mobile ;)</p>
+      <p>Click menu button above to open menu</p>
+      <p>To close click a menu item, the button or swipe the overlay to close (with mouse click, hold, then move left)</p>
+    </div>
+  </div>
+
+
+<!-- JavaScript Includes -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular.min.js"></script>
+<script src="http://code.angularjs.org/1.2.0rc1/angular-route.min.js"></script>
+<script src="http://code.angularjs.org/1.2.0rc1/angular-touch.min.js"></script>
+<script src="demo.js"></script>
+</body>
+</html>

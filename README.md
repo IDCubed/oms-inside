@@ -7,11 +7,11 @@
 [Install Node.js](http://nodejs.org/) and then:
 
 ```sh
-$ git clone git@github.com:IDCubed/oms-happathon.git    // copy repo to your computer
-$ cd oms-happathon    // change to happathon directory
-$ npm -g install grunt-cli karma bower    // installs grunt-cli,karma,bower (mac/linux add sudo)
-$ npm install    // installs node dependencies in a /node_modules/ directory
-$ bower install    // installs js/css dependencies in your /app/vendor directory
+$ git clone git@github.com:IDCubed/oms-happathon.git    # copy repo to your computer
+$ cd oms-happathon    # change to happathon directory
+$ npm -g install grunt-cli karma bower    # installs grunt-cli,karma,bower (mac/linux add sudo)
+$ npm install    # installs node dependencies in a /node_modules/ directory (mac/linux add sudo)
+$ bower install    # installs js/css dependencies in your /app/vendor directory
 $ grunt watch
 ```
 
@@ -45,8 +45,11 @@ Increase participating Somerville residents' well-being (as each defines it) by 
 
 ## Philosophy
 
+**Self-defined well-being**
+Our key differentiator is that we do not attempt to apply a “one size fits all” approach. Well-being is inherently subjective and differs with different people’s needs and perceptions. Thus this application will apply machine learning to customize a personal wellbeing index for each user, then aggregate our personal indices for a community index. As our perceptions and communities change over time, the aggregate indices change with us.
+
 **Separate Measure from Improve (Engine and Application)**
-There are [many](http://www.happsee.com/) [happiness-related](https://www.happier.com/) [applications](http://www.mappiness.org.uk/).  There is no standard way mobile applications measure happiness.  We're building the Happathon Engine, a happiness measurement tool co-designed with psychologists that any mobile happiness app can include.  That way developers can spend less time measuring well-being, and more time improving it.  To [dogfood](http://en.wikipedia.org/wiki/Eating_your_own_dog_food) it, we're also building the Happathon Application designed to measurably improve well-being.
+There are [many](http://emotionsense.org/) [happiness-related](https://www.happier.com/) [applications](http://www.happsee.com/).  There is no standard way mobile applications measure happiness.  We're building the Happathon Engine, a happiness measurement tool co-designed with psychologists that any mobile happiness app can include.  That way developers can spend less time measuring well-being, and more time improving it.  To [dogfood](http://en.wikipedia.org/wiki/Eating_your_own_dog_food) it, we're also building the Happathon Application designed to measurably improve well-being.
 
 **Empower Community**
 TODO (community visualizations, question additions, challenges)
@@ -57,62 +60,147 @@ A web app to run in iPhone and Android to iterate quickly, combined with a mobil
 **Usefulness**
 Only questions that have obvious usefulness.
 
-**Self-defined well-being**
-TODO
 
 
 
 ## Architecture
-- angular.js for rapid prototyping
-- Properly orchestrated modules to encourage drag-and-drop component re-use.
-- Tests exist alongside the component they are testing with no separate `test`
-  directory required; the build process should be sophisticated enough to handle
-  this.
-- Speaking of which, the build system should work automagically, without
-  involvement from the developer. It should do what needs to be done, while
-  staying out of the way. Components should end up tested, linted, compiled,
+- plugin management with bower
+- all functionality that can be a plugin, should be a plugin
+- plugins contain no renderer-specific code (e.g., angular) so plugin
+  developers do not need to know the rendering framework, and we can
+  switch ui rendering frameworks to any platform without plugins changes
+  (if we switch renderers, unit tests in plugins may go wonky.  Need to
+  think about how to resolve that)
+  Unit tests alongside the code they are testing.
+- end-to-end tests in separate directory
+- The build system should integrate plugins into the UI automatically.
+  Components should end up tested, linted, compiled,
   and minified, ready for use in a production environment.
-- Integration with popular tools like Bower, Karma, and LESS.
 - *Encourages* test-driven development. It's the only way to code.
 - A directory structure that is cogent, meaningful to new team members, and
   supporting of the above points.
 - Well-documented, to show new developers *why* things are set up the way they
-  are.
-- It should be responsive to evidence. Community feedback is therefore crucial
-  to the success of both the Happathon Engine and Application.
+  are.  If you see something that's unclear, please submit a pull request if
+  you understand it, or open an issue if you don't.
+- Errors shouldn't just tell you what broke.  They should tell you how to fix it.
 
 ## Learn
 
 ### Overall Directory Structure
 
 At a high level, the structure looks roughly like this:
+\* Note: All plugins will eventually be separate git repositories. They're placed a plugins directory to encourage modularity and act as if they were installed.
 
 ```
 oms-happathon/
-  |- e2e-tests/
-  |- grunt-tasks/
-  |- karma/
-  |- src/
-  |  |- app/
-  |  |  |- <app logic>
+  |- .jshintrc // file syntax checking
+  |- bower_components/ // all bower components, including 3rd party libraries and happathon plugins
+  |  |- happathon-challenge-utils/ // provides utils to make a challenge from
+  |  |  |- challenge-config.js // provides a config object to the challenge module
+  |  |  |- challenge-base.tpl.html
+  |  |  |- challenge.less
+  |  |  |- challenge-part-analysis.tpl.html
+  |  |  |- challenge-part-chart.tpl.html
+  |  |- happathon-challenge-2kind/
+  |  |  |- 2kind-config.js
+  |  |  |- 2kind.tpl.html
+  |  |  |- 2kind.less
+  |  |- happathon-challenge-somerville-happiness-research/ // provides json for somerville happiness survey
+  |  |  |- somerville-happiness-research-config.js
+  |  |- happathon-challenge-happathon-research/ // provides json for start and quarterly surveys
+  |  |  |- happathon-research-config.js
+  |  |- happathon-insight-miner/ // explorers let you play with the data, then click to share cool visualizations as a plugin
+  |  |  |  |- insight-miner-module.js
+  |  |  |  |- insight-miner-spec.js
+  |  |  |  |- insight-miner.tpl.html
+  |  |- happathon-insight-status/ // status insight
+  |  |  |  |- insight-status-module.js
+  |  |  |  |- insight-status-spec.js
+  |  |  |  |- insight-status.tpl.html
+  |  |- insight-utils/ provides a base module and utilities for building insights
+  |  |  |  |- insight-module.js
+  |  |  |  |- insight-spec.js
+  |  |  |  |- insight-base.tpl.html
+  |  |  |  |- insight-part-analysis.tpl.html
+  |  |  |  |- insight-part-chart.tpl.html
+  |  |  |  |- insight-part-chart.tpl.html
+  |  |- happathon-utils/ // templates, controllers, services, directives, used in multiple app places
+  |  |- happathon-engine/
+  |  |  |- engine-module.js //
+  |  |  |- engine-spec.js
+  |  |  |- api/
+  |  |  |  |- settings-api-module.js // accepts json objects to configure the engine settings and optionally additional settings to store
+  |  |  |  |- settings-api-spec.js // unit tests
+  |  |  |  |- routing-api-module.js // provides routing to forms and api
+  |  |  |  |- routing-api-spec.js // routing unit tests
+  |  |  |  |- holon-api-module.js // provides holon CRUD api
+  |  |  |  |- holon-api-spec.js // holon unit tests
+  |  |  |  |- form-api-module.js // provides form gen/config api. Defines states for routing api. Passes instructions to form-module.js
+  |  |  |  |- form-api-spec.js // form unit tests
+  |  |  |  |- auth-service.js // authorizationa/authentication services that provide apis with promises
+  |  |  |  |- auth-spec.js // authorizor unit tests
+  |  |  |- assets/
+  |  |  |  |- <static files>
+  |  |  |- form/
+  |  default form part json for form-module to extend with incoming config objects
+  |  |  |  |- form-spec.js // form module unit tests - contains defaults
+  |  |  |  |- moment.json // +moment form
+  |  |  |  |  |- daily.json // daily form
+  |  |  |  |  |- form.less // form styles
+  |  |  |  |  |- form-base.tpl.html // form container to render forms in
+  |  |  |  |  |- form-multi-page-base.tpl.html
+  |  |  |- form-utils/ // contains form templates and custom directives
+  |  |  |  |  |- checkbox-tpl.html
+  |  |  |  |  |- add-custom-tpl.html
+  |  |  |  |  |- add-custom-with-relationship.tpl.html
+  |  |  |  |  |- radio-tpl.html
+  |  |  |  |  |- text-tpl.html
+  |  |  |  |  |- textarea-tpl.html
+  |  |  |  |  |- select-tpl.html
+  |  |  |  |  |- multiselect-tpl.html
+  |  |  |  |  |- slider-7point-tpl.html
+  |  |  |  |  |- grid-10x10-tpl.html
+  |  |  |  |  |- button-submit-tpl.html
+  |  |  |  |  |- button-continue-tpl.html
+  |  |  |- holon-types/
+  |  |  |  |  |- holon-type-city-module.js // extends base with properties specific to city holons and returns json obj
+  |  |  |  |  |- holon-type-human-module.js // extends base with properties specific to human holons and returns json obj
+  |  |  |- mock-backend/
+  |  |  |  |  |- mock-backend-module.js // provides back end CRUD interface to all APIs
+  |  |  |  |  |- mock-backend-spec.js
+  |  |  |  |  |- holon-somerville-module.js // extends holon-type-city-module with somerville specific details and data
+  |  |  |  |  |- holon-johndoe-module.js // extends holon-type-human-module with johndoe specific details and data
+  |  |  |- settings/
+  |  |  |  |  |- settings.tpl.html // to display a holon's settings
+  |  |  |  |  |- settings-module.js // provides fns for holon-api-module.js to CRUD holon settings
+  |- bower.json // bower dependencies stored in bower_components
+  |- build.config.js // build configuration variables
+  |- e2e-tests/ // mocha + chai code to test user scenarios involving multiple screens
+  |- Gruntfile.js // build configuration
+  |- karma/ // testing configuration
+  |- module.prefix // anon function to prefix compiled/minified js
+  |- module.suffix // anon function to suffix compiled/minified js
+  |- package.json // node package dependencies
+  |- travis.yml // enables continuous integration
+  |- src/ // contains all the raw source files
+  |  |- happathon-android/ // contains all code that runs on android
   |  |- assets/
   |  |  |- <static files>
-  |  |- common/
-  |  |  |- <reusable code>
-  |  |- less/
-  |  |  |- main.less
-  |- vendor/
-  |  |- angular-bootstrap/
-  |  |- bootstrap/
-  |  |- placeholders/
-  |- .bowerrc
-  |- .jshintrc
-  |- bower.json
-  |- build.config.js
-  |- Gruntfile.js
-  |- module.prefix
-  |- module.suffix
-  |- package.json
+  |  |- app/ // the happathon app
+  |  |  |- index.html
+  |  |  |- app.js // routing, engine api interaction, plugin base
+  |  |  |- app.spec.js
+  |  |  |- app.less // styles
+  |  |  |- holon-module.js // handles holon display
+  |  |  |- holon-spec.js
+  |  |  |- insight-base.tpl.html
+  |  |  |- plugin-list.tpl.html
+  |  |  |- plugin-adding-instructions.tpl.html  // instructions for how to add a plugin
+  |  |  |- mock-backend-module.js
+  |  |  |- settings-config-module.js // provides app specific settings schema with default for the engine to store
+  |  |  |- holon-type-base-module.js // contains the base holon json for new holon types to extend
+
+
 ```
 
 What follows is a brief description of each entry, but most directories contain

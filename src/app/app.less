@@ -1,0 +1,226 @@
+/**
+ * This is the main application stylesheet. It should include or import all
+ * stylesheets used throughout the application as this is the only stylesheet in
+ * the Grunt configuration that is automatically processed.
+ */
+
+
+/**
+ * First, we include the Twitter Bootstrap LESS files. Only the ones used in the
+ * project should be imported as the rest are just wasting space.
+ */
+
+// for the moment, include everything.  We can optimize later.
+@import 'thirdparty/bootstrap/dist/css/bootstrap.css';
+
+// @import '../../bower_components/bootstrap/less/variables.less';
+// @import '../../bower_components/bootstrap/less/mixins.less';
+// @import '../../bower_components/bootstrap/less/utilities.less';
+// @import '../../bower_components/bootstrap/less/responsive-utilities.less';
+// @import '../../bower_components/bootstrap/less/scaffolding.less';
+// @import '../../bower_components/bootstrap/less/type.less';
+// @import '../../bower_components/bootstrap/less/grid.less';
+// @import '../../bower_components/bootstrap/less/navs.less';
+// @import '../../bower_components/bootstrap/less/navbar.less';
+// @import '../../bower_components/bootstrap/less/buttons.less';
+// @import '../../bower_components/bootstrap/less/button-groups.less';
+// @import '../../bower_components/bootstrap/less/dropdowns.less';
+// @import '../../bower_components/bootstrap/less/forms.less';
+
+
+/**
+ * Variables
+ * This is our main variables section.  We must include it here so we can overwrite any variable
+ * definitions in our imported stylesheets.
+ */
+
+@blue: rgb( 53 ,172 ,221);
+
+@orange: rgb( 240 ,129 ,60);
+
+@green: rgb( 69 ,178 ,84);
+
+.absolute-center(@margin: auto) {
+  position:absolute;
+  margin:@margin;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+}
+.border-radius(@radius: 5px){
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+/**
+ * Typography
+ */
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Regular'), local('Roboto-Regular'), url(assets/fonts/Roboto-Regular.woff) format('woff');
+}
+
+code, pre, .pre {
+  padding: 5px;
+  margin: 10px 0;
+  background-color: #EFEFEF;
+  border: 1px solid #DADADA;
+  .border-radius(3px);
+}
+
+code {padding: 0 3px; }
+pre {margin: 10px 0; padding: 5px; } .page-header {margin-top: 60px; &:first-child {margin-top: 20px; } }
+// h2 {margin: 20px 0; color: #666; }
+
+
+.root-container{
+  .absolute-center;
+  border:none;
+  padding:10px;
+  overflow-x:hidden;
+  .content{
+    // position:absolute;
+    overflow:hidden;
+    // overflow-y:auto;
+  }
+}
+
+
+
+/* States */
+.pseudo-hide{
+  position:absolute !important;
+  left:-5000px !important;
+}
+
+
+
+/**
+ *Custom Icons
+ *
+ *
+ */
+@font-face {
+  font-family: 'icomoon';
+  src:url('assets/fonts/icomoon.eot');
+  src:url('assets/fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+    url('assets/fonts/icomoon.ttf') format('truetype'),
+    url('assets/fonts/icomoon.woff') format('woff'),
+    url('assets/fonts/icomoon.svg#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-plus:before {content: "\e600"; }
+.icon-user-add:before {content: "\e601"; }
+.icon-search:before {content: "\e602"; }
+.icon-add-to-list:before {content: "\e603"; }
+.icon-info:before {content: "\e604"; }
+.icon-cart:before {content: "\e605"; }
+.icon-user:before {content: "\e606"; }
+.icon-users:before {content: "\e607"; }
+.icon-minus:before {content: "\e608"; }
+.icon-plus2:before {content: "\e609"; }
+.icon-arrow-down:before {content: "\e60a"; }
+.icon-arrow-up:before {content: "\e60b"; }
+.icon-text:before {content: "\e60c"; }
+.icon-pencil:before {content: "\e60d"; }
+.icon-info2:before {content: "\e60e"; }
+.icon-question:before {content: "\e60f"; }
+.icon-help:before {content: "\e610"; }
+.icon-spinner:before {content: "\e611"; }
+.icon-cog:before {content: "\e612"; }
+.icon-stats:before {content: "\e613"; }
+.icon-info3:before {content: "\e614"; }
+.icon-info4:before {content: "\e615"; }
+.icon-accessibility:before {content: "\e616"; }
+.icon-plus3:before {content: "\e617"; }
+
+
+/**
+ * Now that all app-wide styles have been applied, we can load the styles for
+ * all the submodules and components we are using.
+ *
+ * TODO: In a later version of this boilerplate, I'd like to automate this.
+ */
+
+/**
+ * Mobile slide menu demo
+ *
+ */
+
+
+.menuleft{left:-50%;position:fixed;top:0;width:50%;height:100%;z-index:1000;border-right:1px solid #000;background-color:#e9e9e9;display:block}
+.menuleft.slide{left:0}
+.menuleft h1{background-color:#424242;color:#eee;font-size:1.2em;line-height:50px;text-align:center;float:none !important}
+.menuleft a{display:block;width:98%;padding:10px 0 10px 2%;color:#424242;border-bottom:1px solid #424242}
+#all{display:block;width:100%}
+#all.hide{position:fixed;left:50%;top:0;width:100%}
+#all.slide{position:relative;}
+.slide,.hide{transition: all 0.2s ease;}
+
+#header{background-color:#03ae74;width:96%;height:50px;padding:0 2%}
+#header button{float:left;width:29px;height:28px;margin-top:12px;background:transparent url('button.png') no-repeat;}
+#header h1{float:left;display:block;width:90%;text-align:center;color:#fff;line-height:50px;font-size:1.2em}
+
+#wrapper{float:left;clear:both;width:96%;padding:0 2%;margin-top:15px}
+p{padding:5px 0}
+
+.overlay{left:0;top:50px;transition: all 0.2s ease;}
+.overlay.show{position:fixed;left:50%;right:0;bottom:0;background-color:rgba(0, 0, 0, 0.8);z-index:9999}
+
+
+
+
+// # The `src/less` Directory
+
+// Note is that *only* `app.less` will be processed during the build, meaning that all
+// other stylesheets must be *imported* into that one.
+
+// This should operate somewhat like the routing; the `app.less` file contains all of the site-wide styles, while
+// any styles that are route-specific should be imported into here from LESS files kept alongside the JavaScript
+// and HTML sources of that component. For example, the `home` section of the site has some custom styles, which
+// are imported like so:
+
+// ```css
+// @import '/plugins/happathon-challenge-2kind/2kind.less';
+// ```
+
+// The same principal, though not demonstrated in the code, would also apply to reusable components. CSS or LESS
+// files from external components would also be imported. If, for example, we had a Twitter feed directive with
+// an accompanying template and style, we would similarly import it:
+
+// ```css
+// @import '../bower_components/somelibrary/somelessfile.less
+// ```
+
+// Using this decentralized approach for all our code (JavaScript, HTML, and CSS) creates a framework where a
+// component's directory can be dragged and dropped into *any other project* and it will "just work".
+
+// I would like to eventually automate the importing during the build so that manually importing it here would no
+// longer be required, but more thought must be put in to whether this is the best approach.
+// // e.g.
+// // @import '../app/insight/status/status.less';
+
+

@@ -1,0 +1,86 @@
+// plugin authors should have to write both individual and group for each plugin
+// plugins which do not work for individual or vs vsersa should be grayed out.
+// There should be an overall settings page which shows you what data is being
+// tracked, and what sensors are activated, by which plugins
+
+// make sure checkmobilebrowser code get pushed with github
+{
+  "plugin_type":"form",
+  "routing":false,
+  "data_schema":false,
+  "extendable":true,
+  "datasource_dependencies":false,
+  "settings":{
+    "allowed_notification_times":{
+      "start":"08:30",
+      "end":"21:30"
+    }
+  },
+  "questions":[ // these map to db columns
+    {
+      "question":"Where are you?",
+      "type":"checkbox",
+      "answers":["Indoors","Outdoors","Home","Work","In transit","Public place"],
+      "others":[],
+      "persist_others":true,
+      "delete_others":true,
+      "other_placement":"append"
+    },
+    {
+      "question":"What are you doing?",
+      "type":"radio",
+      "answers":["Something","Whittling","Eating Broccoli","Kissing a Llama","Drying my nose off"],
+      "others":[],
+      // when creating others by name, it should probably require specifying a relationship type.
+      "persist_others":true,
+      "delete_others":true,
+      "other_placement":"append"
+    },
+    {
+      "question":"Who are you with?",
+      "type":"radio",
+      "answers":["Alone","Significant Other","My Children","Other Children","Relatives","Friends","Co-workers","Clients","Strangers"],
+      "others":[],
+      // when creating others by name, it should probably require specifying a relationship type.
+      "persist_others":true,
+      "delete_others":true,
+      "other_placement":"append"
+    },
+    {
+      "question":"How focused are you?",
+      "type":"slider",
+      "answers":[0,1,2,3,4,5,6,7]
+    },
+    {
+      "question":"How happy are you?",
+      "type":"slider",
+      "answers":[0,1,2,3,4,5,6,7]
+    },
+  ]
+    // engine_schema:{
+    //   installed_environment:{
+    //     apiBaseUrlSuffix:"/installed_environment",
+    //     table:true,
+    //     primary_key:"user.id",// or something ... talk with folks who know DBs
+    //     columns:["type","resolution","make","model","os","imei"],
+    //   },
+    //   sensors:{
+    //     apiBaseUrlSuffix:"/sensors",
+    //     light:{
+    //       table:true,
+    //       columns:["some_primary_key","timestamp","lux","accuracy"],
+    //       primary_key:"some_primary_key",
+    //       apiBaseUrlSuffix:"/light",
+    //       uniqueSourceIdentifier:"edu.mit.media.funf.probe.builtin.LightSensorProbe",
+    //       formatExample:"[{"accuracy":0,"lux":39.0,"timestamp":1384546775.649034}]"
+    //     },
+    //     battery:{
+    //       apiBaseUrlSuffix:"/battery",
+    //       uniqueSourceIdentifier:"edu.mit.media.funf.probe.builtin.LightSensorProbe",
+    //       formatExample:"[{"accuracy":0,"lux":39.0,"timestamp":1384546775.649034}]"
+    //     }
+    //   },
+    //   forms:{
+    //   }
+    // },
+}

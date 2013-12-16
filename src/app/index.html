@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="happathon">
+  <head>
+    <title ng-bind-template="{{$root.activeHolon.menuTitle}}"></title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <!-- font awesome from BootstrapCDN -->
+<!--     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+ -->
+    <!-- compiled CSS -->
+    <!-- token_replace_css_here -->
+
+    <!-- compiled Third Party JavaScript -->
+    <!-- token_replace_thirdparty_js_here -->
+
+    <!-- compiled App JavaScript -->
+    <!-- token_replace_js_here -->
+  </head>
+  <body ng-cloak>
+    <div class="root-container" hap-size>
+
+
+      <div  class="menuleft"
+            ng-class="{hide:!showleftmenu, slide:showleftmenu}"
+            ng-click="toggleLeftMenu()"
+            left-menu>
+
+        <h1>{{$root.currentPluginType}}</h1>
+        <ul class="plugin-nav">
+          <li class="btn btn-default"
+              ng-class="{active:$state.includes('installed')};"
+              ng-click="$state.go('root.leftmenu.installed')">Installed
+          </li>
+          <li class="btn btn-default"
+              ng-class="{active:$state.includes('market')};"
+              ng-click="$state.go('root.leftmenu.market')">Market
+          </li>
+          <li class="icon-pencil"
+              ng-class="{editing:$root.activeHolon.installed_tabs.happathon.viewMode==='editing'}"></li>
+          <li class="icon-pencil"></li>
+        </ul>
+        <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.settings">
+          <ul>
+            <li>
+              <span class="plugin-name">Status</span>
+              <span class="plugin-settings icon-info4"></span>
+              <span class="plugin-settings icon-cog"></span>
+            </li>
+            <li>
+              <span class="plugin-name">Data Explorer</span>
+              <span class="plugin-settings icon-info4"></span>
+              <span class="plugin-settings icon-cog"></span>
+            </li>
+            <li>
+              <span class="plugin-name">Locations</span>
+              <span class="plugin-settings icon-info4"></span>
+              <span class="plugin-settings icon-cog"></span>
+            </li>
+            <li><a ng-click="toggleMenu()">Link 3</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="menuright" ng-class="{hide:!showrightmenu, slide:showrightmenu}">
+        <h1>Settings</h1>
+        <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.settings">
+
+        </div>
+      </div>
+      <nav class="top-nav">
+        <div  class="plugins-dropdown btn icon-stats"
+              ng-class="'plugin-type'+$root.activeHolon.installed_tabs.happathon.activePlugin.type">
+          <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.activePlugin">
+            <ul>
+              <li><a ng-click="toggleMenu()">Link 1</a></li>
+              <li><a ng-click="toggleMenu()">Link 2</a></li>
+              <li><a ng-click="toggleMenu()">Link 3</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="holon-dropdown">
+          <span class="holon-menu-title">{{$root.activeHolon.menu_title}}</span>
+          <span class='phi'>{{$root.activeHolon.phi}}</span>
+        </div>
+        <div class="add-moment">
+          {{$root.holon.menu_title}}
+        </div>
+        <div class="help icon-info3">
+          {{$root.holon.menu_title}}
+        </div>
+        <div class="settings icon-cog" >
+          {{$root.holon.menu_title}}
+        </div>
+      </nav>
+      <div class="content" ui-view="main">
+        main
+      </div>
+      </div>
+    </div>
+  </body>
+</html>

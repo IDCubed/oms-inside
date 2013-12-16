@@ -1,0 +1,43 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+margin: 0;
+padding: 0;
+border: 0;
+font-size: 100%;
+font: inherit;
+vertical-align: baseline;
+}
+button,a{outline:0;overflow:visible;cursor:pointer;border:0;background-color:transparent}
+ul,li{list-style-type:none}
+
+body{width:100%;color:#000;font:16pt Arial, sans-serif;background-color:#f1f1f1}
+
+#menuleft{left:-50%;position:fixed;top:0;width:50%;height:100%;z-index:1000;border-right:1px solid #000;background-color:#e9e9e9;display:block}
+#menuleft.slide{left:0}
+#menuleft h1{background-color:#424242;color:#eee;font-size:1.2em;line-height:50px;text-align:center;float:none !important}
+#menuleft a{display:block;width:98%;padding:10px 0 10px 2%;color:#424242;border-bottom:1px solid #424242}
+#all{display:block;width:100%}
+#all.hide{position:fixed;left:50%;top:0;width:100%}
+#all.slide{position:relative;}
+.slide,.hide{transition: all 0.2s ease;}
+
+#header{background-color:#03ae74;width:96%;height:50px;padding:0 2%}
+#header button{float:left;width:29px;height:28px;margin-top:12px;background:transparent url('button.png') no-repeat;}
+#header h1{float:left;display:block;width:90%;text-align:center;color:#fff;line-height:50px;font-size:1.2em}
+
+#wrapper{float:left;clear:both;width:96%;padding:0 2%;margin-top:15px}
+p{padding:5px 0}
+
+.overlay{left:0;top:50px;transition: all 0.2s ease;}
+.overlay.show{position:fixed;left:50%;right:0;bottom:0;background-color:rgba(0, 0, 0, 0.8);z-index:9999}
