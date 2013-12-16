@@ -2,17 +2,20 @@
   "name": "happathon",
   "version": "0.0.1",
   "dependencies": {
-    "angular": "~1.2.2",
-    "angular-mocks": "~1.2.2",
-    "restangular": "~1.1.8",
-    "angular-touch": "~1.2.2",
-    "bootstrap": "~3.0.3",
+    "angular": "~1.2.5",
     "angular-bootstrap": "~0.6.0",
     "angular-gesture": "~1.3.0",
-    "angular-ui-router": "~0.2.0",
+    "angular-mocks": "~1.2.2",
+    "angular-touch": "~1.2.2",
+    "angular-ui-router": "~0.2.7",
     "angular-ui-utils": "~0.0.4",
+    "bootstrap": "~3.0.3",
+    "d3": "~3.3.12",
+    "d3.chart": "~0.1.3",
     "Faker": "~0.5.11",
-    "jQuery": "~2.0.3"
+    "jQuery": "~2.0.3",
+    "lodash": "~2.4.1",
+    "restangular": "~1.2.1"
   },
   "authors": [
     "Adam Laughlin <adam.laughlin@gmail.com>"
@@ -30,6 +33,6 @@
   "license": "MIT",
   "homepage": "happathon.com",
   "resolutions": {
-    "lodash": "~2.4.1"
+    "angular": "~1.2.5"
   }
 }

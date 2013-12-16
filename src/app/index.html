@@ -68,8 +68,8 @@
       <div class="mainview" ui-view="main">
         <div class="overlay" ng-class="{show:showleftmenu}" ng-swipe-left="showleftmenu=false">
         </div>
-        <nav class="top-nav">
-          <div  class="plugins-dropdown btn icon-stats"
+        <nav class="top-nav list-inline">
+          <button  class="plugins-dropdown btn icon-stats"
                 ng-class="'plugin-type'+$root.activeHolon.installed_tabs.happathon.activePlugin.type">
             <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.activePlugin">
               <ul>
@@ -78,20 +78,20 @@
                 <li><a ng-click="toggleMenu()">Link 3</a></li>
               </ul>
             </div>
-          </div>
+          </button>
           <div class="holon-dropdown">
             <span class="holon-menu-title">{{$root.activeHolon.menu_title}}</span>
             <span class='phi'>{{$root.activeHolon.phi}}</span>
           </div>
-          <div class="add-moment">
+          <button class="add-moment">
             {{$root.holon.menu_title}}
-          </div>
-          <div class="help icon-info3">
+          </button>
+          <button class="help icon-info3">
             {{$root.holon.menu_title}}
-          </div>
-          <div class="settings icon-cog" >
+          </button>
+          <button class="settings icon-cog" >
             {{$root.holon.menu_title}}
-          </div>
+          </button>
         </nav>
         <div class="content" ui-view="main">
           main
