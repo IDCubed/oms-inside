@@ -1,7 +1,7 @@
 angular.module( 'happathon-engine.holon-johndoe', [
   'happathon-engine.holon-type-human'
 ])
-.service('HolonJohnDoe', ['holonTypeHuman', function (holonTypeHuman) {
+.service('happathon-engine.holon-johndoe', ['holonTypeHuman', function (holonTypeHuman) {
   return angular.extend({},{
     id:0,
     version: "0.0.1",

@@ -1,7 +1,7 @@
 angular.module( 'happathon-engine.holon-somerville', [
   'happathon-engine.holon-type-city'
 ])
-.service('HolonSomerville', ['HolonTypeCity', function (HolonTypeCity) {
+.service('happathon-engine.holon-somerville', ['happathon-engine.holon-type-city', function (HolonTypeCity) {
   return angular.extend({},{
     id:1,
     subtype:'city',

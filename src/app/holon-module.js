@@ -1,5 +1,4 @@
 angular.module('happathon.holon',[
-  'happathon-engine.holon-api'
 ])
 
 .controller( 'HolonCtrl', ['$scope', '$log', '$rootScope',

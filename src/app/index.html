@@ -68,31 +68,33 @@
       <div class="mainview" ui-view="main">
         <div class="overlay" ng-class="{show:showleftmenu}" ng-swipe-left="showleftmenu=false">
         </div>
-        <nav class="top-nav list-inline">
-          <button  class="plugins-dropdown btn icon-stats"
-                ng-class="'plugin-type'+$root.activeHolon.installed_tabs.happathon.activePlugin.type">
-            <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.activePlugin">
-              <ul>
-                <li><a ng-click="toggleMenu()">Link 1</a></li>
-                <li><a ng-click="toggleMenu()">Link 2</a></li>
-                <li><a ng-click="toggleMenu()">Link 3</a></li>
-              </ul>
-            </div>
-          </button>
-          <div class="holon-dropdown">
+        <ul class="navbar-fixed-top list-inline">
+          <li>
+            <button ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.activePlugin"
+                    class="plugins-dropdown btn icon-stats"
+                    ng-class="'plugin-type'+$root.activeHolon.installed_tabs.happathon.activePlugin.type {hide:showmenu,slide:!showmenu}">
+            </button>
+          </li>
+          <li class="holon-dropdown">
             <span class="holon-menu-title">{{$root.activeHolon.menu_title}}</span>
             <span class='phi'>{{$root.activeHolon.phi}}</span>
-          </div>
-          <button class="add-moment">
-            {{$root.holon.menu_title}}
-          </button>
-          <button class="help icon-info3">
-            {{$root.holon.menu_title}}
-          </button>
-          <button class="settings icon-cog" >
-            {{$root.holon.menu_title}}
-          </button>
-        </nav>
+          </li>
+          <li>
+            <button class="add-moment icon-plus">
+              {{$root.holon.menu_title}}
+            </button>
+          </li>
+          <li>
+            <button class="help icon-info3">
+              {{$root.holon.menu_title}}
+            </button>
+          </li>
+          <li>
+            <button class="settings icon-cog" >
+              {{$root.holon.menu_title}}
+            </button>
+          </li>
+        </ul>
         <div class="content" ui-view="main">
           main
         </div>

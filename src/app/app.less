@@ -11,7 +11,7 @@
  */
 
 // for the moment, include everything.  We can optimize later.
-@import 'thirdparty/bootstrap/dist/css/bootstrap.css';
+@import 'thirdparty/bootstrap/less/bootstrap.less';
 
 // @import '../../bower_components/bootstrap/less/variables.less';
 // @import '../../bower_components/bootstrap/less/mixins.less';
@@ -175,16 +175,16 @@ pre {margin: 10px 0; padding: 5px; } .page-header {margin-top: 60px; &:first-chi
 .menuleft.slide{left:0}
 .menuleft h1{background-color:#424242;color:#eee;font-size:1.2em;line-height:50px;text-align:center;float:none !important}
 .menuleft a{display:block;width:98%;padding:10px 0 10px 2%;color:#424242;border-bottom:1px solid #424242}
-#all{display:block;width:100%}
-#all.hide{position:fixed;left:50%;top:0;width:100%}
-#all.slide{position:relative;}
+.mainview{display:block;width:100%}
+.mainview.hide{position:fixed;left:50%;top:0;width:100%}
+.mainview.slide{position:relative;}
 .slide,.hide{transition: all 0.2s ease;}
 
-#header{background-color:#03ae74;width:96%;height:50px;padding:0 2%}
-#header button{float:left;width:29px;height:28px;margin-top:12px;background:transparent url('button.png') no-repeat;}
-#header h1{float:left;display:block;width:90%;text-align:center;color:#fff;line-height:50px;font-size:1.2em}
+.navbar-fixed-top{
+  background-color:#03ae74;width:96%;height:50px;padding:0 2%;position: relative;top: auto;
+}
 
-#wrapper{float:left;clear:both;width:96%;padding:0 2%;margin-top:15px}
+.content{float:left;clear:both;width:96%;padding:0 2%;margin-top:15px}
 p{padding:5px 0}
 
 .overlay{left:0;top:50px;transition: all 0.2s ease;}

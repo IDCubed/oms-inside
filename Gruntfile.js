@@ -17,15 +17,16 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-ngmin');
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-jsdoc');
-  grunt.loadNpmTasks('grunt-lesslint');
+  grunt.loadNpmTasks("grunt-sync");
 
 
 
-  /**
-   * Load in our build configuration file.
-   */
-  var userConfig = {
-
+    /**
+     * directoryPaths is a collection of directory patterns that refer to our app code (the
+     * stuff in `src/`). These file paths are used in the configuration of
+     * build tasks.
+     */
+  var directoryPaths = {
     src:{
       dirs:{
         bower:'bower_components/',
@@ -34,16 +35,24 @@ module.exports = function ( grunt ) {
         thirdparty:'<%= src.dirs.app %>thirdparty/',
         plugins:'<%= src.dirs.app %>plugins/' // created by bowercopy
       },
-    /**
-     * This is a collection of file patterns that refer to our app code (the
-     * stuff in `src/`). These file paths are used in the configuration of
-     * build tasks. `js` is all project javascript, less tests. `html_templates` contains
-     * our reusable components' (`src/dependencies`) template HTML files, while
-     * `html_templates` contains the same, but for our app's code. `html` is just our
-     * main HTML file, `less` is our main stylesheet, and `unit` contains our
-     * app's unit tests.
-     */
-    // grunt.file.expand({nonull:true}, 'src/app/*.js','bower_components/happathon**/*.js','!/**/*.spec.js')
+      requiredFiles:{
+        cwd:'<%= src.dirs.app %>thirdparty/',
+        files:[
+          'jquery/jquery.min.js',
+          'lodash/dist/lodash.min.js',
+          'angular/angular.js',
+          'angular-bootstrap/ui-bootstrap-tpls.min.js',
+          'angular-mocks/angular-mocks.js',
+          'angular-touch/angular-touch.min.js',
+          'angular-ui-router/release/angular-ui-router.js',
+          'angular-gesture/ngGesture/gesture.js',
+          'angular-ui-utils/modules/utils.js',
+          'd3/d3.min.js',
+          'd3.chart/d3.chart.min.js',
+          'Faker/Faker.js',
+          'restangular/dist/restangular.js'
+        ]
+      },
 
     },
     /**
@@ -52,10 +61,6 @@ module.exports = function ( grunt ) {
      * completely built.
      */
     build:{// build destinations
-      // there should be no files listed in build.  Only directories.
-      // specific file outputs, like thos in concat:, should specify
-      // the output file in it.  That way plugins that depend on it
-      // can read directly from it, so the order is clearer.
       dirs:{
         root:'build/',
         app:'<%= build.dirs.root %>app/',
@@ -66,7 +71,7 @@ module.exports = function ( grunt ) {
         thirdparty:'<%= build.dirs.app %>thirdparty/'
       }
     },
-    compile:{
+    compile:{ // compile destinations
       dirs:{
         root:'bin/',
         app:'<%= compile.dirs.root %>app/',
@@ -74,46 +79,46 @@ module.exports = function ( grunt ) {
         assets:'<%= compile.dirs.app %>assets/',
         js:'<%= compile.dirs.app %>js/',
         css:'<%= compile.dirs.app %>css/',
-        // thirdparty:{ // unneeded since we blend them all into compile.files.css & js
-        //   js:'bin/app/thirdparty/js',
-        //   css:'bin/app/thirdparty/css'
-        // }
       },
-      // files:{
-      //   js:'<%= compile.dirs.js %><%= pkg.name %>-<%= pkg.version %>.js'
-      // }
     },
-
-
-
-
   };
-  var appFileExists=false;
-  /**
-   * This is the configuration object Grunt uses to give each plugin its
-   * instructions.
-   */
+
+
+  // configurations for all the tasks run in this gruntfile
   var taskConfig = {
-    /**
-     * We read in our `package.json` file so we can access the package name and
-     * version. It's already there, so we don't repeat ourselves here.
-     */
+
+    // Get the app version from `package.json` to stay DRY
     pkg: grunt.file.readJSON("package.json"),
 
-    meta: {
+  /**
+   * The banner is the comment that is placed at the top of our compiled
+   * source files. It is first processed as a Grunt template, where the `<%=`
+   * pairs are evaluated based on this very configuration object.
+   */
+    banner:
+      '/**\n' +
+      ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      ' * <%= pkg.homepage %>\n' +
+      ' *\n' +
+      ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+      ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
+      ' */\n',
+
+    bump: {
     /**
-     * The banner is the comment that is placed at the top of our compiled
-     * source files. It is first processed as a Grunt template, where the `<%=`
-     * pairs are evaluated based on this very configuration object.
+     * Increments the version number, etc.
      */
-      banner:
-        '/**\n' +
-        ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        ' * <%= pkg.homepage %>\n' +
-        ' *\n' +
-        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-        ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
-        ' */\n'
+      options: {
+        files: ["package.json", "bower.json"],
+        commit: false,
+        commitMessage: 'chore(release): v%VERSION%',
+        commitFiles: ["package.json", "client/bower.json"],
+        createTag: false,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: false,
+        pushTo: 'origin'
+      }
     },
 
     changelog: {
@@ -126,28 +131,6 @@ module.exports = function ( grunt ) {
       }
     },
 
-    bump: {
-    /**
-     * Increments the version number, etc.
-     */
-      options: {
-        files: [
-          "package.json",
-          "bower.json"
-        ],
-        commit: false,
-        commitMessage: 'chore(release): v%VERSION%',
-        commitFiles: [
-          "package.json",
-          "client/bower.json"
-        ],
-        createTag: false,
-        tagName: 'v%VERSION%',
-        tagMessage: 'Version %VERSION%',
-        push: false,
-        pushTo: 'origin'
-      }
-    },
 
     clean: [
     /**
@@ -158,71 +141,48 @@ module.exports = function ( grunt ) {
     ],
 
 
-// TODO consider using grunt-sync or grunt-rsync to pull in remote content
-// https://npmjs.org/package/grunt-sync
-// with grunt rsync, we might be able to watch the whole source folder for changes to run rsync,
-// then watch just the build dir to re-run concats, etc.
+
+    connect:{ // lightweight web server to view the app!
+      home:{
+        options:{base:'<%= build.dirs.app %>', livereload:true}
+          // directory:'<%= build.dirs.app %>',
+          // keepalive:true,
+          // port:8000,
+          //
+          // debug:true,
+          // open:'http://localhost:8000/'
+      }
+    },
+
+
+
     copy: {
     /**
      * The `copy` task just copies files from A to B. We use it here to copy
      * our project assets (images, fonts, etc.) and javascripts into
      * `build.dirs`, and then to copy the assets to `dirs.compile`.
-     */
-      expand:true,
-      happathon_plugins:{
-        // may be able to use this to install them https://npmjs.org/package/grunt-bower-cli
-        //re-enable this once we convert all plugins to bower packages
-        // expand:true,
-        // debug:true,
-        // nonull:true,
-        // flatten:false,
-        // cwd:'<%= src.dirs.bower %>', // a.k.a., sourceBasePath
-        // src:'happathon*/**',
-        // dest:'<%= src.dirs.plugins %>',
-      },
-      thirdparty_libs:{
-        expand:true,
-        files:[
-          // have to specify expand:true in each of these else calling it from sync_bower_components fails
-          // {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'bootstrap/less/bootstrap.less'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'jquery/jquery.min.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'lodash/dist/lodash.min.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular/angular.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular-bootstrap/ui-bootstrap-tpls.min.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular-mocks/angular-mocks.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular-touch/angular-touch.min.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular-ui-router/release/angular-ui-router.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular-gesture/ngGesture/gesture.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'angular-ui-utils/modules/utils.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'bootstrap/dist/css/bootstrap.css'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'d3/d3.min.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'d3.chart/d3.chart.min.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'Faker/Faker.js'},
-          {expand:true,cwd:'<%= src.dirs.bower %>',dest:'<%= src.dirs.thirdparty %>', src:'restangular/dist/restangular.js'},
-        ],
-      },
-      app:{
-        expand: true,
-        cwd:'<%= src.dirs.app %>', // change the directory we'll output to
-        src: [
-          '**/*',
-          '!*spec.js', // don't copy
-          '!*.less', // copy via grunt-recess
-          '!*.tpl.html' // copy via grunt-html2js
-        ],
-        dest: '<%= build.dirs.app %>',
-      },
-      // placing this here so we can recopy the changed js files when they change
-      // js:{
-      //   expand:true,
-      //   cwd:'<%= build.dirs.app %>',
-      //   src: '<%= copy.app.src %>/**/*.js',
-      //   dest: '<%= build.dirs.app %>'
-      // },
+     // */
+     //  expand:true,
+     //  happathon_plugins:{
+     //    // may be able to use this to install them https://npmjs.org/package/grunt-bower-cli
+     //    //re-enable this once we convert all plugins to bower packages
+     //    // expand:true,
+     //    // debug:true,
+     //    // nonull:true,
+     //    // flatten:false,
+     //    // cwd:'<%= src.dirs.bower %>', // a.k.a., sourceBasePath
+     //    // src:'happathon*/**',
+     //    // dest:'<%= src.dirs.plugins %>',
+     //  },
+     //
+     //
+     //  convert the plugin config json files to angular services
+     //  TODO: Instead of doing this, it would be simpler to just read the json files and provide them through an api
       happathon_configs_to_angular_services:{
-        // requires:['copy:app'],
         options:{
+          // requires:['sync:build_appjs'],
           processContent: function(content, srcpath){
+            grunt.log.warn('srcpath',srcpath);
             var dirName = srcpath.match(/.*\/([^\/]+)\/.+$/)[1]+'-config';
             // var dirCamel=dirName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
             return '/*jshint indent:false*/\n' +
@@ -231,7 +191,8 @@ module.exports = function ( grunt ) {
                   '  return [' + // wrap everything in an array in case file has comments
                   (content || "''") +
                   '][0];\n});\n';
-          }
+          },
+          // spawn:false
         },
         files:[{
           cwd:'<%= src.dirs.plugins %>',
@@ -241,48 +202,29 @@ module.exports = function ( grunt ) {
           debug:false,
           nonull:false,
           rename: function(dest, src) {
-            // grunt.log.warn('dest,src',dest,src);
+            grunt.log.warn('dest,src',dest,src);
             return dest + src.replace(/\.json/,'-config-module.js');
-          },
-          // options:{
-          // }
+          }
         }],
       }
     },
 
-    concat: {
-    /**
-     * `grunt concat` concatenates multiple source files into a single file.
-     */
 
-      /**
-       * The `build_css` target concatenates compiled CSS and vendor CSS
-       * together.
-       */
-      // compile_css: {
-      //   src: '<%= build.dirs.css %>**/*.css',
-      //   dest: '<%= compile.dirs.css %><%= pkg.name %>-<%= pkg.version %>.css'
-      // },
-      /**
-       * The `compile_js` target is the concatenation of our application source
-       * code and all specified vendor source code into a single file.
-       */
-      // compile_js: {
-      //   options: {
-      //     banner: '<%= meta.banner %>'
-      //   },
-      //   src: [
-      //     '<%= build.fileGroups.thirdparty.js %>',
-      //     'module.prefix',
-      //     '<%= build.fileGroups.js %>',
-      //     'module.suffix'
-      //   ],
-      //   dest: '<%= compile.files.js %>'
-      // },
-      // for html templates, see html2js
+    // `grunt concat` concatenates multiple source files into a single file.
+    concat: {
+      //`compile_css` concatenates our app and thirdparty js in a single file.
+      compile_css: {
+        src: '<%= build.dirs.css %>**/*.css',
+        dest: '<%= compile.dirs.css %><%= pkg.name %>-<%= pkg.version %>.css'
+      },
+      //`compile_js` concatenates our app and thirdparty js in a single file.
+      compile_js: {
+        options: { banner: '<%= banner %>' },
+        src:['module.prefix', '<%= src.requiredFiles %>','<%= build.dirs.js %>', 'module.suffix'],
+        dest: '<%= compile.dirs.js %><%= pkg.name %>-<%= pkg.version %>.js'
+      },
 
       dynamically_add_dependencies_to_appjs:{
-        requires:['copy:app','copy:happathon_configs_to_angular_services'],
         src:'<%= build.dirs.app %>app.js',
         dest:'<%= build.dirs.app %>app.js',
         options:{
@@ -292,9 +234,8 @@ module.exports = function ( grunt ) {
             var servicesStr = '';
             grunt.file.expand(
               {debug:false,nonull:true,expand:true},
-              grunt.config.get('build.dirs.root')+'**/*-module.js'
+              grunt.config.get('build.dirs.plugins')+'**/*.js'
             ).forEach(function(path,loopIterator,filesArr){
-              // grunt.log.warn('path,one,two',path);
               var contents = grunt.file.read(path);
               // get module names from the file
               var matchedModules = contents.match(/angular\.module.*?["'].+?['"]+/g) || [];
@@ -307,8 +248,6 @@ module.exports = function ( grunt ) {
                 servicesStr += '\n// '+ matchedServices[i];
               }
             });
-            // grunt.log.warn('modulesStr',modulesStr);
-// {{concat.dynamically_add_dependencies_to_appjs.modules}}
             var newContent = content.replace(/\/\/\s+\{\{concat.dynamically_add_dependencies_to_appjs.modules\}\}/,modulesStr);
             newContent = newContent.replace(/\{\{concat.dynamically_add_dependencies_to_appjs.services\}\}/,servicesStr);
             return newContent;
@@ -316,8 +255,7 @@ module.exports = function ( grunt ) {
         },
       },
 
-      index:{ // adds css and js files to index
-        requires:['copy:app'],
+      build_index:{ // adds css and js files to index
         src:'<%= src.dirs.app %>index.html',
         dest:'<%= build.dirs.app %>index.html',
         options:{
@@ -327,12 +265,11 @@ module.exports = function ( grunt ) {
             var thirdpartyStr = '\n';
 
             // ensure our third party dependencies load in the correct order
-            var thirdPartyFiles=grunt.config.get('copy.thirdparty_libs.files');
-            // grunt.log.warn('thirdPartyFiles',thirdPartyFiles);
-            thirdPartyFiles.forEach(function(file){
-              // grunt.log.warn('file',file.src);
+            var thirdPartyFiles=grunt.config.get('src.requiredFiles');
+            thirdPartyFiles.files.forEach(function(filePath){
+              grunt.log.warn('file',filePath);
               thirdpartyStr+= '\n    <script type="text/javascript" src="thirdparty/'+
-              file.src +
+              filePath +
               '"></script>';
             });
             // replace index tokens with appropriate css and js files
@@ -363,12 +300,24 @@ module.exports = function ( grunt ) {
     },
 
 
+    /**
+     * HTML2JS is a Grunt plugin that takes all of your template files and
+     * places them into JavaScript files as strings that are added to
+     * AngularJS's template cache, so all the html templates join the initial
+     * js payload as one JavaScript file.
+     */
+    html2js: {
+      options:{module:'html_templates_jsfied'},
+      app:{src:['<%= src.dirs.app %>*.tpl.html','<%= src.dirs.plugins %>**/*.tpl.html'], dest:'<%= build.dirs.js %>html_templates_jsfied.js'}
+    },
 
-    jsdoc: {
+
+
     /**
      * Compiles source documentation into a web page.
      * For valid tags, see http://usejsdoc.org/#JSDoc3_Tag_Dictionary
      */
+    jsdoc: {
       dist : {
         src: ['src/*.js', 'test/*.js'],
         options: {
@@ -377,34 +326,40 @@ module.exports = function ( grunt ) {
       }
     },
 
-    uglify: {
-    /**
-     * `ng-min` annotates the sources before minifying. That is, it allows us
-     * to code without the array syntax.
-     */
 
+    jshint: {
     /**
-     * Minify the sources!
+     * `jshint` defines the rules of our linter as well as which files we
+     * should check. This file, all javascript sources, and all our unit tests
+     * are linted based on the policies listed in `options`. But we can also
+     * specify exclusionary patterns by prefixing them with an exclamation
+     * point (!); this is useful when code comes from a third party but is
+     * nonetheless inside `src/`.
      */
-      compile: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        files: {
-          src:'<%= concat.compile_js.dest %>',
-          dest:'<%= concat.compile_js.dest %>'
-        }
-      }
+      options:{jshintrc: '.jshintrc'},
+      src_appjs: ['<%= src.dirs.app %>**/*.js', '!<%= src.dirs.thirdparty %>**'],
+      built_appjs: '<%= build.dirs.js %>app.js',
+      built_html_templates: '<%= build.dirs.js %>html_templates_jsfied.js',
+      rootfiles: ['*.{json,js}','*.*rc'], // lints the rootfiles, bower files, etc.
+      built_angular_services: '<%= build.dirs.js %>**/*-module.js',
+    },
+
+
+    // Karma configurations.
+    karma: {
+      options: {configFile: 'karma-config-unit.js'},
+      unit: {runnerPort: 9101, background: true },
+      continuous: {singleRun: true, background: true }
     },
 
     recess: {
     /**
-     * `recess` handles our LESS compilation and uglification automatically.
+     * `recess` for LESS files concatenates, converts to CSS, copies, and optionally minifies them;
      * Only our `app.less` file is included in compilation; all other files
      * must be imported from this file.
      */
       build: {
-        src: [ '<%= src.dirs.app %>**/*.less' ],
+        src: [ '<%= src.dirs.app %>app.less','<%= src.dirs.thirdparty %>bootstrap/less/bootstrap.less' ],
         dest: '<%= build.dirs.css %><%= pkg.name %>-<%= pkg.version %>.css',
         options: {
           compile: true,
@@ -427,190 +382,59 @@ module.exports = function ( grunt ) {
       // }
     },
 
-    jshint: {
-    /**
-     * `jshint` defines the rules of our linter as well as which files we
-     * should check. This file, all javascript sources, and all our unit tests
-     * are linted based on the policies listed in `options`. But we can also
-     * specify exclusionary patterns by prefixing them with an exclamation
-     * point (!); this is useful when code comes from a third party but is
-     * nonetheless inside `src/`.
-     */
-      options:{jshintrc: '.jshintrc'},
-      js: [
-        '<%= src.dirs.app %>*.js',
-        '<%= src.dirs.app %>**/*.js',
-        '!<%= src.dirs.thirdparty %>**/*.js'
-      ],
-      build_appjs: '<%= build.dirs.js %>app.js',
-      rootfiles: ['*.{json,js}','*.*rc'] // lints the rootfiles, bower files, etc.
-    },
 
-
-    html2js: {
-    /**
-     * HTML2JS is a Grunt plugin that takes all of your template files and
-     * places them into JavaScript files as strings that are added to
-     * AngularJS's template cache. This means that the templates too become
-     * part of the initial payload as one JavaScript file. Neat!
-     */
-      options:{
-        module:'html_templates_jsfied'
+    sync:{
+      thirdparty_to_src: {
+        files: [{
+          cwd: '<%= src.dirs.bower %>',
+          src: ['**/*.{js,less}','!{happathon,jQuery,node_modules,.git,Gruntfile,gruntfile,gruntFile,bootstrap/js,bootstrap/dist}*/','jQuery/jquery.min.js'],
+          dest: '<%= src.dirs.thirdparty %>',
+        }]
       },
-      app: {
-        src:  '<%= src.dirs.root %>**/*.tpl.html' ,
-        dest: '<%= build.dirs.js %>html_templates_jsfied.js'
-      }
+      thirdparty_to_build:{cwd: '<%= src.dirs.thirdparty %>', src:'**/*.{js,css}', dest:'<%= build.dirs.thirdparty %>'},
+      build_app: {cwd: '<%= src.dirs.app %>', src:['**/*.js','!thirdparty/**','!**/*.spec.js'], dest:'<%= build.dirs.app %>'},
+      assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= build.dirs.assets %>'}
     },
-
-    karma: {
     /**
-     * The Karma configurations.
+     * `ng-min` annotates the sources before minifying. That is, it allows us
+     * to code without the array syntax.
      */
-      options: {
-        configFile: 'karma-config-unit.js'
-      },
-      unit: {
-        runnerPort: 9101,
-        background: true
-      },
-      continuous: {
-        singleRun: true,
-        background: true
-      }
+    /** Minify the sources! */
+    uglify: {
+      options: {banner: '<%= banner %>'},
+      files: {src:'<%= concat.compile_js.dest %>', dest:'<%= concat.compile_js.dest %>'}
     },
 
-    lesslint:{
-      src:['<%= src.dirs.app %>**/*.less','!**/thirdparty/']
-    },
-
-    connect:{
-    /**
-     * The default for ng-boilerplate is viewing files with file:// protocol.
-     * To view the built with a web server, we'll include grunt-contrib-connect
-     *
-     */
-      home:{
-        options:{
-          base:'<%= build.dirs.app %>',
-          // directory:'<%= build.dirs.app %>',
-          // keepalive:true,
-          // port:8000,
-          //
-          // debug:true,
-          livereload:true,
-          // open:'http://localhost:8000/'
-        }
-      }
-    },
 
     delta: {
-    /**
-     * And for rapid development, we have a watch set up that checks to see if
-     * any of the files listed below change, and then to execute the listed
-     * tasks when they do. This just saves us from having to type "grunt" into
-     * the command-line every time we want to see what we're working on; we can
-     * instead just leave "grunt watch" running in a background terminal. Set it
-     * and forget it, as Ron Popeil used to tell us.
-     *
-     * But we don't need the same thing to happen for all the files.
-     */
-      /**
-       * By default, we want the Live Reload to work for all tasks; this is
-       * overridden in some tasks (like this file) where browser resources are
-       * unaffected. It runs by default on port 35729, which your browser
-       * plugin should auto-detect.
-       */
+     // watches files to see if they change and runs the tasks specified below
+     // when they do, automating the build process each time a file is saved.
+     // NOTE: These only run on CHANGED files, not creations/deletions
       options: {
-        livereload: true
+        cwd:'<%= src.dirs.app %>', // set a default source dir...
+        livereload: true // and automatically reload the browser when files change
       },
 
-      /**
-       * When the rootfiles changes, we just want to lint it.
-       * Temporarily while working on the build process, rebuild too.
-       */
-      rootfiles: {
-        files: ['*.{json,js}','*.*rc','!karma-config-unit.js'],
-        tasks: [
-          'jshint:rootfiles',
-          // 'copy:thirdparty_libs',
-          'build'
-        ]
-      },
-
-      /**
-       * When our JavaScript source files change, we want to run lint them and
-       * run our unit tests.
-       */
-      // js: {
-      //   files: [
-      //     '<%= src.dirs.app %>*.{js,json}',
-      //     '<%= src.dirs.app %>**/*.{js,json}',
-      //     '!**/*.spec.js'
-      //   ],
-      //   tasks: [
-      //     'jshint:js',
-      //     'karma:unit:run',
-      //     // 'copy:js',
-      //   ]
-      // },
-      app:{
-        files:[
-          '<%= src.dirs.app %>*.{js,json}',
-          '<%= src.dirs.app %>**/*.{js,json}',
-          '!thirdparty/**/*',
-        ],
-        tasks:['copy:app']
-      },
-      // app:{
-      //   files{}
-      // },
       // /**
       //  * When a JavaScript unit test file changes, we only want to lint it and
       //  * run the unit tests. We don't want to do any live reloading.
       //  */
-      // spec: {
-      //   files: [
-      //     '<%= src.fileGroups.js_spec %>'
-      //   ],
-      //   tasks: [ 'jshint:test', 'karma:unit:run' ],
-      //   options: {
-      //     livereload: false
-      //   }
-      // },
-
-
-      /**
-       * When assets are changed, copy them. Note that this will *not* copy new
-       * files, so this is probably not very useful.
-       */
-      // assets: {
-      //   files: '<%= src.dirs.assets %>',
-      //   // tasks: [ 'copy:assets' ]
-      // },
-
-      /**
-       * When index.html changes, we need to compile it.
-       */
-      index: {
-        files: '<%= src.dirs.app %>index.html',
-        tasks: [ 'concat:index']
-      },
-      /**
-       * When our templates change, we only rewrite the template cache.
-       */
-      html_templates: {
-        files: '<%= src.dirs.app %>**/*.tpl.html',
-        tasks: [ 'html2js' ]
-      },
-
-      /**
-       * When the CSS files change, we need to compile and minify them.
-       */
-      less: {
-        files: [ '<%= src.dirs.app %>**/*.less' ],
-        tasks: [ /*'lesslint',*/'recess:build' ]
-      },
+      // spec: { files: '<%= **/*.spec.js %>', tasks: [ 'jshint:test', 'karma:unit:run' ], },
+      // copy over all the static js/css.  These should not overwrite existing since sync checks file times.
+      app_static:{ files: '**/*.{css,js}', tasks: 'sync:build_app'},
+      // When the rootfiles change, lint them.
+      rootfiles:{files: ['*.{json,js}','!karma-config-unit.js'],tasks:['jshint:rootfiles','build'],options:{cwd:'.'}},
+      // compile index on change
+      angular_dependencies: {files: '**/*-module.js', tasks: ['concat:dynamically_add_dependencies_to_appjs','jshint:built_angular_services'] },
+      // compile index on change
+      index: {files: 'index.html', tasks: 'concat:index' },
+      // Recompile template cache on change
+      html_templates: {files: '**/*.tpl.html', tasks: 'html2js' },
+      // compile less on change
+      appless:{ files: 'app.less', tasks: 'recess:build'},
+      bootstrapless:{ files: '<%= src.dirs.thirdparty %>bootstrap/**/*.less', tasks: 'recess:build'},
+      // Copy any changed assets
+      assets:{files:'assets/**', tasks:'sync:assets'},
 
     }
   };
@@ -619,7 +443,7 @@ module.exports = function ( grunt ) {
 
 
 
-  grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
+  grunt.initConfig( grunt.util._.extend( taskConfig, directoryPaths ) );
 
   /**
    * In order to make it safe to just compile or copy *only* what was changed,
@@ -629,16 +453,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [
-    'build',
-    // 'karma:unit',
-    'connect',
-    'delta'
-  ]);
-
-
-
-
+  grunt.registerTask( 'watch', ['build', /*'karma:unit', */'connect', 'delta' ]);
 
 
   /** The default task is to build and compile. */
@@ -646,27 +461,25 @@ module.exports = function ( grunt ) {
   // 'compile'remove this for now.  We're not at a production stage.  We only need build.
 
   /**
-   * The `build` task gets your app ready to run for development and testing.
-   * The build phase:
-   * lint all files in src.app.js
-   * compile less to css
-   * copy all js files to build.dirs.app
+   * The `build` task gets sets up the app for development and testing.
    */
 
   grunt.registerTask( 'build', [
     // if this is the first run, it should copy the third party libs to your thirdparty dir
-    // grunt.file.exists(grunt.config.get('src.dirs.thirdparty'))?'copy:thirdparty_libs':'clean',
-    'clean',
-    'sync_bower_components',
-    'jshint',
-    'html2js',
-    // 'lesslint',
-    'recess:build',
-    'copy:app',
-
-    'copy:happathon_configs_to_angular_services',
-    'concat:dynamically_add_dependencies_to_appjs',
-    'concat:index',
+    !grunt.file.exists(grunt.config.get('src.dirs.thirdparty'))? // does the thirdparty directory exist in src?
+      'sync:thirdparty_to_src': // nope, create it and populate with fresh bower components
+      'clean', // otherwise we're working with an existing install.  Wipe out the build dir for a fresh one.
+    'html2js', // compile the html templates to js and place them in the build dir
+    'jshint:built_html_templates', // and lint them
+    'jshint:src_appjs', // lint src js
+    'copy:happathon_configs_to_angular_services', // copy the happathon configs to build as angular services
+    'jshint:built_angular_services', // and lint them
+    'sync:build_app', // copy everything over to the build dir, excluding the things already copied
+    'sync:thirdparty_to_build', // copy third party js & css to build
+    'concat:dynamically_add_dependencies_to_appjs', // automatically add all angular service and module dependencies for us
+    'recess:build', // compile our less to css and copy it to the build dir
+    'sync:assets', // along with assets
+    'concat:build_index', // build our index file with all its dependencies
     // 'karmaconfig',
     // 'karma:continuous'
   ]);
@@ -695,16 +508,4 @@ module.exports = function ( grunt ) {
     // grunt.config('jshint.all.src', filepath);
   });
 
-
-
-  grunt.registerTask('sync_bower_components', 'copied bower packages to their intended directories', function() {
-    // Enqueue "bar" and "baz" tasks, to run after "foo" finishes, in-order.
-    // var pluginsDir = grunt.config.get('<%= src.dirs.plugins %>');
-    // var pluginsCopied = grunt.file.exists(grunt.config.get('src.dirs.plugins'));
-
-    var thirdPartyLibsCopied = grunt.file.exists(grunt.config.get('src.dirs.thirdparty'));
-    if(!thirdPartyLibsCopied) {
-      grunt.task.run('copy:thirdparty_libs');
-    }
-  });
 };

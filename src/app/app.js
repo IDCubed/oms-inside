@@ -78,18 +78,21 @@ var happ = angular.module( 'happathon', [
           '$stateParams',
           'HolonJohnDoe',
           'HolonSomerville',
+
           function($rootScope, $state, $stateParams, HolonJohnDoe, HolonSomerville){
             console.log('resolving holonAPI',HolonJohnDoe,HolonSomerville);
             $rootScope.holons = [HolonJohnDoe, HolonSomerville];
             $rootScope.activeHolon = HolonJohnDoe;
             // holonApiPromise.then(function(holonObj){
             //   // not especially fond of putting all params on rootscope, but this works for quick prototyping.
-            //   $rootScope.$state = $state;
-            //   $rootScope.$stateParams = $stateParams;
-            //   $rootScope.holons = holonObj.list;
-            //   $rootScope.activeHolon = holonObj.active;
-            //   $rootScope.tabs = tabsDynamicData;
-            //   $rootScope.plugs = tempPluginsObj;
+
+// $root.activeHolon.installed_tabs.happathon.activePlugin
+            $rootScope.$state = $state;
+            $rootScope.$stateParams = $stateParams;
+            // $rootScope.holons = holonObj.list;
+            // $rootScope.activeHolon = holonObj.active;
+            // $rootScope.tabs = tabsDynamicData;
+            // $rootScope.plugs = tempPluginsObj;
 
             // });
             return $rootScope.holons;

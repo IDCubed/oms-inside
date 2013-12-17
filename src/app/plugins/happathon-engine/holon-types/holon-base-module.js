@@ -1,5 +1,5 @@
 angular.module( 'happathon-engine.holon-base', [])
-.service('holonBase', ['pluginBase', function (pluginBase) {
+.service('happathon-engine.holon-base', ['pluginBase', function (pluginBase) {
   return angular.extend({},{
     id:null,
     core_id:null,
