@@ -8,6 +8,7 @@ angular.module('happathon-engine.mock-backend', [
 .config( ['$stateProvider','$urlRouterProvider','RestangularProvider',
   function myAppConfig ( $stateProvider, $urlRouterProvider, RestangularProvider) {
 
+    console.log('RestangularProvider',RestangularProvider);
     // Define Restangular settings for back-end sync
     RestangularProvider.setBaseUrl('/api/v0/');
     RestangularProvider.setListTypeIsArray(false);
@@ -16,7 +17,7 @@ angular.module('happathon-engine.mock-backend', [
     });
     RestangularProvider.setResponseExtractor(function(response, operation, what,something,something2) {
       console.log('extractor response',response);
-      // console.log('extractor operation',operation);
+      console.log('extractor operation',operation);
       // console.log('extractor what',what);
       // console.log('extractor something',something);
       // console.log('extractor something2',something2);
@@ -27,14 +28,15 @@ angular.module('happathon-engine.mock-backend', [
 
   }
 ])
-.service('happathon-engine.mock-backend',[
+.run([
   'happathon-engine.holon-somerville',
   'happathon-engine.holon-johndoe',
   '$httpBackend',
   function happathonEngineMockBackend (Somerville,JohnDoe,$httpBackend) {
     console.log('running backend module');
-
-    $httpBackend.whenGET(/form|insight|challenge|tpl\.html/gi).passThrough();
+    // var $httpBackend = $injector.get('$httpBackend');
+    /*NOTE: THESE CALLS MUST BE IN A "RUN" FUNCTION TO WORK!!!*/
+    $httpBackend.whenGET(/\./g).passThrough();
 
     $httpBackend.whenGET(/\/api\/v0\/holons/)
     .respond(function(method, url, data, headers){

@@ -2,21 +2,19 @@ var happ = angular.module( 'happathon', [
   'html_templates_jsfied',
   'ui.router',
   'ngTouch',
-  // 'happathon-engine',
+  'happathon-engine'
   // 'happathon-engine.holon-johndoe',
   // 'happathon-engine.holon-somerville',
 // {{concat.dynamically_add_dependencies_to_appjs.modules}}
 ])
 // {{concat.dynamically_add_dependencies_to_appjs.services}}
 
-.config( ['$stateProvider','$urlRouterProvider','RestangularProvider',
-  function myAppConfig ( $stateProvider, $urlRouterProvider, RestangularProvider) {
+.config( ['$stateProvider','$urlRouterProvider',
+  function myAppConfig ( $stateProvider, $urlRouterProvider) {
 
     /**
      * States
      */
-
-
     // State factory fn since most states follow a consistent format.
     function stateFactory(stateObj){
       var o = angular.copy(stateObj);
@@ -29,6 +27,7 @@ var happ = angular.module( 'happathon', [
         url:names.slice(1).join('/'),
         controller: o.ctrl
       };
+      console.log('obj.url',obj.url);
       // if there is no controller, make it an abstract state so its children can
       // inherit the root deferred object and not display until it resolves.
       // https://github.com/angular-ui/ui-router/wiki/Nested-States-%26-Nested-Views#abstract-states
@@ -36,7 +35,7 @@ var happ = angular.module( 'happathon', [
         obj.template = '<ui-view/>';
         obj.abstract = true;
       }
-      console.log('state obj',obj);
+      // console.log('state obj',obj);
       // else{
         // make it a normal child state
         // we want these to inherit the resolve deferred on the root state,
@@ -62,49 +61,58 @@ var happ = angular.module( 'happathon', [
       $stateProvider.state(obj);
     }
 
-
+    console.log('about to run root state');
     // root state
     $stateProvider
     .state({
-      url:'/{holonType}',
+      url:'/{holonID}/{activePluginType}/{activePluginName}',
       name:'root',
-      abstract:true,
-      template:'<ui-view/>',
+      // templateUrl:['',function(){
+
+      // }],
+      views:{
+        main:{
+          template:'<h1>TEST</h1>',
+          // controller:'AppCtrl'
+          controller:function ($scope) {
+            console.log('AppCtrl $scope',$scope);
+          }
+        }
+      },
       resolve:{
         // waits to resolve the state until the holons list has returned.
         holonAPI:[
           '$rootScope',
           '$state',
           '$stateParams',
-          'HolonJohnDoe',
-          'HolonSomerville',
+          'happathon-engine.raw-data-api',
 
-          function($rootScope, $state, $stateParams, HolonJohnDoe, HolonSomerville){
-            console.log('resolving holonAPI',HolonJohnDoe,HolonSomerville);
-            $rootScope.holons = [HolonJohnDoe, HolonSomerville];
-            $rootScope.activeHolon = HolonJohnDoe;
-            // holonApiPromise.then(function(holonObj){
-            //   // not especially fond of putting all params on rootscope, but this works for quick prototyping.
+          function(root, state, params,rawDataApiPromise){
+            // console.log('resolving engineModule',engineModule);
+            console.log('state',state);
 
-// $root.activeHolon.installed_tabs.happathon.activePlugin
-            $rootScope.$state = $state;
-            $rootScope.$stateParams = $stateParams;
-            // $rootScope.holons = holonObj.list;
-            // $rootScope.activeHolon = holonObj.active;
-            // $rootScope.tabs = tabsDynamicData;
-            // $rootScope.plugs = tempPluginsObj;
 
-            // });
-            return $rootScope.holons;
-            // return holonApiPromise;
+            // engineApi
+//             root.holons = [HolonJohnDoe, HolonSomerville];
+//             root.activeHolon = HolonJohnDoe;
+            rawDataApiPromise.then(function(holonObj){
+              console.log('holonObj',holonObj);
+                // not especially fond of putting all params on rootscope, but this works for quick prototyping.
+              root.activePluginType = state.$current.params.activePluginType;
+              root.activePlugin = state.$current.params.activePluginName;
+
+              root.state = state;
+              root.stateParams = params;
+              root.holons = holonObj.list;
+              root.activeHolon = holonObj.active;
+              // root.tabs = tabsDynamicData;
+              // root.plugs = tempPluginsObj;
+
+            });
+//             return root.holons;
+            return rawDataApiPromise;
           }
         ]
-      },
-      views:{
-        'menus@':{
-          templateUrl:'holon/holon-menus.tpl.html',
-          controller:'HolonCtrl'
-        }
       }
     });
 
@@ -112,26 +120,26 @@ var happ = angular.module( 'happathon', [
     // the last part of the name is also the template name it will look to load
     // e.g., name:'insight.status'  loads 'insight/status/status.tpl.html'
 
-    stateFactory({name:'root.mainview', ctrl:'MainViewCtrl'});
-    stateFactory({name:'root.topnav', ctrl:'TopNavCtrl'});
-    stateFactory({name:'root.leftmenu', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.individuals', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.groups', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.insights', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.forms', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.challenges', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.apis', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.installed.algorithms', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.individuals', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.groups', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.insights', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.forms', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.challenges', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.apis', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.leftmenu.market.algorithms', ctrl:'LeftMenuCtrl'});
-    stateFactory({name:'root.rightmenu', ctrl:'RightMenuCtrl'});
+    // stateFactory({name:'root.app-settings', ctrl:'MainViewCtrl'});
+    // stateFactory({name:'root.topnav', ctrl:'TopNavCtrl'});
+    // stateFactory({name:'root.leftmenu', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.individuals', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.groups', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.insights', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.forms', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.challenges', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.apis', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.installed.algorithms', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.individuals', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.groups', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.insights', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.forms', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.challenges', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.apis', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.leftmenu.market.algorithms', ctrl:'LeftMenuCtrl'});
+    // stateFactory({name:'root.rightmenu', ctrl:'RightMenuCtrl'});
 
     // stateFactory({name:'root.insight.status', ctrl:'InsightCtrl'});
     // stateFactory({name:'root.insight.list', ctrl:'InsightCtrl'});
@@ -152,12 +160,17 @@ var happ = angular.module( 'happathon', [
 
 
     // define where to go if no state matched
-    $urlRouterProvider.otherwise("/human/insight/status");
+    $urlRouterProvider.otherwise("/0/insight/status");
   }
 ])
 
+.controller("AppCtrl", ['$scope',function($scope){
+  // $scope.showmenu=false;
+  console.log('AppCtrl $scope',$scope);
+}])
 .controller("MainViewCtrl", ['$scope',function($scope){
   // $scope.showmenu=false;
+  console.log('mainview $scope',$scope);
   $scope.toggleLeftMenu = function(){
     $scope.showmenu = !$scope.showmenu;
   };
@@ -165,14 +178,19 @@ var happ = angular.module( 'happathon', [
 .controller("TopNavCtrl", ['$scope',function($scope){
   // $scope.showmenu=false;
   $scope.toggleLeftMenu = function(){
-    $scope.showmenu = !$scope.showmenu;
+    $scope.showleftmenu = !$scope.showleftmenu;
+  };
+  $scope.toggleRightMenu = function(){
+
+    $scope.showrightmenu = !$scope.showrightmenu;
   };
 }])
+.controller("LeftMenuCtrl", ['$scope',function($scope){
+  // $scope.showmenu=false;
+}])
+
 .controller("RightMenuCtrl", ['$scope',function($scope){
   // $scope.showmenu=false;
-  $scope.toggleRightMenu = function(){
-    $scope.showmenu = !$scope.showmenu;
-  };
 }])
 
 .service('pluginBase', [function () {
@@ -323,81 +341,33 @@ var happ = angular.module( 'happathon', [
       });
     }
   };
-}])
-
-
-/** mobile slide demo */
-.directive('LeftMenu', ['$swipe',
-  function($swipe) {
-    return {
-      restrict: 'EA',
-      link: function(scope, ele, attrs, ctrl) {
-        var startX, pointX;
-        $swipe.bind(ele, {
-          'start': function(coords) {
-            startX = coords.x;
-            pointX = coords.y;
-          },
-          'move': function(coords) {
-            var delta = coords.x - pointX;
-            // ...
-          },
-          'end': function(coords) {
-            // ...
-          },
-          'cancel': function(coords) {
-            // ...
-          }
-        });
-      }
-    };
-  }
-])
-
-
-
-
-.service('app.happathon.json', [function () {
-
-  var happathon_engine_settings = {
-    dependencies:{
-      happathon_form_start:'0.0.1',
-      happathon_form_moment:'0.0.1',
-      happathon_form_daily:'0.0.1',
-      happathon_form_quarterly:'0.0.1'
-    },
-    settings:{
-      // extended by each dependency.
-      // We can override the dependencies' settings here
-      // since we control the dependencies, we can just specify in them instead.
-    },
-    data_schema:{
-      installed_environment:{
-        apiBaseUrlSuffix:'/installed_environment',
-        table:true,
-        primary_key:'user.id',// or something ... talk with folks who know DBs
-        columns:['type','resolution','make','model','os','imei'],
-      },
-      sensors:{
-        apiBaseUrlSuffix:'/sensors',
-        light:{
-          table:true,
-          columns:['some_primary_key','timestamp','lux','accuracy'],
-          primary_key:'some_primary_key',
-          apiBaseUrlSuffix:"/light",
-          uniqueSourceIdentifier:"edu.mit.media.funf.probe.builtin.LightSensorProbe",
-          formatExample:'[{"accuracy":0,"lux":39.0,"timestamp":1384546775.649034}]'
-        },
-        battery:{
-          apiBaseUrlSuffix:"/battery",
-          uniqueSourceIdentifier:"edu.mit.media.funf.probe.builtin.LightSensorProbe",
-          formatExample:'[{"accuracy":0,"lux":39.0,"timestamp":1384546775.649034}]'
-        }
-      },
-      forms:{
-      }
-    }
-
-  };
-  return happathon_engine_settings;
 }]);
+
+
+// /** mobile slide demo */
+// .directive('LeftMenu', ['$swipe',
+//   function($swipe) {
+//     return {
+//       restrict: 'EA',
+//       link: function(scope, ele, attrs, ctrl) {
+//         var startX, pointX;
+//         $swipe.bind(ele, {
+//           'start': function(coords) {
+//             startX = coords.x;
+//             pointX = coords.y;
+//           },
+//           'move': function(coords) {
+//             var delta = coords.x - pointX;
+//             // ...
+//           },
+//           'end': function(coords) {
+//             // ...
+//           },
+//           'cancel': function(coords) {
+//             // ...
+//           }
+//         });
+//       }
+//     };
+//   }
+// ])

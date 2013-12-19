@@ -35,12 +35,4 @@ function HolonCtrl ( $scope, $log, $rootScope) {
   //   console.log('$stateChangeSuccess arguments',arguments);
   // });
 
-}])
-.controller('MenuCtrl', ['$rootScope','$scope', '$log', 'holons',
-  function MenuCtrl ($rootScope,$scope, $log, holons) {
-  console.log('MenuCtrl',holons);
-  $scope.holons = holons.list;//holonDataPromise.activeHolon;
-  $scope.holon = holons.active;//holonDataPromise.activeHolon;
-
-
 }]);

@@ -1,7 +1,7 @@
 angular.module( 'happathon-engine.holon-type-human', [
   'happathon-engine.holon-base'
 ])
-.service('holonTypeHuman', ['holonBase', function (holonBase) {
+.service('holonTypeHuman', ['happathon-engine.holon-base', function (holonBase) {
   return angular.extend({},{
     id:null,
     type:'holon',

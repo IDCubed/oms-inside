@@ -144,13 +144,12 @@ module.exports = function ( grunt ) {
 
     connect:{ // lightweight web server to view the app!
       home:{
-        options:{base:'<%= build.dirs.app %>', livereload:true}
-          // directory:'<%= build.dirs.app %>',
-          // keepalive:true,
-          // port:8000,
-          //
-          // debug:true,
-          // open:'http://localhost:8000/'
+        options:{
+          base:'<%= build.dirs.app %>',
+          livereload:true,
+          debug:true
+          // open:'http://127.0.0.1:8000/'
+        }
       }
     },
 
@@ -182,7 +181,7 @@ module.exports = function ( grunt ) {
         options:{
           // requires:['sync:build_appjs'],
           processContent: function(content, srcpath){
-            grunt.log.warn('srcpath',srcpath);
+            grunt.log.writeln('srcpath',srcpath);
             var dirName = srcpath.match(/.*\/([^\/]+)\/.+$/)[1]+'-config';
             // var dirCamel=dirName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
             return '/*jshint indent:false*/\n' +
@@ -202,7 +201,7 @@ module.exports = function ( grunt ) {
           debug:false,
           nonull:false,
           rename: function(dest, src) {
-            grunt.log.warn('dest,src',dest,src);
+            grunt.log.writeln('dest,src',dest,src);
             return dest + src.replace(/\.json/,'-config-module.js');
           }
         }],
@@ -225,7 +224,7 @@ module.exports = function ( grunt ) {
       },
 
       dynamically_add_dependencies_to_appjs:{
-        src:'<%= build.dirs.app %>app.js',
+        src:'<%= src.dirs.app %>app.js',
         dest:'<%= build.dirs.app %>app.js',
         options:{
           process:function(content, srcpath){
@@ -267,7 +266,7 @@ module.exports = function ( grunt ) {
             // ensure our third party dependencies load in the correct order
             var thirdPartyFiles=grunt.config.get('src.requiredFiles');
             thirdPartyFiles.files.forEach(function(filePath){
-              grunt.log.warn('file',filePath);
+              grunt.log.writeln('file',filePath);
               thirdpartyStr+= '\n    <script type="text/javascript" src="thirdparty/'+
               filePath +
               '"></script>';
@@ -283,7 +282,7 @@ module.exports = function ( grunt ) {
               }
               var newStr = path.replace(/.*?\/app\//,'');
               if(/js$/.test(path)){
-                // grunt.log.warn('path',path);
+                // grunt.log.writeln('path',path);
                 jsStr+= '    <script type="text/javascript" src="'+newStr+'"></script>\n';
               } else {
                 cssStr+='    <link rel="stylesheet" type="text/css" href="'+ newStr+ '" />\n';
@@ -341,7 +340,7 @@ module.exports = function ( grunt ) {
       built_appjs: '<%= build.dirs.js %>app.js',
       built_html_templates: '<%= build.dirs.js %>html_templates_jsfied.js',
       rootfiles: ['*.{json,js}','*.*rc'], // lints the rootfiles, bower files, etc.
-      built_angular_services: '<%= build.dirs.js %>**/*-module.js',
+      built_angular_services: ['<%= build.dirs.app %>**/*-module.js'],
     },
 
 
@@ -387,7 +386,7 @@ module.exports = function ( grunt ) {
       thirdparty_to_src: {
         files: [{
           cwd: '<%= src.dirs.bower %>',
-          src: ['**/*.{js,less}','!{happathon,jQuery,node_modules,.git,Gruntfile,gruntfile,gruntFile,bootstrap/js,bootstrap/dist}*/','jQuery/jquery.min.js'],
+          src: ['**/*.{js,less,map}','!{happathon,jQuery,node_modules,.git,Gruntfile,gruntfile,gruntFile,bootstrap/js,bootstrap/dist}*/','jQuery/jquery.min.js'],
           dest: '<%= src.dirs.thirdparty %>',
         }]
       },
@@ -406,13 +405,13 @@ module.exports = function ( grunt ) {
     },
 
 
-    delta: {
+    watch: {
      // watches files to see if they change and runs the tasks specified below
      // when they do, automating the build process each time a file is saved.
      // NOTE: These only run on CHANGED files, not creations/deletions
       options: {
         cwd:'<%= src.dirs.app %>', // set a default source dir...
-        livereload: true // and automatically reload the browser when files change
+        livereload: true, // and automatically reload the browser when files change
       },
 
       // /**
@@ -420,21 +419,21 @@ module.exports = function ( grunt ) {
       //  * run the unit tests. We don't want to do any live reloading.
       //  */
       // spec: { files: '<%= **/*.spec.js %>', tasks: [ 'jshint:test', 'karma:unit:run' ], },
-      // copy over all the static js/css.  These should not overwrite existing since sync checks file times.
-      app_static:{ files: '**/*.{css,js}', tasks: 'sync:build_app'},
       // When the rootfiles change, lint them.
-      rootfiles:{files: ['*.{json,js}','!karma-config-unit.js'],tasks:['jshint:rootfiles','build'],options:{cwd:'.'}},
+      rootfiles:{files: ['Gruntfile.js','package.json','bower.json'],tasks:['jshint:rootfiles','buildSpec'],options:{cwd:'.'}},
+      // compile app's angular dependencies on change
+      main_app_module: {files:'app.js', tasks: ['concat:dynamically_add_dependencies_to_appjs','jshint:built_appjs','buildSpec'] },
+      angular_modules: {files: ['**/*-module.js'], tasks: ['sync:build_app','jshint:built_angular_services','buildSpec'] },
+      static_files_excluding_angular_modules:{files: ['**/*.{css,js}','!**/*-module.js'], tasks: ['sync:build_app','buildSpec']},
       // compile index on change
-      angular_dependencies: {files: '**/*-module.js', tasks: ['concat:dynamically_add_dependencies_to_appjs','jshint:built_angular_services'] },
-      // compile index on change
-      index: {files: 'index.html', tasks: 'concat:index' },
+      index: {files: 'index.html', tasks: ['concat:build_index','buildSpec'] },
       // Recompile template cache on change
-      html_templates: {files: '**/*.tpl.html', tasks: 'html2js' },
+      html_templates: {files: '**/*.tpl.html', tasks: ['html2js','buildSpec'] },
       // compile less on change
-      appless:{ files: 'app.less', tasks: 'recess:build'},
-      bootstrapless:{ files: '<%= src.dirs.thirdparty %>bootstrap/**/*.less', tasks: 'recess:build'},
+      appless:{ files: 'app.less', tasks: ['recess:build','buildSpec']},
+      bootstrapless:{ files: 'thirdparty/bootstrap/**/*.less', tasks: ['recess:build','buildSpec']},
       // Copy any changed assets
-      assets:{files:'assets/**', tasks:'sync:assets'},
+      assets:{files:'assets/**', tasks:['sync:assets','buildSpec']},
 
     }
   };
@@ -452,8 +451,8 @@ module.exports = function ( grunt ) {
    * `delta`) and then add a new task called `watch` that does a clean build
    * before watching for changes.
    */
-  grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', ['build', /*'karma:unit', */'connect', 'delta' ]);
+  // grunt.renameTask( 'watch', 'delta' );
+  grunt.registerTask( 'init', ['build', /*'karma:unit', */'connect', 'watch' ]);
 
 
   /** The default task is to build and compile. */
@@ -476,10 +475,11 @@ module.exports = function ( grunt ) {
     'jshint:built_angular_services', // and lint them
     'sync:build_app', // copy everything over to the build dir, excluding the things already copied
     'sync:thirdparty_to_build', // copy third party js & css to build
-    'concat:dynamically_add_dependencies_to_appjs', // automatically add all angular service and module dependencies for us
+    // 'concat:dynamically_add_dependencies_to_appjs', // automatically add all angular service and module dependencies for us
     'recess:build', // compile our less to css and copy it to the build dir
     'sync:assets', // along with assets
     'concat:build_index', // build our index file with all its dependencies
+    'buildSpec'
     // 'karmaconfig',
     // 'karma:continuous'
   ]);
@@ -497,15 +497,11 @@ module.exports = function ( grunt ) {
     'uglify'
   ]);
 
-
-  // on watch events configure watchers to only run on changed file
-  grunt.event.on('watch', function(action, filepath) {
-    // filter the event we'll pass to the different watches
-    if(/(js|html|hson)$/.test(filepath)){
-      grunt.config('copy.app.files', [filepath]);
-    }
-    // grunt.config('copy.app.src', filepath);
-    // grunt.config('jshint.all.src', filepath);
+  grunt.registerTask('buildSpec','test That all build files that should exist, do',function(){
+    if(!grunt.file.exists('build/app/index.html')) {grunt.fail.fatal('index.html does not exist!');}
+    if(!grunt.file.exists('build/app/app.js')) {grunt.fail.fatal('app.js does not exist!');}
+    if(!grunt.file.exists('build/app/thirdparty/')) {grunt.fail.fatal('thirdparty directory does not exist!');}
+    if(!grunt.file.exists('build/app/plugins/')) {grunt.fail.fatal('plugins directory does not exist!');}
+    if(!grunt.file.exists('build/app/js/html_templates_jsfied.js')) {grunt.fail.fatal('html_templates_jsfied does not exist!');}
   });
-
 };

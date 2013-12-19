@@ -15,13 +15,13 @@ angular.module( 'happathon-engine.raw-data-api', [
   // console.log('running holonData in main', Restangular,$q);
     var d = $q.defer();
     var holonsObj = Restangular.all('holons');
-    // console.log('holonsObj',holonsObj);
+    console.log('Restangular',Restangular);
     // TODO: Cache last known holonList locally for faster render.
     holonsObj.getList()
     .then(function (holonList) {
       // make copies we can use for modifying/displaying
       // return those in an object along with with functions to update original
-      // console.log('resolving');
+      console.log('resolving holonList',holonList);
       var obj = {
         'list':angular.copy(holonList),
         'active':angular.copy(holonList[0]),

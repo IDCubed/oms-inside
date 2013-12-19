@@ -24,11 +24,14 @@ angular.module( 'happathon-engine.holon-johndoe', [
     apis:[], // generated dynamically from the engine schema
     installed_tabs:{
       happathon_app:{
-        data:[], // populated by plugin's engine schema
-        settings:{
-          apis:[] // populated by plugin's engine schema
+        settings:{ // stores arbitrary data for the application
+          user_configurable:{},
+          internal:{ // stores settings that aren't configurable by the user
+            viewModel:{
+              mode:'viewing'
+            }
+          }
         }
-
       },
       happathon_engine:{ // we populate the data here.  We need to define the schema in the happathon engine module
         data:[], // populated by plugin's engine schema
@@ -75,6 +78,52 @@ angular.module( 'happathon-engine.holon-johndoe', [
     }
   },holonTypeHuman);
 }]);
+
+// // .service('app.happathon.json', [function () {
+
+//   var happathon_engine_settings = {
+//     dependencies:{
+//       happathon_form_start:'0.0.1',
+//       happathon_form_moment:'0.0.1',
+//       happathon_form_daily:'0.0.1',
+//       happathon_form_quarterly:'0.0.1'
+//     },
+//     settings:{
+//       // extended by each dependency.
+//       // We can override the dependencies' settings here
+//       // since we control the dependencies, we can just specify in them instead.
+//     },
+//     data_schema:{
+//       installed_environment:{
+//         apiBaseUrlSuffix:'/installed_environment',
+//         table:true,
+//         primary_key:'user.id',// or something ... talk with folks who know DBs
+//         columns:['type','resolution','make','model','os','imei'],
+//       },
+//       sensors:{
+//         apiBaseUrlSuffix:'/sensors',
+//         light:{
+//           table:true,
+//           columns:['some_primary_key','timestamp','lux','accuracy'],
+//           primary_key:'some_primary_key',
+//           apiBaseUrlSuffix:"/light",
+//           uniqueSourceIdentifier:"edu.mit.media.funf.probe.builtin.LightSensorProbe",
+//           formatExample:'[{"accuracy":0,"lux":39.0,"timestamp":1384546775.649034}]'
+//         },
+//         battery:{
+//           apiBaseUrlSuffix:"/battery",
+//           uniqueSourceIdentifier:"edu.mit.media.funf.probe.builtin.LightSensorProbe",
+//           formatExample:'[{"accuracy":0,"lux":39.0,"timestamp":1384546775.649034}]'
+//         }
+//       },
+//       forms:{
+//       }
+//     }
+
+//   };
+//   return happathon_engine_settings;
+// }]);
+
         // '/activeDataSources/'
         // '/discoverableDataSources/'
         // '/hiddenDataSources/'
