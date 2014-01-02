@@ -1,0 +1,46 @@
+<div class="menuleft"
+      ng-class="{active:$root.showleftmenu}"
+      ng-click="$event.stopPropagation();">
+  <div class="menu-title">
+    <span class="plug-icon icon-{{$root.pluginListType}}"></span>
+    <span >{{$root.pluginListType}}</span>
+  </div>
+  <div class="plugin-nav btn-toolbar">
+    <div class="btn-group">
+      <button type="button"
+        ng-class="{editing:$root.people.installed_tabs.happathon.viewMode==='editing'}"
+        class="btn btn-default icon-pencil"
+        ng-click="toggleEditMode()"
+      ></button>
+    </div>
+    <div class="btn-group">
+      <button type="button"
+              class="btn btn-default"
+              ng-model="pluginListSource"
+              btn-radio="'installed'"
+              >
+              Installed
+      </button>
+              <!-- ng-click="pluginListSource='installed'" -->
+              <!-- ng-click="pluginListSource='discover'" -->
+      <button type="button"
+              class="btn btn-default"
+              ng-model="pluginListSource"
+              btn-radio="'discover'"
+              >
+              Discover
+      </button>
+    </div>
+  </div>
+  <div class="plugin-list btn-group-vertical" ng-repeat="(pluginType,pluginsArray) in $root.pluginsByType" ng-show="$root.pluginListType===pluginType">
+    <button class="btn btn-default"
+        type="button"
+        ng-repeat="pluginObj in pluginsArray"
+        ng-class="{active:pluginObj.name===$root.plugin.name}"
+        >
+      <span class="plugin-settings" ng-click="$root.showrightmenu=1;"><span class="icon-cog"></span></span>
+      <span class="plugin-info"><span class="icon-info4"></span></span>
+      <span class="plugin-name" ng-click="changeState(pluginObj.name);">{{pluginObj.menu_title}}</span>
+    </button>
+  </div>
+</div>

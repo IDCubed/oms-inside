@@ -1,0 +1,45 @@
+<ul class="nav nav-pills">
+  <li>
+    <a class="plugins-dropdown icon-{{$root.pluginListType}}"
+       ng-click="$root.pluginListSelectorVisible=1;$event.stopPropagation();">
+    </a>
+    <ul class="plugin-type-selector nav nav-stacked nav-pills"
+        ng-show="$root.pluginListSelectorVisible">
+        <li ng-repeat="(key,val) in $root.pluginsByType" ng-class="{active:$root.pluginListType===key}">
+          <a ng-click="switchPluginListType(key);$event.stopPropagation();">
+            <span class="plug-icon icon-{{key}}"></span>
+            <span>{{key}}</span>
+          </a>
+        </li>
+    </ul>
+  </li>
+  <li class="people-dropdown dropdown">
+    <a class="dropdown-toggle">
+      <span class="people-select-title">{{$root.people.menu_title}}</span>
+      <span class='phi'>{{$root.people.phi}}</span>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li ng-class="{active:peep.name===$root.people.name}"
+          ng-repeat="peep in $root.peopleListObj"
+          ng-click="changeState(peep.name)">
+        <a>
+          <span class="people-select-title">{{peep.menu_title}}</span>
+          <span class='phi'>{{peep.phi}}</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="settings">
+    <a class="icon-cog" ng-click="$root.showrightmenu=!$root.showrightmenu; $event.stopPropagation();">
+    </a>
+  </li>
+  <li class="help ">
+    <a class="icon-info3">
+    </a>
+  </li>
+  <li class="add-moment">
+    <a class="icon-plus" ng-click="changeState('happathon-form-moment');">
+    </a>
+  </li>
+</ul>

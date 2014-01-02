@@ -3,60 +3,78 @@
 // There should be an overall settings page which shows you what data is being
 // tracked, and what sensors are activated, by which plugins
 
-// make sure checkmobilebrowser code get pushed with github
 {
-  "plugin_type":"form",
-  "routing":false,
-  "data_schema":false,
+  "type":"form",
+  "name": "happathon-form-moment",
+  "menu_title":"Capture the Moment",
   "extendable":true,
-  "datasource_dependencies":false,
-  "settings":{
-    "allowed_notification_times":{
-      "start":"08:30",
-      "end":"21:30"
+  "settings":[
+    {
+      "name":"allowed_notification_times",
+      "value":{
+        "start":"08:30",
+        "end":"21:30"
+      },
+      "template":"happathon-settings-utils_angular : time-range.tpl.partial"
     }
-  },
-  "questions":[ // these map to db columns
-    {
-      "question":"Where are you?",
-      "type":"checkbox",
-      "answers":["Indoors","Outdoors","Home","Work","In transit","Public place"],
-      "others":[],
-      "persist_others":true,
-      "delete_others":true,
-      "other_placement":"append"
-    },
-    {
-      "question":"What are you doing?",
-      "type":"radio",
-      "answers":["Something","Whittling","Eating Broccoli","Kissing a Llama","Drying my nose off"],
-      "others":[],
-      // when creating others by name, it should probably require specifying a relationship type.
-      "persist_others":true,
-      "delete_others":true,
-      "other_placement":"append"
-    },
-    {
-      "question":"Who are you with?",
-      "type":"radio",
-      "answers":["Alone","Significant Other","My Children","Other Children","Relatives","Friends","Co-workers","Clients","Strangers"],
-      "others":[],
-      // when creating others by name, it should probably require specifying a relationship type.
-      "persist_others":true,
-      "delete_others":true,
-      "other_placement":"append"
-    },
-    {
-      "question":"How focused are you?",
-      "type":"slider",
-      "answers":[0,1,2,3,4,5,6,7]
-    },
-    {
-      "question":"How happy are you?",
-      "type":"slider",
-      "answers":[0,1,2,3,4,5,6,7]
-    },
-  ]
+  ],
+  "display_templates":{
+    "individual":[
+        {
+          "question":"Heading?",
+          "placeholder":"placeholderHeading",
+          "type":"text",
+          "template":"happathon-form-utils_angular : heading.tpl.partial"
+        },
+        {
+          "question":"Text?",
+          "placeholder":"placeholderText",
+          "type":"text",
+          "template":"happathon-form-utils_angular : text.tpl.partial"
+        },
+        {
+          "question":"Where are you?",
+          "answers":["Indoors","Outdoors","Home","Work","In transit","Public place"],
+          "others":[],
+          "persist_others":true,
+          "delete_others":true,
+          "other_placement":"append",
+          "template":"happathon-form-utils_angular : checkbox.tpl.partial"
+        }
+        // {
+        //   "question":"What are you doing?",
+        //   "type":"radio",
+        //   "answers":["Something","Whittling","Eating Broccoli","Kissing a Llama","Drying my nose off"],
+        //   "others":[],
+        //   // when creating others by name, it should probably require specifying a relationship type.
+        //   "persist_others":true,
+        //   "delete_others":true,
+        //   "other_placement":"append"
+        // },
+        // {
+        //   "question":"Who are you with?",
+        //   "type":"radio",
+        //   "answers":["Alone","Significant Other","My Children","Other Children","Relatives","Friends","Co-workers","Clients","Strangers"],
+        //   "others":[],
+        //   // when creating others by name, it should probably require specifying a relationship type.
+        //   "persist_others":true,
+        //   "delete_others":true,
+        //   "other_placement":"append"
+        // },
+        // {
+        //   "question":"How focused are you?",
+        //   "type":"slider",
+        //   "answers":[0,1,2,3,4,5,6,7]
+        // },
+        // {
+        //   "question":"How happy are you?",
+        //   "type":"slider",
+        //   "answers":[0,1,2,3,4,5,6,7]
+        // }
+
+    ],
+    "group":[]
+  }
     // engine_schema:{
     //   installed_environment:{
     //     apiBaseUrlSuffix:"/installed_environment",

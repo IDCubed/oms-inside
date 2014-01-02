@@ -40,6 +40,14 @@
 
 @green: rgb( 69 ,178 ,84);
 
+@darkgrey:#333;
+
+@medgrey:#888;
+
+@lightgrey:#EEE;
+
+@white: #FFF;
+
 .absolute-center(@margin: auto) {
   position:absolute;
   margin:@margin;
@@ -79,16 +87,27 @@ code {padding: 0 3px; }
 pre {margin: 10px 0; padding: 5px; } .page-header {margin-top: 60px; &:first-child {margin-top: 20px; } }
 // h2 {margin: 20px 0; color: #666; }
 
+// .btn:active,.btn.active,.btn-default:active,.btn-default.active{
+//   background-color: @blue;
+// }
+// a.list-group-item.active{
 
-.root-container{
-  .absolute-center;
-  border:none;
-  overflow-x:hidden;
-  .content{
-    // position:absolute;
-    overflow:hidden;
-    // overflow-y:auto;
-  }
+// }
+// .inverted{
+//   .btn:active,.btn.active,.btn-default:active,.btn-default.active{
+//     background-color: @blue;
+//   }
+//   a.list-group-item.active
+// }
+
+a,a:link,a:visited,a:hover,a:active, {
+  color:@blue;
+  cursor:pointer;
+}
+
+.inverted {
+  a,a:link,a:visited,a:hover,a:active,
+  button,button:link,button:visited,button:hover,button:active {color:@white}
 }
 
 
@@ -131,32 +150,33 @@ pre {margin: 10px 0; padding: 5px; } .page-header {margin-top: 60px; &:first-chi
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-plus:before {content: "\e600"; }
+.icon-challenge:before {content: "\e616"; }
+.icon-form:before {content: "\e60c"; color:@green;}
+.icon-insight:before {content: "\e613"; color:@blue;}
+.icon-peep:before {content: "\e606"; }
+.icon-people:before {content: "\e607"; color:@orange;}
 .icon-user-add:before {content: "\e601"; }
-.icon-search:before {content: "\e602"; }
+.icon-plus:before {content: "\e600"; }
+.icon-market:before {content: "\e605"; }
 .icon-add-to-list:before {content: "\e603"; }
 .icon-info:before {content: "\e604"; }
-.icon-cart:before {content: "\e605"; }
-.icon-user:before {content: "\e606"; }
-.icon-users:before {content: "\e607"; }
-.icon-minus:before {content: "\e608"; }
-.icon-plus2:before {content: "\e609"; }
 .icon-arrow-down:before {content: "\e60a"; }
 .icon-arrow-up:before {content: "\e60b"; }
-.icon-text:before {content: "\e60c"; }
+
+.icon-search:before {content: "\e602"; }
+.icon-minus:before {content: "\e608"; }
+.icon-plus2:before {content: "\e609"; }
 .icon-pencil:before {content: "\e60d"; }
 .icon-info2:before {content: "\e60e"; }
 .icon-question:before {content: "\e60f"; }
 .icon-help:before {content: "\e610"; }
 .icon-spinner:before {content: "\e611"; }
 .icon-cog:before {content: "\e612"; }
-.icon-stats:before {content: "\e613"; }
 .icon-info3:before {content: "\e614"; }
 .icon-info4:before {content: "\e615"; }
-.icon-accessibility:before {content: "\e616"; }
 .icon-plus3:before {content: "\e617"; }
 
-
+.plug-icon > span { margin-left:0.5em;}
 /**
  * Now that all app-wide styles have been applied, we can load the styles for
  * all the submodules and components we are using.
@@ -165,11 +185,24 @@ pre {margin: 10px 0; padding: 5px; } .page-header {margin-top: 60px; &:first-chi
  */
 
 /**
- * Mobile slide menu demo
- *
+ * Main container
  */
+.root-container{
+  .absolute-center;
+  border:none;
+  overflow-x:hidden;
+  .content{
+    // position:absolute;
+    overflow:hidden;
+    // overflow-y:auto;
+  }
+}
 
 
+
+/**
+ * Mobile slide menus
+ */
 .menuleft,.menuright,.mainview{
   position:absolute;
   top:0px;
@@ -177,18 +210,99 @@ pre {margin: 10px 0; padding: 5px; } .page-header {margin-top: 60px; &:first-chi
   height:100%;
   z-index:0;
   display:block;
-  background-color: none;
+  background-color: @white;
+  overflow-x:hidden;
+}
+.mainview{
+  height:86%;
+  top:14%;
 }
 .menuleft,.menuright{
   transition:left 1s;
-  width:80%;
-  background-color: red;
+  width:90%;
+  background-color: @darkgrey;
+  padding:0 0.5em;
+  .menu-title{
+    color:@white;
+    // text-align:center;
+    font-size:1.5em;
+    line-height:2;
+  }
+  z-index: 1;
 }
-.menuleft{left:-80%}
-.menuright{left:100%;}
-.menuleft.active{left:0%; }
-.menuright.active{left:20%; }
+.menuleft{
+  left:-90%;
+  .btn{
+    padding:0 0.5em;
+    line-height:2;
+  }
+  .icon-pencil{
+    padding:0 0.4em;
+  }
 
+  .plugin-nav{
+    margin: 0.5em 0;
+    .btn.active,.btn:active{
+      color:@green;
+    }
+  }
+  .plugin-list{
+    display:block;
+
+    .btn{
+      background-color:@medgrey;
+      color:@white;
+    }
+    .btn.active,.btn:active{
+      color:@green;
+      background-color:@lightgrey;
+    }
+    .plugin-info,.plugin-settings{
+      float:right;
+      color:@darkgrey;
+      padding:0 0 0 0.5em;
+      vertical-align:middle;
+    }
+  }
+}
+.menuright{left:100%;}
+.menuleft.active{left:0%;}
+.menuright.active{left:10%;}
+
+/**
+ * Top Nav
+ */
+.topnav{
+  position:absolute;
+  width:100%;
+  height:8%;
+  vertical-align: middle;
+  border-bottom:1px solid #ddd;
+  .nav {
+    li,a{
+      height:8%;
+      white-space: nowrap;
+    }
+    a{
+      font-size:120%;
+      padding:0.5em 0.5em;
+      line-height:1.2;
+    }
+  }
+  .add-moment,.help,.settings{
+    float:right;
+  }
+  .to-front{
+    z-index:1000;
+  }
+  .plugin-type-selector {
+    background-color: @white;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index:10;
+  }
+}
 // .navbar-fixed-top{
 //   background-color:#03ae74;width:96%;height:50px;padding:0 2%;position: relative;top: auto;
 // }

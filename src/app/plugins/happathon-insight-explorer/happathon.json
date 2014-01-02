@@ -1,8 +1,8 @@
 {
-  "name": "happathon-insight-status",
+  "name": "happathon-insight-explorer",
   "type":"insight",
-  "menu_title":"Status",
-  "long_description":"Overall dashboard. Answers the question 'how is ___ doing?'",
+  "menu_title":"Explorer",
+  "long_description":"Graph two data sources over time.",
   "display_templates":{
     "group":[
       {"template":"happathon-insight-status : status-custom-test.tpl.partial"}

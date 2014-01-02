@@ -133,8 +133,8 @@ oms-happathon/
   |  |  |  |- settings-api-spec.js // unit tests
   |  |  |  |- routing-api-module.js // provides routing to forms and api
   |  |  |  |- routing-api-spec.js // routing unit tests
-  |  |  |  |- holon-api-module.js // provides holon CRUD api
-  |  |  |  |- holon-api-spec.js // holon unit tests
+  |  |  |  |- people-api-module.js // provides people CRUD api
+  |  |  |  |- people-api-spec.js // people unit tests
   |  |  |  |- form-api-module.js // provides form gen/config api. Defines states for routing api. Passes instructions to form-module.js
   |  |  |  |- form-api-spec.js // form unit tests
   |  |  |  |- auth-service.js // authorizationa/authentication services that provide apis with promises
@@ -162,17 +162,17 @@ oms-happathon/
   |  |  |  |  |- grid-10x10-tpl.html
   |  |  |  |  |- button-submit-tpl.html
   |  |  |  |  |- button-continue-tpl.html
-  |  |  |- holon-types/
-  |  |  |  |  |- holon-type-city-module.js // extends base with properties specific to city holons and returns json obj
-  |  |  |  |  |- holon-type-human-module.js // extends base with properties specific to human holons and returns json obj
+  |  |  |- people-types/
+  |  |  |  |  |- people-type-city-module.js // extends base with properties specific to city peoples and returns json obj
+  |  |  |  |  |- people-type-human-module.js // extends base with properties specific to human peoples and returns json obj
   |  |  |- mock-backend/
   |  |  |  |  |- mock-backend-module.js // provides back end CRUD interface to all APIs
   |  |  |  |  |- mock-backend-spec.js
-  |  |  |  |  |- holon-somerville-module.js // extends holon-type-city-module with somerville specific details and data
-  |  |  |  |  |- holon-johndoe-module.js // extends holon-type-human-module with johndoe specific details and data
+  |  |  |  |  |- people-somerville-module.js // extends people-type-city-module with somerville specific details and data
+  |  |  |  |  |- people-johndoe-module.js // extends people-type-human-module with johndoe specific details and data
   |  |  |- settings/
-  |  |  |  |  |- settings.tpl.html // to display a holon's settings
-  |  |  |  |  |- settings-module.js // provides fns for holon-api-module.js to CRUD holon settings
+  |  |  |  |  |- settings.tpl.html // to display a people's settings
+  |  |  |  |  |- settings-module.js // provides fns for people-api-module.js to CRUD people settings
   |- bower.json // bower dependencies stored in bower_components
   |- build.config.js // build configuration variables
   |- e2e-tests/ // mocha + chai code to test user scenarios involving multiple screens
@@ -191,14 +191,14 @@ oms-happathon/
   |  |  |- app.js // routing, engine api interaction, plugin base
   |  |  |- app.spec.js
   |  |  |- app.less // styles
-  |  |  |- holon-module.js // handles holon display
-  |  |  |- holon-spec.js
+  |  |  |- people-module.js // handles people display
+  |  |  |- people-spec.js
   |  |  |- insight-base.tpl.html
   |  |  |- plugin-list.tpl.html
   |  |  |- plugin-adding-instructions.tpl.html  // instructions for how to add a plugin
   |  |  |- mock-backend-module.js
   |  |  |- settings-config-module.js // provides app specific settings schema with default for the engine to store
-  |  |  |- holon-type-base-module.js // contains the base holon json for new holon types to extend
+  |  |  |- people-type-base-module.js // contains the base people json for new people types to extend
 
 
 ```

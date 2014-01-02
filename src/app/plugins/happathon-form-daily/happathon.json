@@ -1,0 +1,16 @@
+// test
+{
+  "name": "happathon-form-daily",
+  "menu_title":"Daily Journal",
+  "type":"form",
+  "display_templates":{
+    "group":[
+      "happathon-insight-status : status-custom-test.tpl.html"
+    ],
+    // test
+    "individual":[
+      "happathon-insight-utils_angular : heading.tpl.partial",
+      "happathon-insight-utils_angular : all-attributes.tpl.partial"
+    ]
+  }
+}

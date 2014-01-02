@@ -1,247 +1,210 @@
+var STATE_PROVIDER; // ugly global workaround for lazy loading states.  Only used in app.js file.
+var DEBUG_MODE=false;
 var happ = angular.module( 'happathon', [
   'html_templates_jsfied',
   'ui.router',
   'ngTouch',
-  'happathon-engine'
-  // 'happathon-engine.holon-johndoe',
-  // 'happathon-engine.holon-somerville',
-// {{concat.dynamically_add_dependencies_to_appjs.modules}}
+  'ui.bootstrap',
+  'happathon-api-app_angular',
+  'happathon-app-utils'
 ])
-// {{concat.dynamically_add_dependencies_to_appjs.services}}
-
 .config( ['$stateProvider','$urlRouterProvider',
-  function myAppConfig ( $stateProvider, $urlRouterProvider) {
+  function myAppConfig ($stateProvider , $urlRouterProvider) {
+    // store the state provider for lazy loading states
+    STATE_PROVIDER = $stateProvider;
+    // console.log('$rootScope',$rootScope);
 
     /**
      * States
      */
-    // State factory fn since most states follow a consistent format.
-    function stateFactory(stateObj){
-      var o = angular.copy(stateObj);
-      var names = o.name.split('.');
-      var i = 1;
-      var L = names.length;
-
-      var obj = {
-        name:o.name,
-        url:names.slice(1).join('/'),
-        controller: o.ctrl
-      };
-      console.log('obj.url',obj.url);
-      // if there is no controller, make it an abstract state so its children can
-      // inherit the root deferred object and not display until it resolves.
-      // https://github.com/angular-ui/ui-router/wiki/Nested-States-%26-Nested-Views#abstract-states
-      if(!o.ctrl){
-        obj.template = '<ui-view/>';
-        obj.abstract = true;
-      }
-      // console.log('state obj',obj);
-      // else{
-        // make it a normal child state
-        // we want these to inherit the resolve deferred on the root state,
-        // so make them children.  However, there's no need to create
-        // a blank insight template just to hold its children, so these should
-        // display in the parent's scope via the "@" absolute path
-        // obj.views={
-        //   'main@':{
-        //     templateUrl: function(params){
-        //       var i = 1;
-        //       var L = names.length;
-        //       var templateUrl = '';
-        //       for ( ; i < L; i++) {
-        //         templateUrl += names[i] +'/';
-        //       }
-        //       templateUrl += names[i-1] +'.tpl.html';
-        //       return templateUrl;
-        //     },
-        //     controller: stateObj.ctrl
-        //   }
-        // };
-      // }
-      $stateProvider.state(obj);
-    }
-
-    console.log('about to run root state');
-    // root state
-    $stateProvider
-    .state({
-      url:'/{holonID}/{activePluginType}/{activePluginName}',
-      name:'root',
-      // templateUrl:['',function(){
-
-      // }],
-      views:{
-        main:{
-          template:'<h1>TEST</h1>',
-          // controller:'AppCtrl'
-          controller:function ($scope) {
-            console.log('AppCtrl $scope',$scope);
-          }
+    // convert the routing request to a state request to use the state events
+    var freshSession=true;
+    $urlRouterProvider.otherwise(function($injector,$location){
+      console.log('$location','hash:',$location.hash(),'path:',$location.path());
+      var redirectTo = $location.path().slice(1);
+      var $state = $injector.get('$state');
+      var apiPromise = $injector.get('happathon-engine-apis-promise');
+      apiPromise.then(function (api) {
+        if(freshSession===true){
+          freshSession=false;
+          redirectTo = api.read('settings',{one:'default_plugin'}).value;
         }
-      },
-      resolve:{
-        // waits to resolve the state until the holons list has returned.
-        holonAPI:[
-          '$rootScope',
-          '$state',
-          '$stateParams',
-          'happathon-engine.raw-data-api',
-
-          function(root, state, params,rawDataApiPromise){
-            // console.log('resolving engineModule',engineModule);
-            console.log('state',state);
-
-
-            // engineApi
-//             root.holons = [HolonJohnDoe, HolonSomerville];
-//             root.activeHolon = HolonJohnDoe;
-            rawDataApiPromise.then(function(holonObj){
-              console.log('holonObj',holonObj);
-                // not especially fond of putting all params on rootscope, but this works for quick prototyping.
-              root.activePluginType = state.$current.params.activePluginType;
-              root.activePlugin = state.$current.params.activePluginName;
-
-              root.state = state;
-              root.stateParams = params;
-              root.holons = holonObj.list;
-              root.activeHolon = holonObj.active;
-              // root.tabs = tabsDynamicData;
-              // root.plugs = tempPluginsObj;
-
-            });
-//             return root.holons;
-            return rawDataApiPromise;
-          }
-        ]
-      }
+        $state.go(redirectTo,{freshSession:true});
+      });
     });
-
-    // child states triggered by menu buttons
-    // the last part of the name is also the template name it will look to load
-    // e.g., name:'insight.status'  loads 'insight/status/status.tpl.html'
-
-    // stateFactory({name:'root.app-settings', ctrl:'MainViewCtrl'});
-    // stateFactory({name:'root.topnav', ctrl:'TopNavCtrl'});
-    // stateFactory({name:'root.leftmenu', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.individuals', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.groups', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.insights', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.forms', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.challenges', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.apis', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.installed.algorithms', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.individuals', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.groups', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.insights', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.forms', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.challenges', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.apis', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.leftmenu.market.algorithms', ctrl:'LeftMenuCtrl'});
-    // stateFactory({name:'root.rightmenu', ctrl:'RightMenuCtrl'});
-
-    // stateFactory({name:'root.insight.status', ctrl:'InsightCtrl'});
-    // stateFactory({name:'root.insight.list', ctrl:'InsightCtrl'});
-    // stateFactory({name:'root.challenge'});
-    // stateFactory({name:'root.challenge.list',ctrl:'ChallengeCtrl'});
-    // stateFactory({name:'root.challenge.add',ctrl:'ChallengeCtrl'});
-    // stateFactory({name:'root.settings'});
-    // stateFactory({name:'root.settings.all', ctrl:'SettingsCtrl'});
-    // stateFactory({name:'root.plugin'});
-    // stateFactory({name:'root.plugin.list',ctrl:'PluginCtrl'});
-    // stateFactory({name:'root.plugin.add',ctrl:'PluginCtrl'});
-    // stateFactory({name:'root.form'});
-    // stateFactory({name:'root.form.moment',ctrl:'FormCtrl'});
-
-
-
-
-
-
-    // define where to go if no state matched
-    $urlRouterProvider.otherwise("/0/insight/status");
   }
 ])
 
-.controller("AppCtrl", ['$scope',function($scope){
-  // $scope.showmenu=false;
-  console.log('AppCtrl $scope',$scope);
-}])
-.controller("MainViewCtrl", ['$scope',function($scope){
-  // $scope.showmenu=false;
-  console.log('mainview $scope',$scope);
-  $scope.toggleLeftMenu = function(){
-    $scope.showmenu = !$scope.showmenu;
-  };
-}])
-.controller("TopNavCtrl", ['$scope',function($scope){
-  // $scope.showmenu=false;
-  $scope.toggleLeftMenu = function(){
-    $scope.showleftmenu = !$scope.showleftmenu;
-  };
-  $scope.toggleRightMenu = function(){
+.run([
+  '$rootScope',
+  '$state',
+  'happathon-engine-apis-promise',
+  'utils',
+  'stateFactory',
+  '$stateParams',
+  '$q',
+  'lodash',
+  '$timeout',
+  function ($rootScope, $state, engineApiPromise,utils,stateFactory,$stateParams,$q,_,$timeout) {
+    // This section is fugly!
+    // Lazy loading templates and states is not something UI router handles well.
+    utils.enableDebugging();
 
-    $scope.showrightmenu = !$scope.showrightmenu;
-  };
-}])
-.controller("LeftMenuCtrl", ['$scope',function($scope){
-  // $scope.showmenu=false;
-}])
+    // set root properties - I think these can go in a parent controller.
+    engineApiPromise.then(function(api){
+      $rootScope.peopleListObj = api.read('people',{add:'user'});
+      $rootScope.people = api.read('people',{one:'user'});
+      $rootScope.plugin = api.read('plugins',{one:'active'});
+      $rootScope.pluginsListObj = api.read('plugins');
+      $rootScope.$state = $state;
+      $rootScope.pluginOrPeopleChanged=false;
+      $rootScope.$stateParams = $stateParams;
+      $rootScope.pluginsByType = api.read('plugins',{groupBy:'type'});
+      $rootScope.pluginsByType.people.push($rootScope.people); // add the user to the list for managing settings consistently
+      console.log('$rootScope.pluginsByType',$rootScope.pluginsByType);
+      $rootScope.pluginListType = $rootScope.plugin.type; // set the initial active list type
 
-.controller("RightMenuCtrl", ['$scope',function($scope){
-  // $scope.showmenu=false;
-}])
+      $rootScope.closeMenus = function(){
+        var open=false;
+        if($rootScope.pluginListSelectorVisible){open=true;$rootScope.pluginListSelectorVisible=0;}
+        if($rootScope.showleftmenu){open=true;$rootScope.showleftmenu=0;}
+        if($rootScope.showrightmenu){open=true;$rootScope.showrightmenu=0;}
+        return open;
+      };
+      $rootScope.changeState = function(stateName){
+        // handle states internally since triggering on $stateChangeSuccess kills css animations,
+        // stateChangeStart doesn't fire on reloads
+        // and stateNotFound only works the first time a state is called
+        if(!stateName){return false; }
+        $rootScope.closeMenus();
+        // don't switch states for people changes.
+        var pluginObj = $rootScope.pluginsListObj[stateName];
+        if (pluginObj && pluginObj.display_templates) {
+          $rootScope.plugin = $rootScope.pluginsListObj[stateName];
+          // $rootScope.pluginOrPeopleChanged=!$rootScope.pluginOrPeopleChanged;
+          if(open){
+            $timeout(function(){
+              // $state.transitionTo(stateName,{notify:true});
+              $state.go(stateName);
+            },1050); // wait for menu close
+          } else {
+            $state.go(stateName);
+            console.log('switching plugin');
+          }
+          return true;
+        }
+        $rootScope.people = _.find($rootScope.peopleListObj,{name:stateName});
+        $rootScope.pluginOrPeopleChanged=!$rootScope.pluginOrPeopleChanged;
+        console.log('switching people');
+        return false;
+      };
+    });
 
-.service('pluginBase', [function () {
-  return {
-    type:null,
-    version: '0.0.0',
-    description: "default plugin description, based loosely on CommonJS packages",
-    keywords: ["package", "example"],
-    maintainers: [
-      {"name": "Example Name", "email": "example@example.com", "web": "http://www.example.com"}
-    ],
-    contributors: [
-      {"name": "Example Anothername", "email": "example2@example.com", "web": "http://www.example.com"}
-    ],
-    issues: {"mail": "dev@example.com", "web": "http://www.example.com/issues"},
-    licenses: [
-      {"type": "MIT", "url": "http://www.example.org/licenses/mit.html"}
-    ],
-    repositories: {
-      canonical:{"type": "git", "url": "http://hg.example.com/mypackage.git"},
-      mirror:{"type": "git", "url": "http://hg.example.com/mypackage.git"}
-    },
-    dependencies:{},
-    devDependencies:{}
-  };
-}])
+    $rootScope.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
+      console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
 
-/*
-<h2>Plugins List</h2>
-<div ng-repeat="(key,plugin) in tabs.happathon_app.plugins">
-  <h3>
-    {{key}}
-  </h3>
-  <hr>
-  <div ng-repeat="(k,plug) in plugin">
-    <pre>{{k}}:{{plug}}</pre>
-  </div>
-</div>
+      var pluginObj = $rootScope.pluginsListObj[unfoundState.to];
+      // if there are display templates, create the state and retry it
+      if (pluginObj&&pluginObj.display_templates) {
+        event.retry = stateFactory(unfoundState.to);
+        return;
+      }
+      // else prevent the transition
+      console.log('preventing switch to new state - no display templates');
+      event.preventDefault();
+    });
+  }
+])
+// lazy loads states
+// returns a promise for when the state is done loading
+.service('stateFactory', [
+  'happathon-engine-apis-promise',
+  'utils',
+  function (engineApiPromise, utils) {
+    return function(stateName){
+
+        // parse plugins here.
+      engineApiPromise.then(function(api){
+
+        // get which plugin to populate the state data from
+        var pluginObj = api.read('plugins',{one:stateName});
+
+        var stateObj = {
+          name:pluginObj.name,
+          url:'/'+pluginObj.name,
+          data:{},
+          views:{
+            'main@':{
+              controller:'MainViewCtrl',
+              template:'<partials-container/>' // gets replaced by the partialsContainer directive
+            },
+            'menuleft@':{
+              controller:'LeftMenuCtrl',
+              templateUrl:'left-menu.tpl.html'
+            },
+            'menuright@':{
+              controller:'RightMenuCtrl',
+              templateUrl:'right-menu.tpl.html'
+            },
+            'topnav@':{
+              controller:'TopNavCtrl',
+              templateUrl:'top-nav.tpl.html'
+            }
+          }
+        };
+
+        // create the state
+        STATE_PROVIDER.state(stateObj);
+
+      // resolve the stateDefinedDeferred to load our newly defined state
+      });
+      return engineApiPromise;
+    };
+  }
+])
+
+
+/**
+ * Controllers
  */
+
+.controller("MainViewCtrl", ['$scope','$state','$rootScope',function($scope,$state,$root){
+
+  // console.log('MainViewCtrl $scope',$scope);
+  // console.log('MainViewCtrl $state',$state);
+}])
+
+// Top Nav
+.controller("TopNavCtrl", ['$scope','$state','$rootScope',function($scope,$state,$root){
+  console.log('TopNavCtrl $scope',$scope);
+  $scope.switchPluginListType = function (typeStr) {
+    $root.pluginListSelectorVisible=0; // yes, just close the selector
+    $root.showleftmenu=1;
+    if($root.pluginListType!==typeStr){ // already on the clicked type?
+      $root.pluginListType = typeStr; // no, set the new type and show
+    }
+  };
+}])
+
+
+.controller("LeftMenuCtrl", ['$scope','$state','$rootScope',function($scope,$state,$root){
+  $scope.pluginListSource='installed';
+  console.log('LeftMenuCtrl $scope',$.extend({},$scope));
+  //
+}])
+
+
+.controller("RightMenuCtrl", ['$scope','$state','$rootScope',function($scope,$state,$rootScope){
+  // $scope.showmenu=false;
+}])
+
 
 .directive('hapSize', ['$timeout','$window', function ($timeout, $window) {
   var runs = 0;
   return {
     restrict: 'A',
-    link: function (scope, iElement, iAttrs, holons) {
-      // this function runs on each menu creation loop
-      // only let it run on the last loop
-      // scope.holons[runs].menuvis = false;
-      // if(++runs < scope.holons.length){
-      //   return;
-      // }
+    link: function (scope, iElement, iAttrs, people) {
+
 
       function size(){
 
@@ -341,33 +304,57 @@ var happ = angular.module( 'happathon', [
       });
     }
   };
+}])
+
+
+
+.directive('partialsContainer',
+['$templateCache','$rootScope','$compile',
+function ($templateCache, $root, $compile) {
+  return {
+    template: '<div></div>',
+    replace: true,
+    restrict: 'E',
+    // compile runs digest once.
+    // link would run digest each time the model changes, including each time a new child is appended.
+    compile:function(tElement, tAttrs, transclude){
+      return {
+        pre:function(scope, iElement, iAttrs,controller){
+          var counter = 0;
+          // for some reason, making this $root.$watch causes the counter to log 3, 2, 1;
+          // where making it scope.$watch only makes it render 1 each time.
+          // Apparently a root watch will run 3 times.
+          //
+          scope.$watch('pluginOrPeopleChanged', function (changed) { // also works
+          // scope.$watch('[plugin,people]', function (changed) {
+            console.log('RENDERING',++counter);
+            // clean up
+            iElement.html('');
+
+            var groupOrIndividual = $root.people.tags.indexOf('group') < 0 ? 'individual' : 'group';
+            var templateArray = $root.plugin.display_templates[groupOrIndividual];
+            // loop over the plugin's display templates
+            if(templateArray===undefined||templateArray.length===0){
+              templateArray=[{template:''}];
+            }
+            // var tempDom = angular.element('<div></div>');
+            angular.forEach(templateArray,function(obj,idx){
+              // create a new child scope for each
+              var childScope=scope.$new();
+              // add the template's data to its scope
+              childScope.template_data=obj;
+              childScope.idx=idx;
+              // get the partials from the cache
+              var templateStr = $templateCache.get('plugins/'+obj.template.split(' : ').join('/'));
+              // if the template str is still blank, return a message;
+              // console.log('templateStr',templateStr);
+              templateStr = templateStr || '<div>The author of plugin "'+$root.plugin.name+'" did not specify a template to display '+groupOrIndividual+'s.</div>';
+              // append the element to the dom - can batch these into one dom write for performance
+              iElement.append($compile(templateStr)(childScope));
+            });
+          });
+        }
+      };
+    }
+  };
 }]);
-
-
-// /** mobile slide demo */
-// .directive('LeftMenu', ['$swipe',
-//   function($swipe) {
-//     return {
-//       restrict: 'EA',
-//       link: function(scope, ele, attrs, ctrl) {
-//         var startX, pointX;
-//         $swipe.bind(ele, {
-//           'start': function(coords) {
-//             startX = coords.x;
-//             pointX = coords.y;
-//           },
-//           'move': function(coords) {
-//             var delta = coords.x - pointX;
-//             // ...
-//           },
-//           'end': function(coords) {
-//             // ...
-//           },
-//           'cancel': function(coords) {
-//             // ...
-//           }
-//         });
-//       }
-//     };
-//   }
-// ])

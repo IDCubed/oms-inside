@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="happathon">
   <head>
-    <title ng-bind-template="{{$root.activeHolon.menuTitle}}"></title>
+    <title ng-bind-template="{{$root.people.menuTitle}}"></title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <!-- font awesome from BootstrapCDN -->
 <!--     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
@@ -17,98 +17,23 @@
   </head>
   <body ng-cloak>
     <div  class="root-container"
-          ng-swipe-left="showleftmenu=0;"
-          ng-swipe-right="showrightmenu=0"
+          ng-swipe-left="$root.showleftmenu=0;"
+          ng-swipe-right="$root.showrightmenu=0;"
+          ng-click="$root.closeMenus();"
           hap-size>
 
 <!--
       <div  class="menuleft"
             ng-class="{hide:!showleftmenu, slide:showleftmenu}"
             left-menu> -->
-      <div  class="menuleft" ng-class="{active:showleftmenu}">
 
-        <h1>{{$root.currentPluginType}}</h1>
-        <ul class="plugin-nav">
-          <li class="btn btn-default"
-              ng-class="{active:$state.includes('installed')};"
-              ng-click="$state.go('root.leftmenu.installed')">Installed
-          </li>
-          <li class="btn btn-default"
-              ng-class="{active:$state.includes('market')};"
-              ng-click="$state.go('root.leftmenu.market')">Market
-          </li>
-          <li class="icon-pencil"
-              ng-class="{editing:$root.activeHolon.installed_tabs.happathon.viewMode==='editing'}"></li>
-          <li class="icon-pencil"></li>
-        </ul>
-        <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.settings">
-          <ul>
-            <li>
-              <span class="plugin-name">Status</span>
-              <span class="plugin-settings icon-info4"></span>
-              <span class="plugin-settings icon-cog"></span>
-            </li>
-            <li>
-              <span class="plugin-name">Data Explorer</span>
-              <span class="plugin-settings icon-info4"></span>
-              <span class="plugin-settings icon-cog"></span>
-            </li>
-            <li>
-              <span class="plugin-name">Locations</span>
-              <span class="plugin-settings icon-info4"></span>
-              <span class="plugin-settings icon-cog"></span>
-            </li>
-            <li><a ng-click="toggleMenu()">Link 3</a></li>
-          </ul>
-        </div>
+      <div ui-view="menuleft">
       </div>
-      <div class="menuright" ng-class="{active:showrightmenu, slide:showrightmenu}">
-        <h1>Settings</h1>
-        <div ng-repeat="settingCategory in $root.activeHolon.installed_tabs.happathon.settings">
-
-        </div>
+      <div ui-view="menuright">
+      </div>
+      <div class="topnav" ui-view="topnav">
       </div>
       <div  class="mainview" ui-view="main">
-        <div class="overlay" ng-swipe-left="showleftmenu=false">
-        </div>
-        <ul class="nav nav-pills">
-          <li>
-            <button ng-click="showleftmenu=!showleftmenu"
-                    ng-class="'plugins-dropdown icon-stats plugin-type'+$root.activeHolon.installed_tabs.happathon.activePlugin.type">
-            </button>
-          </li>
-          <li class="holon-dropdown">
-            <form>
-              <select class="form-control holon-menu-title">
-              <option ng-selected="holon.id===$root.activeHolon.id"  ng-repeat="holon in $root.holons">
-                <span class="holon-select-title">{{holon.menu_title}}</span>
-                <span class='phi'>{{holon.phi}}</span>
-              </option>
-              </select>
-            </form>
-          </li>
-          <li>
-            <button class="add-moment icon-plus">
-              {{$root.holon.menu_title}}
-            </button>
-          </li>
-          <li>
-            <button class="help icon-info3">
-              {{$root.holon.menu_title}}
-            </button>
-          </li>
-          <li>
-            <button class="settings icon-cog"
-                    ng-click="showrightmenu=!showrightmenu">
-              {{$root.holon.menu_title}}
-            </button>
-          </li>
-        </ul>
-        <div class="content" ui-view="main">
-          main
-        </div>
-      </div>
-
       </div>
     </div>
   </body>

@@ -1,54 +1,54 @@
-# The `src/app/holon` Directory
+# The `src/app/people` Directory
 
 /**
- * 
- * From http://en.wikipedia.org/wiki/Holon_(philosophy)
- * A holon (Greek: ὅλον, holon neuter form of ὅλος, holos "whole") is something that is simultaneously a whole and a part.
- * 
- * A person consists of cells, and a family consists of persons.  A cell, a person, a friendship, a family, a business, a city, a country, a planet, are all holons.  It is likely that individual human well-being is determined largely by their holons, so this architecture enables simultaneous data display across multiple holons.
+ *
+ * From http://en.wikipedia.org/wiki/People_(philosophy)
+ * A people (Greek: ὅλον, people neuter form of ὅλος, holos "whole") is something that is simultaneously a whole and a part.
+ *
+ * A person consists of cells, and a family consists of persons.  A cell, a person, a friendship, a family, a business, a city, a country, a planet, are all people.  It is likely that individual human well-being is determined largely by their people, so this architecture enables simultaneous data display across multiple people.
 
- * This directory contains templates to display different holon types (e.g., city, human).
- * Subdirectories  as well as some default holons in subdirectories., and  types folder contains Me is a default holon, and defines specific presentation attributes for the holon
- * Templates in the src/app/holon directory define this presentation
+ * This directory contains templates to display different people types (e.g., city, human).
+ * Subdirectories  as well as some default people in subdirectories., and  types folder contains Me is a default people, and defines specific presentation attributes for the people
+ * Templates in the src/app/people directory define this presentation
  */
 
 ## Overview
 ```
 src/
   |- app/
-  |  |- holon/
+  |  |- people/
   |  |  |- me/
   |  |  |  |- me-config.json
   |  |  |- somerville/
   |  |  |  |- somerville-config.json
-  |  |  |- holon-user.tpl.html
-  |  |  |- holon-human.tpl.html
-  |  |  |- holon-city.tpl.html
-  |  |  |- holon-user.less
-  |  |  |- holon-human.less
-  |  |  |- holon-city.less
-  |  |  |- holon-module.less
+  |  |  |- people-user.tpl.html
+  |  |  |- people-human.tpl.html
+  |  |  |- people-city.tpl.html
+  |  |  |- people-user.less
+  |  |  |- people-human.less
+  |  |  |- people-city.less
+  |  |  |- people-module.less
   |  |  |- home.less
   |  |  |- home.less
   |  |  |- home.spec.js
   |  |  |- home.tpl.html
 ```
 
-- `me/me-config.json` - defines default holon attributes, including presentation template
-- `holon-user.tpl.html` - display template for holon type 'user'
-- `holon-human.tpl.html` - display template for holon type 'human'
-- `holon-city.tpl.html` - display template for holon type 'city'
-- `holon-module.js` defines the angular module
-- `holon-spec.js` - module unit tests.
+- `me/me-config.json` - defines default people attributes, including presentation template
+- `people-user.tpl.html` - display template for people type 'user'
+- `people-human.tpl.html` - display template for people type 'human'
+- `people-city.tpl.html` - display template for people type 'city'
+- `people-module.js` defines the angular module
+- `people-spec.js` - module unit tests.
 
-## `holon-module.js`
+## `people-module.js`
 
 The dependencies block is also where component dependencies should be
 specified, as shown below.  As long as dependencies for each module are specified, the
 the build system takes care of pulling them together correctly.
 
 ```js
-angular.module( 'happathon.holon', [
+angular.module( 'happathon.people', [
   'ui.state', // optional dependencies here
 ])
 ```
@@ -65,8 +65,8 @@ title (see the app.js controller).
 
 ```js
 .config(['$stateProvider', function ( $stateProvider ) {
-  $stateProvider.state( 'holon-user', {
-    url: '/holon',
+  $stateProvider.state( 'people-user', {
+    url: '/people',
     views: {
       "main": {
         controller: 'HomeCtrl',

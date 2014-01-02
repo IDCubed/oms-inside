@@ -7,7 +7,7 @@ src/
   |- app/
   |  |- challenge/
   |  |- form/
-  |  |- holon/
+  |  |- people/
   |  |- insight/
   |  |- mock-backend/
   |  |- plugin/
@@ -23,7 +23,7 @@ filled with subdirectories corresponding to high-level objects or sections in th
 (just updated these.  More details to come tomorrow.)
 ## challenge/
 ## form/
-## holon/
+## people/
 ## insight/
 ## mock-backend/
 ## plugin/

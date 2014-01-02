@@ -4,17 +4,16 @@ module.exports = function ( grunt ) {
    * in `package.json` when you do `npm install` in this directory.
    */
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-conventional-changelog');
-  grunt.loadNpmTasks('grunt-bump');
+  // grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-ngmin');
+  // grunt.loadNpmTasks('grunt-ngmin');
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks("grunt-sync");
@@ -47,9 +46,9 @@ module.exports = function ( grunt ) {
           'angular-ui-router/release/angular-ui-router.js',
           'angular-gesture/ngGesture/gesture.js',
           'angular-ui-utils/modules/utils.js',
-          'd3/d3.min.js',
-          'd3.chart/d3.chart.min.js',
-          'Faker/Faker.js',
+          // 'd3/d3.min.js',
+          // 'd3.chart/d3.chart.min.js',
+          // 'Faker/Faker.js',
           'restangular/dist/restangular.js'
         ]
       },
@@ -143,117 +142,94 @@ module.exports = function ( grunt ) {
 
 
     connect:{ // lightweight web server to view the app!
-      home:{
+      build:{
         options:{
           base:'<%= build.dirs.app %>',
           livereload:true,
-          debug:true
+          debug:false
           // open:'http://127.0.0.1:8000/'
         }
-      }
-    },
-
-
-
-    copy: {
-    /**
-     * The `copy` task just copies files from A to B. We use it here to copy
-     * our project assets (images, fonts, etc.) and javascripts into
-     * `build.dirs`, and then to copy the assets to `dirs.compile`.
-     // */
-     //  expand:true,
-     //  happathon_plugins:{
-     //    // may be able to use this to install them https://npmjs.org/package/grunt-bower-cli
-     //    //re-enable this once we convert all plugins to bower packages
-     //    // expand:true,
-     //    // debug:true,
-     //    // nonull:true,
-     //    // flatten:false,
-     //    // cwd:'<%= src.dirs.bower %>', // a.k.a., sourceBasePath
-     //    // src:'happathon*/**',
-     //    // dest:'<%= src.dirs.plugins %>',
-     //  },
-     //
-     //
-     //  convert the plugin config json files to angular services
-     //  TODO: Instead of doing this, it would be simpler to just read the json files and provide them through an api
-      happathon_configs_to_angular_services:{
+      },
+      compile:{
         options:{
-          // requires:['sync:build_appjs'],
-          processContent: function(content, srcpath){
-            grunt.log.writeln('srcpath',srcpath);
-            var dirName = srcpath.match(/.*\/([^\/]+)\/.+$/)[1]+'-config';
-            // var dirCamel=dirName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
-            return '/*jshint indent:false*/\n' +
-                  'angular.module("' + dirName +'",[])\n'+
-                  '.service("'+dirName +'",function(){\n'+
-                  '  return [' + // wrap everything in an array in case file has comments
-                  (content || "''") +
-                  '][0];\n});\n';
-          },
-          // spawn:false
-        },
-        files:[{
-          cwd:'<%= src.dirs.plugins %>',
-          src:'**/happathon.json',
-          dest:'<%= build.dirs.plugins %>',
-          expand:true,
-          debug:false,
-          nonull:false,
-          rename: function(dest, src) {
-            grunt.log.writeln('dest,src',dest,src);
-            return dest + src.replace(/\.json/,'-config-module.js');
-          }
-        }],
-      }
+          base:'<%= compile.dirs.app %>',
+          livereload:true,
+          debug:false
+          // open:'http://127.0.0.1:8000/'
+        }
+      },
     },
+
+
+
+    // may be able to use this to install happathon bower plugins them https://npmjs.org/package/grunt-bower-cli
 
 
     // `grunt concat` concatenates multiple source files into a single file.
     concat: {
-      //`compile_css` concatenates our app and thirdparty js in a single file.
-      compile_css: {
-        src: '<%= build.dirs.css %>**/*.css',
-        dest: '<%= compile.dirs.css %><%= pkg.name %>-<%= pkg.version %>.css'
-      },
-      //`compile_js` concatenates our app and thirdparty js in a single file.
-      compile_js: {
-        options: { banner: '<%= banner %>' },
-        src:['module.prefix', '<%= src.requiredFiles %>','<%= build.dirs.js %>', 'module.suffix'],
-        dest: '<%= compile.dirs.js %><%= pkg.name %>-<%= pkg.version %>.js'
-      },
 
-      dynamically_add_dependencies_to_appjs:{
-        src:'<%= src.dirs.app %>app.js',
-        dest:'<%= build.dirs.app %>app.js',
+      // temporary, until user object can have plugins installed in db
+      // though we will also need to add them via button click.
+      temporarily_pre_install_plugins_on_user_via_grunt:{
+        src:'<%= src.dirs.plugins %>happathon-engine/mock-backend/people-user-module.js',
+        dest:'<%= build.dirs.plugins %>happathon-engine/mock-backend/people-user-module.js',
         options:{
+          // cwd:'<%= src.dirs.plugins %>happathon-engine/mock-backend/',
           process:function(content, srcpath){
-            var appjsFile = content;
-            var modulesStr = '';
-            var servicesStr = '';
+            var pluginsStr;
+            var plugins={};
             grunt.file.expand(
               {debug:false,nonull:true,expand:true},
-              grunt.config.get('build.dirs.plugins')+'**/*.js'
+              grunt.config.get('src.dirs.plugins')+'**/happathon.json'
             ).forEach(function(path,loopIterator,filesArr){
-              var contents = grunt.file.read(path);
-              // get module names from the file
-              var matchedModules = contents.match(/angular\.module.*?["'].+?['"]+/g) || [];
-              for (var i = 0, L = matchedModules.length; i < L;i++){
-                modulesStr += '  ' + matchedModules[i].replace(/angular\.module[^'"]+/gi,'')+',\n';
+              var configJsonStr = grunt.file.read(path)
+              .replace(/^[^{]*/,'') // strip starting lines before {
+              .replace(/\s*?\/\/[^\n]+/gi,''); // strip comments
+              if(!/\{/.test(configJsonStr)){ // if no JSON object, return
+                return;
               }
-              //get service names from the file
-              var matchedServices = contents.match(/\.service.*?["'].+?['"]+/g)||[];
-              for (i = 0, L = matchedServices.length; i < L;i++){
-                servicesStr += '\n// '+ matchedServices[i];
-              }
+              var pluginObj=JSON.parse(configJsonStr);
+              plugins[pluginObj.name]=pluginObj;
+              // pluginsStr+='"'+pluginName+'":'+configJsonStr+',';
             });
-            var newContent = content.replace(/\/\/\s+\{\{concat.dynamically_add_dependencies_to_appjs.modules\}\}/,modulesStr);
-            newContent = newContent.replace(/\{\{concat.dynamically_add_dependencies_to_appjs.services\}\}/,servicesStr);
+            pluginsStr = JSON.stringify(plugins); // convert to string
+            pluginsStr = pluginsStr.slice(1).slice(0,-1); // remove the leading and trailing braces
+            // console.log('pluginsStr',pluginsStr);
+            var newContent = content.replace(/\'add plugin configs here via grunt\'\:\'\'/,pluginsStr);
             return newContent;
           }
         },
       },
-
+      // dynamically_add_dependencies_to_appjs:{
+      //   src:'<%= src.dirs.app %>app.js',
+      //   dest:'<%= build.dirs.app %>app.js',
+      //   options:{
+      //     process:function(content, srcpath){
+      //       var appjsFile = content;
+      //       var modulesStr = '';
+      //       var servicesStr = '';
+      //       grunt.file.expand(
+      //         {debug:false,nonull:true,expand:true},
+      //         grunt.config.get('build.dirs.plugins')+'**/*.js'
+      //       ).forEach(function(path,loopIterator,filesArr){
+      //         var contents = grunt.file.read(path);
+      //         // get module names from the file
+      //         var matchedModules = contents.match(/angular\.module.*?["'].+?['"]+/g) || [];
+      //         for (var i = 0, L = matchedModules.length; i < L;i++){
+      //           modulesStr += '  ' + matchedModules[i].replace(/angular\.module[^'"]+/gi,'')+',\n';
+      //         }
+      //         //get service names from the file
+      //         var matchedServices = contents.match(/\.service.*?["'].+?['"]+/g)||[];
+      //         for (i = 0, L = matchedServices.length; i < L;i++){
+      //           servicesStr += '\n// '+ matchedServices[i];
+      //         }
+      //       });
+      //       var newContent = content.replace(/\/\/\s+\{\{concat.dynamically_add_dependencies_to_appjs.modules\}\}/,modulesStr);
+      //       newContent = newContent.replace(/\{\{concat.dynamically_add_dependencies_to_appjs.services\}\}/,servicesStr);
+      //       return newContent;
+      //     }
+      //   },
+      // },
       build_index:{ // adds css and js files to index
         src:'<%= src.dirs.app %>index.html',
         dest:'<%= build.dirs.app %>index.html',
@@ -265,6 +241,7 @@ module.exports = function ( grunt ) {
 
             // ensure our third party dependencies load in the correct order
             var thirdPartyFiles=grunt.config.get('src.requiredFiles');
+
             thirdPartyFiles.files.forEach(function(filePath){
               grunt.log.writeln('file',filePath);
               thirdpartyStr+= '\n    <script type="text/javascript" src="thirdparty/'+
@@ -295,6 +272,46 @@ module.exports = function ( grunt ) {
             return newContent;
           }
         }
+      },
+
+      //`compile_css` concatenates our app and thirdparty js in a single file.
+      compile_css: {
+        src: '<%= build.dirs.app %>**/*.css',
+        dest: '<%= compile.dirs.app %><%= pkg.name %>-<%= pkg.version %>.css'
+      },
+      //`compile_js` concatenates our app and thirdparty js in a single file.
+      compile_js: {
+        options: { banner: '<%= banner %>' },
+        src:['module.prefix','<%= build.dirs.app %>/*.js', '<%= build.dirs.plugins %>**/*.js','module.suffix'],
+        dest: '<%= compile.dirs.app %><%= pkg.name %>-<%= pkg.version %>.js'
+      },
+      compile_thirdparty_js: {
+        src:'<%= src.requiredFiles %>',
+        dest: '<%= compile.dirs.app %>thirdparty.js'
+      },
+
+      compile_index:{ // adds css and js files to index
+        src:'<%= src.dirs.app %>index.html',
+        dest:'<%= compile.dirs.app %>index.html',
+        options:{
+          process:function(content, srcpath){
+            // var newJsPath= grunt.file.expand('<%= concat.compile_js.dest');
+            // var newCssPath= grunt.file.expand('<%= concat.compile_css.dest');
+            return content
+            .replace(
+              /    <\!-- token_replace_thirdparty_js_here -->/i,
+              '    <script type="text/javascript" src="'+grunt.file.expand(grunt.config.get('concat.build_thirdparty_js.dest'))+'"></script>\n'
+            )
+            .replace(
+              /    <\!-- token_replace_js_here -->/i,
+              '    <script type="text/javascript" src="'+grunt.file.expand(grunt.config.get('concat.build_js.dest'))+'"></script>\n'
+            )
+            .replace(
+              /    <\!-- token_replace_css_here -->/i,
+              '    <link rel="stylesheet" type="text/css" href="'+ grunt.file.expand(grunt.config.get('concat.build_css.dest')) + '" />\n'
+            );
+          }
+        }
       }
     },
 
@@ -306,8 +323,14 @@ module.exports = function ( grunt ) {
      * js payload as one JavaScript file.
      */
     html2js: {
-      options:{module:'html_templates_jsfied'},
-      app:{src:['<%= src.dirs.app %>*.tpl.html','<%= src.dirs.plugins %>**/*.tpl.html'], dest:'<%= build.dirs.js %>html_templates_jsfied.js'}
+      options:{
+        module:'html_templates_jsfied',
+        base:'<%= src.dirs.app %>'// strips the build dir from the template name
+      },
+      src_tpls_plus_build_tpls_to_js:{
+        src:'<%= src.dirs.app %>**/*.tpl.{html,partial}',
+        dest:'<%= build.dirs.app %>html_templates_jsfied.js'
+      }
     },
 
 
@@ -336,11 +359,11 @@ module.exports = function ( grunt ) {
      * nonetheless inside `src/`.
      */
       options:{jshintrc: '.jshintrc'},
-      src_appjs: ['<%= src.dirs.app %>**/*.js', '!<%= src.dirs.thirdparty %>**'],
+      src_js: ['<%= src.dirs.app %>**/*.{json,js}', '!<%= src.dirs.thirdparty %>**'],
       built_appjs: '<%= build.dirs.js %>app.js',
-      built_html_templates: '<%= build.dirs.js %>html_templates_jsfied.js',
+      built_html_templates: '<%= build.dirs.app %>html_templates_jsfied.js',
       rootfiles: ['*.{json,js}','*.*rc'], // lints the rootfiles, bower files, etc.
-      built_angular_services: ['<%= build.dirs.app %>**/*-module.js'],
+      // built_angular_services: ['<%= build.dirs.app %>**/*-module.js'],
     },
 
 
@@ -358,27 +381,27 @@ module.exports = function ( grunt ) {
      * must be imported from this file.
      */
       build: {
-        src: [ '<%= src.dirs.app %>app.less','<%= src.dirs.thirdparty %>bootstrap/less/bootstrap.less' ],
+        src: [ '<%= src.dirs.app %>app.less' ],
         dest: '<%= build.dirs.css %><%= pkg.name %>-<%= pkg.version %>.css',
         options: {
           compile: true,
           compress: false,
           noUnderscores: false,
-          noIDs: false,
+          noIDs: true,
           zeroUnits: false
         }
       },
-      // compile: {
-      //   src: [ '<%= src.fileGroups.less %>' ],
-      //   dest: '<%= compile.files.css %>',
-      //   options: {
-      //     compile: true,
-      //     compress: true,
-      //     noUnderscores: false,
-      //     noIDs: false,
-      //     zeroUnits: false
-      //   }
-      // }
+      compile: {
+        src: [ '<%= src.dirs.app %>app.less' ],
+        dest: '<%= build.dirs.css %><%= pkg.name %>-<%= pkg.version %>.css',
+        options: {
+          compile: true,
+          compress: true,
+          noUnderscores: false,
+          noIDs: true,
+          zeroUnits: false
+        }
+      }
     },
 
 
@@ -391,14 +414,10 @@ module.exports = function ( grunt ) {
         }]
       },
       thirdparty_to_build:{cwd: '<%= src.dirs.thirdparty %>', src:'**/*.{js,css}', dest:'<%= build.dirs.thirdparty %>'},
-      build_app: {cwd: '<%= src.dirs.app %>', src:['**/*.js','!thirdparty/**','!**/*.spec.js'], dest:'<%= build.dirs.app %>'},
+      src_js_css_html_to_build:{cwd: '<%= src.dirs.app %>', src:['**/*.{js,css,html}','!thirdparty/**','!**/*.spec.js'], dest:'<%= build.dirs.app %>'},
       assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= build.dirs.assets %>'}
     },
-    /**
-     * `ng-min` annotates the sources before minifying. That is, it allows us
-     * to code without the array syntax.
-     */
-    /** Minify the sources! */
+
     uglify: {
       options: {banner: '<%= banner %>'},
       files: {src:'<%= concat.compile_js.dest %>', dest:'<%= concat.compile_js.dest %>'}
@@ -420,15 +439,21 @@ module.exports = function ( grunt ) {
       //  */
       // spec: { files: '<%= **/*.spec.js %>', tasks: [ 'jshint:test', 'karma:unit:run' ], },
       // When the rootfiles change, lint them.
-      rootfiles:{files: ['Gruntfile.js','package.json','bower.json'],tasks:['jshint:rootfiles','buildSpec'],options:{cwd:'.'}},
+      rootfiles:{files: ['Gruntfile.js','package.json','bower.json'],tasks:['jshint:rootfiles','build'],options:{cwd:'.'}},
       // compile app's angular dependencies on change
-      main_app_module: {files:'app.js', tasks: ['concat:dynamically_add_dependencies_to_appjs','jshint:built_appjs','buildSpec'] },
-      angular_modules: {files: ['**/*-module.js'], tasks: ['sync:build_app','jshint:built_angular_services','buildSpec'] },
-      static_files_excluding_angular_modules:{files: ['**/*.{css,js}','!**/*-module.js'], tasks: ['sync:build_app','buildSpec']},
+      main_app_module: {files:'app.js', tasks: [/*'concat:dynamically_add_dependencies_to_appjs',*/'jshint:src_js','buildSpec'] },
+      angular_modules: {files: ['**/*-module.js','!**/people-user-module.js'], tasks: ['sync:src_js_css_html_to_build','buildSpec'] },
+      static_files_excluding_angular_modules:{files: ['**/*.{css,js,html}','!**/*-module.js','!index.html'], tasks: ['sync:src_js_css_html_to_build','buildSpec']},
+      preinstall_user_plugins:{files:'plugins/**/people-user-module.js',tasks:['concat:temporarily_pre_install_plugins_on_user_via_grunt','buildSpec']},
       // compile index on change
       index: {files: 'index.html', tasks: ['concat:build_index','buildSpec'] },
       // Recompile template cache on change
-      html_templates: {files: '**/*.tpl.html', tasks: ['html2js','buildSpec'] },
+      compile_partials_to_tpls: {files: ['**/*.tpl.{html,partial}','plugins/**/happathon.json'], tasks: [
+        'html2js',
+        'concat:temporarily_pre_install_plugins_on_user_via_grunt',
+        'jshint:built_html_templates',
+        'buildSpec'
+      ]},
       // compile less on change
       appless:{ files: 'app.less', tasks: ['recess:build','buildSpec']},
       bootstrapless:{ files: 'thirdparty/bootstrap/**/*.less', tasks: ['recess:build','buildSpec']},
@@ -444,15 +469,10 @@ module.exports = function ( grunt ) {
 
   grunt.initConfig( grunt.util._.extend( taskConfig, directoryPaths ) );
 
-  /**
-   * In order to make it safe to just compile or copy *only* what was changed,
-   * we need to ensure we are starting from a clean, fresh build. So we rename
-   * the `watch` task to `delta` (that's why the configuration var above is
-   * `delta`) and then add a new task called `watch` that does a clean build
-   * before watching for changes.
-   */
-  // grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'init', ['build', /*'karma:unit', */'connect', 'watch' ]);
+
+  // Initialize the dev setup - it does a clean build before watching for changes
+  grunt.registerTask( 'dev', ['build', /*'karma:unit', */'connect:build', 'watch' ]);
+  grunt.registerTask( 'devcompile', ['build', /*'karma:unit', */'connect:compile', 'watch' ]);
 
 
   /** The default task is to build and compile. */
@@ -468,14 +488,12 @@ module.exports = function ( grunt ) {
     !grunt.file.exists(grunt.config.get('src.dirs.thirdparty'))? // does the thirdparty directory exist in src?
       'sync:thirdparty_to_src': // nope, create it and populate with fresh bower components
       'clean', // otherwise we're working with an existing install.  Wipe out the build dir for a fresh one.
+    'jshint:src_js', // lint src js
+    'sync:src_js_css_html_to_build', // copy everything over to the build dir, excluding the things already copied
+    'concat:temporarily_pre_install_plugins_on_user_via_grunt',
     'html2js', // compile the html templates to js and place them in the build dir
     'jshint:built_html_templates', // and lint them
-    'jshint:src_appjs', // lint src js
-    'copy:happathon_configs_to_angular_services', // copy the happathon configs to build as angular services
-    'jshint:built_angular_services', // and lint them
-    'sync:build_app', // copy everything over to the build dir, excluding the things already copied
     'sync:thirdparty_to_build', // copy third party js & css to build
-    // 'concat:dynamically_add_dependencies_to_appjs', // automatically add all angular service and module dependencies for us
     'recess:build', // compile our less to css and copy it to the build dir
     'sync:assets', // along with assets
     'concat:build_index', // build our index file with all its dependencies
@@ -491,10 +509,12 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'compile', [
 
     'recess:compile',
-    'copy:compile_assets',
-    'ngmin',
-    // 'concat:compile_js',
-    'uglify'
+    'sync:assets',
+    'concat:compile_thirdparty_js',
+    'concat:compile_js',
+    'concat:compile_css',
+    'concat:compile_index',
+    // 'uglify'
   ]);
 
   grunt.registerTask('buildSpec','test That all build files that should exist, do',function(){
@@ -502,6 +522,15 @@ module.exports = function ( grunt ) {
     if(!grunt.file.exists('build/app/app.js')) {grunt.fail.fatal('app.js does not exist!');}
     if(!grunt.file.exists('build/app/thirdparty/')) {grunt.fail.fatal('thirdparty directory does not exist!');}
     if(!grunt.file.exists('build/app/plugins/')) {grunt.fail.fatal('plugins directory does not exist!');}
-    if(!grunt.file.exists('build/app/js/html_templates_jsfied.js')) {grunt.fail.fatal('html_templates_jsfied does not exist!');}
+    if(!grunt.file.exists('build/app/html_templates_jsfied.js')) {grunt.fail.fatal('html_templates_jsfied does not exist!');}
+    var user=grunt.file.read('build/app/plugins/happathon-engine/mock-backend/people-user-module.js');
+    // grunt.log.writeln('user');
+    if(user.indexOf('"name":"happathon-form-daily",')<0){
+      grunt.fail.fatal('plugins were not added to user!');
+    }
+    var templateFile=grunt.file.read('build/app/html_templates_jsfied.js');
+    if(templateFile.indexOf('plugins/happathon-insight-utils_angular/all-attributes.tpl.partial')<0){
+      grunt.fail.fatal('insight-status plugin not added to template cache via html2js!');
+    }
   });
 };

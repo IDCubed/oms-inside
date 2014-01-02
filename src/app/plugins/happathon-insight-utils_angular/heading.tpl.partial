@@ -1,0 +1,1 @@
+<h2>{{$root.people.menu_title}}</h2>

@@ -27,19 +27,19 @@ PLUGINS LIST PAGE
 slides in from left.
 user clicks plugins button
 user sees two tabs at top - installed and available.  Default is available.
-user sees dropdown for plugin types: insights, holons, algorithms, challenges
-app compare's plugin's required data source identifiers to holon's available data source identifiers
+user sees dropdown for plugin types: insights, peoples, algorithms, challenges
+app compare's plugin's required data source identifiers to people's available data source identifiers
 plugins that require data from source ids not in the users's data store, are greyed out
 Add New Plugin Type
 Click on an installed Insight
 Click on an installed Form
 Click on an installed Challenge
-Click on an installed Holon
+Click on an installed People
 Click on an installed Algorithm
 Click on a market Insight
 Click on a market Form
 Click on a market Challenge
-Click on a market Holon
+Click on a market People
 Click on a market Algorithm
 
 Plugins may define data sources, and read other data sources
@@ -90,10 +90,10 @@ INSIGHT PLUGIN
 // plugin provides engine with data schema, default api routes, and
 // plugin provides settings schema (with defaults) to engine
 // plugin provides api schema to engine
-// engine adds api schema to holon
-// engine adds api customization to holon settings
-// engine adds default settings to holon
-// engine adds data storage to holon based on schema
+// engine adds api schema to people
+// engine adds api customization to people settings
+// engine adds default settings to people
+// engine adds data storage to people based on schema
 // plugin installed
 
 plugin provides an interface for other plugins
