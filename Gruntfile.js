@@ -34,25 +34,21 @@ module.exports = function ( grunt ) {
         thirdparty:'<%= src.dirs.app %>thirdparty/',
         plugins:'<%= src.dirs.app %>plugins/' // created by bowercopy
       },
-      requiredFiles:{
-        cwd:'<%= src.dirs.app %>thirdparty/',
-        files:[
-          'jquery/jquery.min.js',
-          'lodash/dist/lodash.min.js',
-          'angular/angular.js',
-          'angular-bootstrap/ui-bootstrap-tpls.min.js',
-          'angular-mocks/angular-mocks.js',
-          'angular-touch/angular-touch.min.js',
-          'angular-ui-router/release/angular-ui-router.js',
-          'angular-gesture/ngGesture/gesture.js',
-          'angular-ui-utils/modules/utils.js',
-          // 'd3/d3.min.js',
-          // 'd3.chart/d3.chart.min.js',
-          // 'Faker/Faker.js',
-          'restangular/dist/restangular.js'
-        ]
-      },
-
+      requiredFiles:[
+        'jquery/jquery.min.js',
+        'lodash/dist/lodash.min.js',
+        'angular/angular.min.js',
+        'angular-bootstrap/ui-bootstrap-tpls.min.js',
+        'angular-mocks/angular-mocks.js',
+        'angular-touch/angular-touch.min.js',
+        'angular-ui-router/release/angular-ui-router.js',
+        'angular-gesture/ngGesture/gesture.js',
+        'angular-ui-utils/modules/utils.js',
+        // 'd3/d3.min.js',
+        // 'd3.chart/d3.chart.min.js',
+        // 'Faker/Faker.js',
+        'restangular/dist/restangular.js'
+      ]
     },
     /**
      * The `build.dirs` folder is where our projects are compiled during
@@ -72,12 +68,9 @@ module.exports = function ( grunt ) {
     },
     compile:{ // compile destinations
       dirs:{
-        root:'bin/',
+        root:'dist/',
         app:'<%= compile.dirs.root %>app/',
-        plugins:'<%= compile.dirs.app %>plugins/',
-        assets:'<%= compile.dirs.app %>assets/',
-        js:'<%= compile.dirs.app %>js/',
-        css:'<%= compile.dirs.app %>css/',
+        assets:'<%= compile.dirs.app %>assets/'
       },
     },
   };
@@ -153,8 +146,9 @@ module.exports = function ( grunt ) {
       compile:{
         options:{
           base:'<%= compile.dirs.app %>',
-          livereload:true,
-          debug:false
+          livereload:false,
+          debug:true,
+          keepalive:true
           // open:'http://127.0.0.1:8000/'
         }
       },
@@ -200,36 +194,7 @@ module.exports = function ( grunt ) {
           }
         },
       },
-      // dynamically_add_dependencies_to_appjs:{
-      //   src:'<%= src.dirs.app %>app.js',
-      //   dest:'<%= build.dirs.app %>app.js',
-      //   options:{
-      //     process:function(content, srcpath){
-      //       var appjsFile = content;
-      //       var modulesStr = '';
-      //       var servicesStr = '';
-      //       grunt.file.expand(
-      //         {debug:false,nonull:true,expand:true},
-      //         grunt.config.get('build.dirs.plugins')+'**/*.js'
-      //       ).forEach(function(path,loopIterator,filesArr){
-      //         var contents = grunt.file.read(path);
-      //         // get module names from the file
-      //         var matchedModules = contents.match(/angular\.module.*?["'].+?['"]+/g) || [];
-      //         for (var i = 0, L = matchedModules.length; i < L;i++){
-      //           modulesStr += '  ' + matchedModules[i].replace(/angular\.module[^'"]+/gi,'')+',\n';
-      //         }
-      //         //get service names from the file
-      //         var matchedServices = contents.match(/\.service.*?["'].+?['"]+/g)||[];
-      //         for (i = 0, L = matchedServices.length; i < L;i++){
-      //           servicesStr += '\n// '+ matchedServices[i];
-      //         }
-      //       });
-      //       var newContent = content.replace(/\/\/\s+\{\{concat.dynamically_add_dependencies_to_appjs.modules\}\}/,modulesStr);
-      //       newContent = newContent.replace(/\{\{concat.dynamically_add_dependencies_to_appjs.services\}\}/,servicesStr);
-      //       return newContent;
-      //     }
-      //   },
-      // },
+
       build_index:{ // adds css and js files to index
         src:'<%= src.dirs.app %>index.html',
         dest:'<%= build.dirs.app %>index.html',
@@ -242,7 +207,7 @@ module.exports = function ( grunt ) {
             // ensure our third party dependencies load in the correct order
             var thirdPartyFiles=grunt.config.get('src.requiredFiles');
 
-            thirdPartyFiles.files.forEach(function(filePath){
+            thirdPartyFiles.forEach(function(filePath){
               grunt.log.writeln('file',filePath);
               thirdpartyStr+= '\n    <script type="text/javascript" src="thirdparty/'+
               filePath +
@@ -286,8 +251,13 @@ module.exports = function ( grunt ) {
         dest: '<%= compile.dirs.app %><%= pkg.name %>-<%= pkg.version %>.js'
       },
       compile_thirdparty_js: {
-        src:'<%= src.requiredFiles %>',
-        dest: '<%= compile.dirs.app %>thirdparty.js'
+        nonull:true,
+        process:true,
+        src:'<%= src.dirs.thirdparty %>**/{<%= src.requiredFiles %>}',
+        // grunt.file.expand(grunt.config.get('src.requiredFiles')).forEach(function(path){
+        //   return grunt.config.get('src.dirs.thirdparty')+path;
+        // }),
+        dest:'<%= compile.dirs.app %>thirdparty.js'
       },
 
       compile_index:{ // adds css and js files to index
@@ -300,15 +270,15 @@ module.exports = function ( grunt ) {
             return content
             .replace(
               /    <\!-- token_replace_thirdparty_js_here -->/i,
-              '    <script type="text/javascript" src="'+grunt.file.expand(grunt.config.get('concat.build_thirdparty_js.dest'))+'"></script>\n'
+              '    <script type="text/javascript" src="'+grunt.file.expand(grunt.config.get('concat.compile_thirdparty_js.dest'))[0].replace('dist/app/','')+'"></script>\n'
             )
             .replace(
               /    <\!-- token_replace_js_here -->/i,
-              '    <script type="text/javascript" src="'+grunt.file.expand(grunt.config.get('concat.build_js.dest'))+'"></script>\n'
+              '    <script type="text/javascript" src="'+grunt.file.expand(grunt.config.get('concat.compile_js.dest'))[0].replace('dist/app/','')+'"></script>\n'
             )
             .replace(
               /    <\!-- token_replace_css_here -->/i,
-              '    <link rel="stylesheet" type="text/css" href="'+ grunt.file.expand(grunt.config.get('concat.build_css.dest')) + '" />\n'
+              '    <link rel="stylesheet" type="text/css" href="'+ grunt.file.expand(grunt.config.get('concat.compile_css.dest'))[0].replace('dist/app/','') + '" />\n'
             );
           }
         }
@@ -404,7 +374,6 @@ module.exports = function ( grunt ) {
       }
     },
 
-
     sync:{
       thirdparty_to_src: {
         files: [{
@@ -413,9 +382,11 @@ module.exports = function ( grunt ) {
           dest: '<%= src.dirs.thirdparty %>',
         }]
       },
-      thirdparty_to_build:{cwd: '<%= src.dirs.thirdparty %>', src:'**/*.{js,css}', dest:'<%= build.dirs.thirdparty %>'},
+      thirdparty_to_build:{cwd: '<%= src.dirs.thirdparty %>', src:'<%= src.requiredFiles %>', dest:'<%= build.dirs.thirdparty %>'},
       src_js_css_html_to_build:{cwd: '<%= src.dirs.app %>', src:['**/*.{js,css,html}','!thirdparty/**','!**/*.spec.js'], dest:'<%= build.dirs.app %>'},
-      assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= build.dirs.assets %>'}
+      assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= build.dirs.assets %>'},
+      compile_assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= compile.dirs.assets %>'},
+
     },
 
     uglify: {
@@ -507,9 +478,8 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-
     'recess:compile',
-    'sync:assets',
+    'sync:compile_assets',
     'concat:compile_thirdparty_js',
     'concat:compile_js',
     'concat:compile_css',
