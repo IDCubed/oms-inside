@@ -214,41 +214,62 @@ a,a:link,a:visited,a:hover,a:active, {
   overflow-x:hidden;
 }
 .mainview{
-  height:86%;
-  top:14%;
+  height:92%;
+  top:8%;
 }
 .menuleft,.menuright{
   transition:left 1s;
   width:90%;
   background-color: @darkgrey;
-  padding:0 0.5em;
-  .menu-title{
-    color:@white;
-    // text-align:center;
-    font-size:1.5em;
-    line-height:2;
-  }
+  padding:0.5em;
   z-index: 1;
+  .menu-title {
+    color:@white;
+    background-color:@darkgrey;
+    font-size:1.4em;
+    margin-right:0.7em;
+  }
 }
 .menuleft{
   left:-90%;
-  .btn{
-    padding:0 0.5em;
-    line-height:2;
+  .plugin-type-nav {
+    border-bottom-color: @medgrey;
+    // text-align:center;
+    li{
+      > a {
+        background-color: #555;
+        padding:5px 10px;
+        border-color:@medgrey;
+      }
+    }
+    li.active{
+      > a{
+        background-color:@darkgrey;
+        border-bottom-color:@darkgrey;
+      }
+    }
   }
-  .icon-pencil{
-    padding:0 0.4em;
-  }
-
   .plugin-nav{
     margin: 0.5em 0;
+    .btn{
+      padding:0 0.5em;
+      line-height:2;
+    }
+    .icon-pencil{
+      padding:0 0.4em;
+    }
     .btn.active,.btn:active{
       color:@green;
+    }
+    .plugin-type-title{
+      color: @medgrey;
+      text-align: center;
+      font-size: 150%;
+      margin-right:0.5em;
     }
   }
   .plugin-list{
     display:block;
-
     .btn{
       background-color:@medgrey;
       color:@white;
@@ -265,7 +286,27 @@ a,a:link,a:visited,a:hover,a:active, {
     }
   }
 }
-.menuright{left:100%;}
+.menuright{
+  left:100%;
+  color:@white;
+  > div > div {
+    margin:0.5em 0;
+    label{
+      font-weight:normal;
+    }
+    input[type=text]{
+      display:block;
+    }
+  }
+  .settings-section{
+    color:@medgrey;
+    font-size:130%;
+  }
+  .settings-section.plugin{
+    margin:1em 0 0.5em 0;
+  }
+}
+
 .menuleft.active{left:0%;}
 .menuright.active{left:10%;}
 
@@ -282,6 +323,7 @@ a,a:link,a:visited,a:hover,a:active, {
     li,a{
       height:8%;
       white-space: nowrap;
+      color:@darkgrey;
     }
     a{
       font-size:120%;
@@ -295,24 +337,7 @@ a,a:link,a:visited,a:hover,a:active, {
   .to-front{
     z-index:1000;
   }
-  .plugin-type-selector {
-    background-color: @white;
-    position: absolute;
-    top:0;
-    left:0;
-    z-index:10;
-  }
 }
-// .navbar-fixed-top{
-//   background-color:#03ae74;width:96%;height:50px;padding:0 2%;position: relative;top: auto;
-// }
-
-// .content{float:left;clear:both;width:96%;padding:0 2%;margin-top:15px}
-// p{padding:5px 0}
-
-// .overlay{left:0;top:50px;transition: all 0.2s ease;}
-// .overlay.show{position:fixed;left:50%;right:0;bottom:0;background-color:rgba(0, 0, 0, 0.8);z-index:9999}
-
 
 
 

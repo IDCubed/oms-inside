@@ -35,19 +35,19 @@ module.exports = function ( grunt ) {
         plugins:'<%= src.dirs.app %>plugins/' // created by bowercopy
       },
       requiredFiles:[
-        'jquery/jquery.min.js',
-        'lodash/dist/lodash.min.js',
-        'angular/angular.min.js',
-        'angular-bootstrap/ui-bootstrap-tpls.min.js',
-        'angular-mocks/angular-mocks.js',
-        'angular-touch/angular-touch.min.js',
-        'angular-ui-router/release/angular-ui-router.js',
-        'angular-gesture/ngGesture/gesture.js',
-        'angular-ui-utils/modules/utils.js',
+        '<%= src.dirs.thirdparty %>jquery/jquery.min.js',
+        '<%= src.dirs.thirdparty %>lodash/dist/lodash.min.js',
+        '<%= src.dirs.thirdparty %>angular/angular.js',
+        '<%= src.dirs.thirdparty %>angular-bootstrap/ui-bootstrap-tpls.min.js',
+        '<%= src.dirs.thirdparty %>angular-mocks/angular-mocks.js',
+        '<%= src.dirs.thirdparty %>angular-touch/angular-touch.min.js',
+        '<%= src.dirs.thirdparty %>angular-ui-router/release/angular-ui-router.js',
+        '<%= src.dirs.thirdparty %>angular-gesture/ngGesture/gesture.js',
+        '<%= src.dirs.thirdparty %>angular-ui-utils/modules/utils.js',
         // 'd3/d3.min.js',
         // 'd3.chart/d3.chart.min.js',
         // 'Faker/Faker.js',
-        'restangular/dist/restangular.js'
+        '<%= src.dirs.thirdparty %>restangular/dist/restangular.js'
       ]
     },
     /**
@@ -62,8 +62,7 @@ module.exports = function ( grunt ) {
         plugins:'<%= build.dirs.app %>plugins/',
         assets:'<%= build.dirs.app %>assets/',
         js:'<%= build.dirs.app %>js/',
-        css:'<%= build.dirs.app %>',
-        thirdparty:'<%= build.dirs.app %>thirdparty/'
+        css:'<%= build.dirs.app %>'
       }
     },
     compile:{ // compile destinations
@@ -147,7 +146,7 @@ module.exports = function ( grunt ) {
         options:{
           base:'<%= compile.dirs.app %>',
           livereload:false,
-          debug:true,
+          debug:false,
           keepalive:true
           // open:'http://127.0.0.1:8000/'
         }
@@ -202,17 +201,8 @@ module.exports = function ( grunt ) {
           process:function(content, srcpath){
             var cssStr = '\n';
             var jsStr = '\n';
-            var thirdpartyStr = '\n';
+            var thirdpartyStr = '    <script type="text/javascript" src="thirdparty.js"></script>\n';
 
-            // ensure our third party dependencies load in the correct order
-            var thirdPartyFiles=grunt.config.get('src.requiredFiles');
-
-            thirdPartyFiles.forEach(function(filePath){
-              grunt.log.writeln('file',filePath);
-              thirdpartyStr+= '\n    <script type="text/javascript" src="thirdparty/'+
-              filePath +
-              '"></script>';
-            });
             // replace index tokens with appropriate css and js files
             grunt.file.expand(
               {nonull:false,debug:false},
@@ -247,19 +237,19 @@ module.exports = function ( grunt ) {
       //`compile_js` concatenates our app and thirdparty js in a single file.
       compile_js: {
         options: { banner: '<%= banner %>' },
-        src:['module.prefix','<%= build.dirs.app %>/*.js', '<%= build.dirs.plugins %>**/*.js','module.suffix'],
+        src:['module.prefix','<%= build.dirs.app %>/*.js', '!<%= build.dirs.app %>/thirdparty.js', '<%= build.dirs.plugins %>**/*.js','module.suffix'],
         dest: '<%= compile.dirs.app %><%= pkg.name %>-<%= pkg.version %>.js'
       },
-      compile_thirdparty_js: {
-        nonull:true,
+      build_thirdparty_js: {
         process:true,
-        src:'<%= src.dirs.thirdparty %>**/{<%= src.requiredFiles %>}',
-        // grunt.file.expand(grunt.config.get('src.requiredFiles')).forEach(function(path){
-        //   return grunt.config.get('src.dirs.thirdparty')+path;
-        // }),
+        src:'<%= src.requiredFiles %>',
+        dest:'<%= build.dirs.app %>thirdparty.js'
+      },
+      compile_thirdparty_js: {
+        process:true,
+        src:'<%= concat.build_thirdparty_js.dest %>',
         dest:'<%= compile.dirs.app %>thirdparty.js'
       },
-
       compile_index:{ // adds css and js files to index
         src:'<%= src.dirs.app %>index.html',
         dest:'<%= compile.dirs.app %>index.html',
@@ -382,11 +372,9 @@ module.exports = function ( grunt ) {
           dest: '<%= src.dirs.thirdparty %>',
         }]
       },
-      thirdparty_to_build:{cwd: '<%= src.dirs.thirdparty %>', src:'<%= src.requiredFiles %>', dest:'<%= build.dirs.thirdparty %>'},
       src_js_css_html_to_build:{cwd: '<%= src.dirs.app %>', src:['**/*.{js,css,html}','!thirdparty/**','!**/*.spec.js'], dest:'<%= build.dirs.app %>'},
       assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= build.dirs.assets %>'},
       compile_assets:{cwd: '<%= src.dirs.assets %>', src:'**', dest:'<%= compile.dirs.assets %>'},
-
     },
 
     uglify: {
@@ -415,16 +403,19 @@ module.exports = function ( grunt ) {
       main_app_module: {files:'app.js', tasks: [/*'concat:dynamically_add_dependencies_to_appjs',*/'jshint:src_js','buildSpec'] },
       angular_modules: {files: ['**/*-module.js','!**/people-user-module.js'], tasks: ['sync:src_js_css_html_to_build','buildSpec'] },
       static_files_excluding_angular_modules:{files: ['**/*.{css,js,html}','!**/*-module.js','!index.html'], tasks: ['sync:src_js_css_html_to_build','buildSpec']},
-      preinstall_user_plugins:{files:'plugins/**/people-user-module.js',tasks:['concat:temporarily_pre_install_plugins_on_user_via_grunt','buildSpec']},
       // compile index on change
       index: {files: 'index.html', tasks: ['concat:build_index','buildSpec'] },
       // Recompile template cache on change
-      compile_partials_to_tpls: {files: ['**/*.tpl.{html,partial}','plugins/**/happathon.json'], tasks: [
-        'html2js',
-        'concat:temporarily_pre_install_plugins_on_user_via_grunt',
-        'jshint:built_html_templates',
-        'buildSpec'
-      ]},
+      compile_partials_to_tpls: {
+        files: ['**/*.tpl.{html,partial}','plugins/**/{people-user-module.js,happathon.json}'],
+        tasks: [
+          'html2js',
+          'concat:temporarily_pre_install_plugins_on_user_via_grunt',
+          'jshint:src_js',
+          'jshint:built_html_templates',
+          'buildSpec'
+        ]
+      },
       // compile less on change
       appless:{ files: 'app.less', tasks: ['recess:build','buildSpec']},
       bootstrapless:{ files: 'thirdparty/bootstrap/**/*.less', tasks: ['recess:build','buildSpec']},
@@ -443,11 +434,11 @@ module.exports = function ( grunt ) {
 
   // Initialize the dev setup - it does a clean build before watching for changes
   grunt.registerTask( 'dev', ['build', /*'karma:unit', */'connect:build', 'watch' ]);
-  grunt.registerTask( 'devcompile', ['build', /*'karma:unit', */'connect:compile', 'watch' ]);
+  grunt.registerTask( 'devcompile', ['build', /*'karma:unit', */,'compile','connect:compile' ]);
 
 
   /** The default task is to build and compile. */
-  grunt.registerTask( 'default', ['build', /*'compile'*/ ]);
+  grunt.registerTask( 'default', ['build', 'compile','connect:compile','watch' ]);
   // 'compile'remove this for now.  We're not at a production stage.  We only need build.
 
   /**
@@ -464,7 +455,7 @@ module.exports = function ( grunt ) {
     'concat:temporarily_pre_install_plugins_on_user_via_grunt',
     'html2js', // compile the html templates to js and place them in the build dir
     'jshint:built_html_templates', // and lint them
-    'sync:thirdparty_to_build', // copy third party js & css to build
+    'concat:build_thirdparty_js', // copy third party js & css to build
     'recess:build', // compile our less to css and copy it to the build dir
     'sync:assets', // along with assets
     'concat:build_index', // build our index file with all its dependencies
@@ -490,7 +481,7 @@ module.exports = function ( grunt ) {
   grunt.registerTask('buildSpec','test That all build files that should exist, do',function(){
     if(!grunt.file.exists('build/app/index.html')) {grunt.fail.fatal('index.html does not exist!');}
     if(!grunt.file.exists('build/app/app.js')) {grunt.fail.fatal('app.js does not exist!');}
-    if(!grunt.file.exists('build/app/thirdparty/')) {grunt.fail.fatal('thirdparty directory does not exist!');}
+    if(!grunt.file.exists('build/app/thirdparty.js')) {grunt.fail.fatal('thirdparty js does not exist!');}
     if(!grunt.file.exists('build/app/plugins/')) {grunt.fail.fatal('plugins directory does not exist!');}
     if(!grunt.file.exists('build/app/html_templates_jsfied.js')) {grunt.fail.fatal('html_templates_jsfied does not exist!');}
     var user=grunt.file.read('build/app/plugins/happathon-engine/mock-backend/people-user-module.js');

@@ -30,18 +30,24 @@ angular.module( 'happathon-engine.people-user', [
       installed_tabs:{
         happathon_app:{
           settings:{ // stores arbitrary data for the application
-            developer_mode:{
-              user_configurable:true,
-              value:true
-            },
-            default_plugin:{
-              user_configurable:true,
-              value:'happathon-insight-status'
-            },
-            default_people_id:{
-              user_configurable:true,
-              value:0
-            }
+            individual:[
+              {
+                setting:'developer_mode',
+                question:"Developer Mode",
+                user_configurable:true,
+                template:'happathon-form-utils_angular : checkbox.tpl.partial'
+              },
+              {
+                setting:'default_plugin',
+                question:'Default Plugin',
+                user_configurable:true,
+                placeholder:"placeholderText",
+                type:'text',
+                value:'happathon-insight-status',
+                template:'happathon-form-utils_angular : text.tpl.partial'
+              }
+            ],
+            group:[]
           },
           plugins:{
             installed:{

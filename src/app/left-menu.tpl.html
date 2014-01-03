@@ -1,17 +1,20 @@
 <div class="menuleft"
       ng-class="{active:$root.showleftmenu}"
       ng-click="$event.stopPropagation();">
-  <div class="menu-title">
-    <span class="plug-icon icon-{{$root.pluginListType}}"></span>
-    <span >{{$root.pluginListType}}</span>
-  </div>
+
+  <ul class="nav nav-tabs plugin-type-nav">
+    <li class="menu-title">Plugins</li>
+    <li ng-repeat="(key,val) in $root.pluginsByType"
+        ng-click="switchPluginListType(key);$event.stopPropagation();"
+        ng-class="{active:$root.pluginListType===key}"
+        >
+      <a class="plug-icon icon-{{key}}"></a>
+    </li>
+
+  </ul>
   <div class="plugin-nav btn-toolbar">
-    <div class="btn-group">
-      <button type="button"
-        ng-class="{editing:$root.people.installed_tabs.happathon.viewMode==='editing'}"
-        class="btn btn-default icon-pencil"
-        ng-click="toggleEditMode()"
-      ></button>
+    <div class="btn-group plugin-type-title">
+      <span>{{$root.pluginListType}}</span>
     </div>
     <div class="btn-group">
       <button type="button"
@@ -31,7 +34,15 @@
               Discover
       </button>
     </div>
+    <div class="btn-group">
+      <button type="button"
+        ng-class="{editing:$root.people.installed_tabs.happathon.viewMode==='editing'}"
+        class="btn btn-default icon-pencil"
+        ng-click="toggleEditMode()"
+      ></button>
+    </div>
   </div>
+
   <div class="plugin-list btn-group-vertical" ng-repeat="(pluginType,pluginsArray) in $root.pluginsByType" ng-show="$root.pluginListType===pluginType">
     <button class="btn btn-default"
         type="button"

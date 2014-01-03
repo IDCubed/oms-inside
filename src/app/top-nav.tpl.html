@@ -1,17 +1,8 @@
 <ul class="nav nav-pills">
   <li>
     <a class="plugins-dropdown icon-{{$root.pluginListType}}"
-       ng-click="$root.pluginListSelectorVisible=1;$event.stopPropagation();">
+       ng-click="$root.showleftmenu=1;$event.stopPropagation();">
     </a>
-    <ul class="plugin-type-selector nav nav-stacked nav-pills"
-        ng-show="$root.pluginListSelectorVisible">
-        <li ng-repeat="(key,val) in $root.pluginsByType" ng-class="{active:$root.pluginListType===key}">
-          <a ng-click="switchPluginListType(key);$event.stopPropagation();">
-            <span class="plug-icon icon-{{key}}"></span>
-            <span>{{key}}</span>
-          </a>
-        </li>
-    </ul>
   </li>
   <li class="people-dropdown dropdown">
     <a class="dropdown-toggle">

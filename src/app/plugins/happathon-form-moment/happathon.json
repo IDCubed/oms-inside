@@ -8,16 +8,18 @@
   "name": "happathon-form-moment",
   "menu_title":"Capture the Moment",
   "extendable":true,
-  "settings":[
-    {
-      "name":"allowed_notification_times",
-      "value":{
-        "start":"08:30",
-        "end":"21:30"
-      },
-      "template":"happathon-settings-utils_angular : time-range.tpl.partial"
-    }
-  ],
+  "settings":{
+    "individual":[
+      {
+        "name":"allowed_notification_times",
+        "value":{
+          "start":"08:30",
+          "end":"21:30"
+        },
+        "template":"happathon-form-utils_angular : time-range.tpl.partial"
+      }
+    ]
+  },
   "display_templates":{
     "individual":[
         {

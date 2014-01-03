@@ -1,2 +1,4 @@
-<label for="{{idx}}">{{template_data.question}}</label>
-<input name="{{idx}} "type="text" placeholder="{{template_data.placeholder}}"/>
+<div>
+  <label for="{{idx}}">{{template_data.question}}</label>
+  <input name="{{idx}} "type="text" placeholder="{{template_data.value}}"/>
+</div>

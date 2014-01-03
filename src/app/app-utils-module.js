@@ -53,6 +53,10 @@ angular.module('happathon-app-utils', [])
       $rootScope.$on('$viewContentLoaded',function(event){
         console.log('$viewContentLoaded - fired after dom rendered',event);
       });
-    }
+    },
+
+    getPluginObj:function(name){
+      return $rootScope.pluginsListObj[name.indexOf('root.')===0?name.slice(5):name];
+    },
   };
 }]);

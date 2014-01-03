@@ -7,7 +7,7 @@ angular.module( 'happathon-api-app_angular', [
   'happathon-engine.mock-backend',
   'restangular'
 ])
-.service('happathon-engine-apis-promise', ['Restangular', '$q', function (Restangular,$q) {
+.service('happathon-engine-apis-promise', ['Restangular', '$q', 'lodash',function (Restangular,$q,_) {
   // App API: provides a engine back-end wrapper to cache data for faster rendering and dev shortcuts
   // Get the whole user object, necessary data streams, and plugins to start with.
   // Longer data streams will query separately from the engine api and return promises.
@@ -44,7 +44,9 @@ angular.module( 'happathon-api-app_angular', [
       case 'plugins':
         if(options.one){
           if(options.one==='active'){
-            return appData.plugins.installed[appData.settings.default_plugin.value];
+            var set = appAPI.read('settings',{one:'default_plugin'}).value;
+            console.log("appAPI.read('settings',{one:'default_plugin'})",appAPI.read('settings',{one:'default_plugin'}));
+            return appData.plugins.installed[set];
           }
           if(appData.plugins.installed[options.one]){
             return appData.plugins.installed[options.one];
@@ -82,22 +84,14 @@ angular.module( 'happathon-api-app_angular', [
       case 'listDataSourcesUpdated':
         return '';
       case 'settings':
-        if(options.filter){
-          var settingsList = [];
-          for (var settingName in appData.settings){
-            if(settingName.indexOf(options.filter)>-1){
-              settingsList.push(appData.settings[settingName]);
-            }
-          }
-          return settingsList;
-        }
         if(options.one){
-          if(appData.settings[options.one]){
-            return appData.settings[options.one];
+          var oneSetting = _.find(appData.settings.individual,{setting:options.one});
+          if(oneSetting){
+            return oneSetting;
           }
-          return 'no setting named' + options.one;
+          return 'No setting named ' + options.one;
         }
-        return 'please use {filter:""} or {one:""} to select a setting';
+        return appData.settings.individual;
       default:
         return 'default-case';
       }
