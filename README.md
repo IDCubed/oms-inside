@@ -7,16 +7,16 @@
 [Install Node.js](http://nodejs.org/) and then:
 
 ```sh
+(Note: on Windows, you can ignore the "sudo" part)
 $ git clone git@github.com:IDCubed/oms-happathon.git    # copy repo to your computer
 $ cd oms-happathon    # change to happathon directory
-$ npm -g install grunt-cli karma bower    # installs grunt-cli,karma,bower (mac/linux add sudo)
-$ npm install    # installs node dependencies in a /node_modules/ directory (mac/linux add sudo)
-$ bower install    # installs js/css dependencies in your /app/vendor directory
-$ grunt watch
+$ sudo npm -g install grunt-cli karma bower    # installs grunt-cli,karma,bower
+$ sudo npm install    # installs node dependencies in a /node_modules/ directory
+$ bower install    # installs js/css dependencies in your /bower_components/ directory
+$ grunt dev   # starts the dev environment
 ```
-
-Unit tests will run in a new browser window.
-`localhost:8000/#/` will open in your default browser.
+After typing ```grunt dev```, you should see the unit test runner open a new Chrome browser window.
+Click http://localhost:8000 to open the application in your default browser.
 
 And Boom!  You're set up to hack on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files in the src/ directory will also reload your page automatically.  Happy hacking!
 
@@ -30,13 +30,11 @@ We're currently looking for:
 - iPhone developer(s) for the same
 - UI Developers (HTML/JavaScript/CSS/Angular)
 - UX designers to make the app is useful and enjoyable
-
-To ask questions, check out [Communication](#communication) or join one of the [Meetups](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/).
-
-To Beta test the app when it's ready, join the [Beta Testers Google Group](https://groups.google.com/forum/#!forum/happathon).
+- Beta Testers: To Beta test the app when it's ready, join the [Beta Testers Google Group](https://groups.google.com/forum/#!forum/happathon).
 
 Learn more about or the project in general at [Meetup](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/about/), and tech in particular by reading on below.
 
+To ask questions, check out our [Communication Channels](#communication) or join one of the [Meetups](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/).
 
 
 ## Pilot Goal
@@ -64,19 +62,12 @@ Only questions that have obvious usefulness.
 
 
 ## Architecture
-- plugin management with bower
-- all functionality that can be a plugin, should be a plugin
-- plugins contain no renderer-specific code (e.g., angular) so plugin
-  developers do not need to know the rendering framework, and we can
-  switch ui rendering frameworks to any platform without plugins changes
-  (if we switch renderers, unit tests in plugins may go wonky.  Need to
-  think about how to resolve that)
-  Unit tests alongside the code they are testing.
-- end-to-end tests in separate directory
+- Nearly everything is a plugin so it's easy to extend the app's functionality
+- Plugin creators need not learn the UI framework (e.g. angular) to contribute
+- Migrate to different front-ends without changing the plugins
 - The build system should integrate plugins into the UI automatically.
-  Components should end up tested, linted, compiled,
-  and minified, ready for use in a production environment.
 - *Encourages* test-driven development. It's the only way to code.
+- Unit tests alongside the code they are testing. (End-to-end tests are separate)
 - A directory structure that is cogent, meaningful to new team members, and
   supporting of the above points.
 - Well-documented, to show new developers *why* things are set up the way they
@@ -86,111 +77,40 @@ Only questions that have obvious usefulness.
 
 ## Learn
 
+### Plugins
+
+\* Note: All plugins will eventually be separate git repositories. They're placed a plugins directory to encourage modularity and act as if they were installed.
+
+All plugin directories (those starting with ```happathon-```) contain a ```happathon.json``` file that defines the plugin configuration.  It will have differences depending on the type of plugin.  The different plugin types, and their JSON structure are defined in the [happathon.json spec](https://docs.google.com/document/d/10c_P2pixt1jjV0sPP86JDx1RAvLwvfJpFYM7ISh3Pls/edit#).
+
+Plugins central to the app cannot be removed, but community-contributed plugins may be added and removed as desired.
+
 ### Overall Directory Structure
 
 At a high level, the structure looks roughly like this:
-\* Note: All plugins will eventually be separate git repositories. They're placed a plugins directory to encourage modularity and act as if they were installed.
 
 ```
 oms-happathon/
-  |- .jshintrc // file syntax checking
-  |- bower_components/ // all bower components, including 3rd party libraries and happathon plugins
-  |  |- happathon-challenge-utils/ // provides utils to make a challenge from
-  |  |  |- challenge-config.js // provides a config object to the challenge module
-  |  |  |- challenge-base.tpl.html
-  |  |  |- challenge.less
-  |  |  |- challenge-part-analysis.tpl.html
-  |  |  |- challenge-part-chart.tpl.html
-  |  |- happathon-challenge-2kind/
-  |  |  |- 2kind-config.js
-  |  |  |- 2kind.tpl.html
-  |  |  |- 2kind.less
-  |  |- happathon-challenge-somerville-happiness-research/ // provides json for somerville happiness survey
-  |  |  |- somerville-happiness-research-config.js
-  |  |- happathon-challenge-happathon-research/ // provides json for start and quarterly surveys
-  |  |  |- happathon-research-config.js
-  |  |- happathon-insight-miner/ // explorers let you play with the data, then click to share cool visualizations as a plugin
-  |  |  |  |- insight-miner-module.js
-  |  |  |  |- insight-miner-spec.js
-  |  |  |  |- insight-miner.tpl.html
-  |  |- happathon-insight-status/ // status insight
-  |  |  |  |- insight-status-module.js
-  |  |  |  |- insight-status-spec.js
-  |  |  |  |- insight-status.tpl.html
-  |  |- insight-utils/ provides a base module and utilities for building insights
-  |  |  |  |- insight-module.js
-  |  |  |  |- insight-spec.js
-  |  |  |  |- insight-base.tpl.html
-  |  |  |  |- insight-part-analysis.tpl.html
-  |  |  |  |- insight-part-chart.tpl.html
-  |  |  |  |- insight-part-chart.tpl.html
-  |  |- happathon-utils/ // templates, controllers, services, directives, used in multiple app places
-  |  |- happathon-engine/
-  |  |  |- engine-module.js //
-  |  |  |- engine-spec.js
-  |  |  |- api/
-  |  |  |  |- settings-api-module.js // accepts json objects to configure the engine settings and optionally additional settings to store
-  |  |  |  |- settings-api-spec.js // unit tests
-  |  |  |  |- routing-api-module.js // provides routing to forms and api
-  |  |  |  |- routing-api-spec.js // routing unit tests
-  |  |  |  |- people-api-module.js // provides people CRUD api
-  |  |  |  |- people-api-spec.js // people unit tests
-  |  |  |  |- form-api-module.js // provides form gen/config api. Defines states for routing api. Passes instructions to form-module.js
-  |  |  |  |- form-api-spec.js // form unit tests
-  |  |  |  |- auth-service.js // authorizationa/authentication services that provide apis with promises
-  |  |  |  |- auth-spec.js // authorizor unit tests
-  |  |  |- assets/
-  |  |  |  |- <static files>
-  |  |  |- form/
-  |  default form part json for form-module to extend with incoming config objects
-  |  |  |  |- form-spec.js // form module unit tests - contains defaults
-  |  |  |  |- moment.json // +moment form
-  |  |  |  |  |- daily.json // daily form
-  |  |  |  |  |- form.less // form styles
-  |  |  |  |  |- form-base.tpl.html // form container to render forms in
-  |  |  |  |  |- form-multi-page-base.tpl.html
-  |  |  |- form-utils/ // contains form templates and custom directives
-  |  |  |  |  |- checkbox-tpl.html
-  |  |  |  |  |- add-custom-tpl.html
-  |  |  |  |  |- add-custom-with-relationship.tpl.html
-  |  |  |  |  |- radio-tpl.html
-  |  |  |  |  |- text-tpl.html
-  |  |  |  |  |- textarea-tpl.html
-  |  |  |  |  |- select-tpl.html
-  |  |  |  |  |- multiselect-tpl.html
-  |  |  |  |  |- slider-7point-tpl.html
-  |  |  |  |  |- grid-10x10-tpl.html
-  |  |  |  |  |- button-submit-tpl.html
-  |  |  |  |  |- button-continue-tpl.html
-  |  |  |- people-types/
-  |  |  |  |  |- people-type-city-module.js // extends base with properties specific to city peoples and returns json obj
-  |  |  |  |  |- people-type-human-module.js // extends base with properties specific to human peoples and returns json obj
-  |  |  |- mock-backend/
-  |  |  |  |  |- mock-backend-module.js // provides back end CRUD interface to all APIs
-  |  |  |  |  |- mock-backend-spec.js
-  |  |  |  |  |- people-somerville-module.js // extends people-type-city-module with somerville specific details and data
-  |  |  |  |  |- people-johndoe-module.js // extends people-type-human-module with johndoe specific details and data
-  |  |  |- settings/
-  |  |  |  |  |- settings.tpl.html // to display a people's settings
-  |  |  |  |  |- settings-module.js // provides fns for people-api-module.js to CRUD people settings
+  |- eslint.json // file syntax checking
+  |- bower_components/ // all thirdparty libraries before they get copied to src/app/thirdparty
   |- bower.json // bower dependencies stored in bower_components
-  |- build.config.js // build configuration variables
+  |- build/ // our development files
+  |- dist/ // our production files
   |- e2e-tests/ // mocha + chai code to test user scenarios involving multiple screens
-  |- Gruntfile.js // build configuration
-  |- karma/ // testing configuration
-  |- module.prefix // anon function to prefix compiled/minified js
-  |- module.suffix // anon function to suffix compiled/minified js
+  |- Gruntfile.js // build and testing configuration
+  |- module.prefix // prefix of to wrap compiled/minified js in a self-executing anonymous function
+  |- module.suffix // suffix to go with the prefix
   |- package.json // node package dependencies
-  |- travis.yml // enables continuous integration
+  |- travis.yml // enables continuous integration via TravisCI
   |- src/ // contains all the raw source files
   |  |- happathon-android/ // contains all code that runs on android
   |  |- assets/
   |  |  |- <static files>
   |  |- app/ // the happathon app
   |  |  |- index.html
-  |  |  |- app.js // routing, engine api interaction, plugin base
-  |  |  |- app.spec.js
-  |  |  |- app.less // styles
+  |  |  |- app.js // routing, rendering, and plugin control
+  |  |  |- app.less // app-wide styles
+  |  |  |- app.spec.js // tests for app.js
   |  |  |- people-module.js // handles people display
   |  |  |- people-spec.js
   |  |  |- insight-base.tpl.html
@@ -199,34 +119,38 @@ oms-happathon/
   |  |  |- mock-backend-module.js
   |  |  |- settings-config-module.js // provides app specific settings schema with default for the engine to store
   |  |  |- people-type-base-module.js // contains the base people json for new people types to extend
-
+  |  |  |- plugins/
+  |  |  |  |- happathon-api-app_angular/
+  |  |  |  |  |- api-app_angular-module.js // wraps the raw data api for angular-specific performance improvements
+  |  |  |  |  |- happathon.json // (these will be in every directory. We won't take up space with them below this)
+  |  |  |  |- happathon-challenge-2kind/  // initial campaign
+  |  |  |  |- happathon-challenge-happathon-research/ // provides json for starting questions
+  |  |  |  |- happathon-challenge-somerville-happiness-research/ // somerville happiness survey
+  |  |  |  |- happathon-challenge-utils_angular/ // angular-specific templates for challenges to reference
+  |  |  |  |- happathon-engine/ // the engine is required for any happathon app.  It takes care of user data,
+                                // authentication, settings management, and any other CRUD operations
+                                // it doesn't belong in plugins since it's a separate app from the happathon app
+                                // putting it here for mocking until we implement it in the backend
+  |  |  |  |  |- engine-module.js // temporary angular module to mock the engine
+  |  |  |  |  |- assets/
+  |  |  |  |  |  |- <static files>
+  |  |  |  |  |- mock-backend/
+  |  |  |  |  |  |- mock-backend-module.js // provides raw data CRUD interface to all API plugins
+  |  |  |  |  |  |- mock-backend-spec.js // unit tests for the above
+  |  |  |  |  |  |- people-user-module.js // temporary angular module to load the user object - this should be in db
+  |  |  |  |- happathon-insight-explorer/ // explorers let you explore various aspects of your data
+  |  |  |  |- happathon-insight-status/ // people (individual or group) status dashboard
+  |  |  |  |- happathon-insight-utils_angular/ // angular-specific templates for insight plugins to reference
+  |  |  |  |- happathon-org_customization-somerville/ // somerville customizations
+  |  |  |  |- happathon-people-xxxx/ // eventually discoverable people (groups & individuals) will be listed as
+                                     // installable plugins.  for now they're hard coded into
+                                     // happathon-engine/mock-backend/people-user-module.js
 
 ```
 
 What follows is a brief description of each entry, but most directories contain
 their own `README.md` file with additional documentation, so browse around to
 learn more.
-
-- `e2e-tests/` - contain end-to-end test scripts
-- `karma/` - test configuration.
-- `src/` - our application sources. [Read more &raquo;](src/README.md)
-- `vendor/` - third-party libraries. [Bower](http://bower.io) will install
-  packages here. Anything added to this directory will need to be manually added
-  to `build.config.js` and `karma/karma-unit.js` to be picked up by the build
-  system.
-- `.bowerrc` - the Bower configuration file. This tells Bower to install
-  components into the `vendor/` directory.
-- `.jshintrc` - a configuration file to standardize JSHint code linting
-- `bower.json` - this is our project configuration for Bower and it contains the
-  list of Bower dependencies we need.
-- `build.config.js` - our customizable build settings; see "The Build System"
-  below.
-- `Gruntfile.js` - our build script; see "The Build System" below.
-- `module.prefix` and `module.suffix` - our compiled application script is
-  wrapped in these, which by default are used to place the application inside a
-  self-executing anonymous function to ensure no clashes with other libraries.
-- `package.json` - metadata about the app, used by NPM and our build script. Our
-  NPM dependencies are listed here.
 
 ### Detailed Installation
 
@@ -249,8 +173,7 @@ you have Node.js installed, you can simply use `npm` to make it all happen:
 $ npm -g install grunt-cli karma bower
 ```
 
-If you're on Linux (like I am) then throw `sudo` in front of that command.  If
-you're on Windows, then you're on your own.
+If you're on Linux then throw `sudo` in front of that command.
 
 Next, you can either clone this repository using Git, download it as a zip file
 from GitHub, or merge the branch into your existing repository. Assuming you're
@@ -302,46 +225,20 @@ to work.
 To ensure your setup works, launch grunt:
 
 ```sh
-$ grunt watch
+$ grunt dev
 ```
 
-The built files are placed in the `build/` directory by default. Open the
-`build/index.html` file in your browser and check it out! Because everything is
-compiled, no XHR requests are needed to retrieve templates, so until this needs
-to communicate with your backend there is no need to run it from a web server.
+For a deeper look at the build process, read the thoroughly commented Gruntfile.js.
+The built files are placed in the `build/` directory by default.
 
-`watch` is actually an alias of the `grunt-contrib-watch` that will first run a
-partial build before watching for file changes. With this setup, any file that
-changes will trigger only those build tasks necessary to bring the app up to
-date. For example, when a template file changes, the templates are recompiled
-and concatenated, but when a test/spec file changes, only the tests are run.
-This allows the watch command to complete in a fraction of the time it would
-ordinarily take.
-
-In addition, if you're running a Live Reload plugin in your browser (see below),
-you won't even have to refresh to see the changes! When the `watch` task detects
-a file change, it will reload the page for you. Sweet.
-
-When you're ready to push your app into production, just run the `compile`
-command:
-
-```sh
-$ grunt compile
-```
-
-This will concatenate and minify your sources and place them by default into the
-`bin/` directory. There will only be three files: `index.html`,
-`your-app-name.js`, and `your-app-name.css`. All of the vendor dependencies like
-Bootstrap styles and AngularJS itself have been added to them for super-easy
-deploying. If you use any assets (`src/assets/`) then they will be copied to
-`bin/` as is.
-
-Lastly, a complete build is always available by simply running the default
-task, which runs `build` and then `compile`:
+When you're ready to push your app into production, just run `grunt` by itself:
 
 ```sh
 $ grunt
 ```
+
+This will build, concatenate and minify your sources and place them by default into the
+`dist/` directory.
 
 ### The Build System
 
@@ -349,54 +246,8 @@ The best way to learn about the build system is by familiarizing yourself with
 Grunt and then reading through the heavily documented build script,
 `Gruntfile.js`. But you don't need to do that to be very productive with
 `oms-happathon`. What follows in this section is a quick introduction to the
-tasks provided and should be plenty to get you started.
-
-The driver of the process is the `delta` multi-task, which watches for file
-changes using `grunt-contrib-watch` and executes one of nine tasks when a file
-changes:
-
-* `delta:gruntfile` - When `Gruntfile.js` changes, this task runs the linter
-  (`jshint`) on that one file and reloads the configuration.
-* `delta:assets` - When any file within `src/assets/` changes, all asset files
-  are copied to `build/assets/`.
-* `delta:html` - When `src/index.html` changes, it is compiled as a Grunt
-  template, so script names, etc., are dynamically replaced with the correct
-  values configured dynamically by Grunt.
-* `delta:less` - When any `*.less` file within `src/` changes, the
-  `src/less/main.less` file is linted and copied into
-  `build/assets/ng-boilerplate.css`.
-* `delta:jssrc` - When any JavaScript file within `src/` that does not end in
-  `.spec.js` changes, all JavaScript sources are linted, all unit tests are run,
-  and the all source files are re-copied to `build/src`.
-* `delta:coffeesrc` - When any `*.coffee` file in `src/` that doesn't match
-  `*.spec.coffee` changes, the Coffee scripts are compiled independently into
-  `build/src` in a structure mirroring where they were in `src/` so it's easy to
-  locate problems. For example, the file
-  `src/common/titleService/titleService.coffee` is compiled to
-  `build/src/common/titleService/titleService.js`.
-* `delta:tpls` - When any `*.tpl.html` file within `src/` changes, all templates
-  are put into strings in a JavaScript file (technically two, one for
-  `src/common/` and another for `src/app/`) that will add the template to
-  AngularJS's
-  [`$templateCache`](http://docs.angularjs.org/api/ng.$templateCache) so
-  template files are part of the initial JavaScript payload and do not require
-  any future XHR.  The template cache files are `build/template-app.js` and
-  `build/template-common.js`.
-* `delta:jsunit` - When any `*.spec.js` file in `src/` changes, the test files
-  are linted and the unit tests are executed.
-* `delta:coffeeunit` - When any `*.spec.coffee` file in `src/` changes, the test
-  files are linted, compiled their tests executed.
-
-As covered in the previous section, `grunt watch` will execute a full build
-up-front and then run any of the aforementioned `delta:*` tasks as needed to
-ensure the fastest possible build. So whenever you're working on your project,
-start with:
-
-```sh
-$ grunt watch
-```
-
-And everything will be done automatically!
+tasks provided and should be plenty to get you started.  TODO, generate this from the
+Gruntfile.js 'build' section comments
 
 ### Build vs. Compile
 
@@ -416,37 +267,8 @@ $ grunt
 ```
 
 This will perform a build and then a compile. The compiled site - ready for
-uploading to the server! - is located in `bin/`, taking a cue from
-traditional software development. To test that your full site works as
-expected, open the `bin/index.html` file in your browser. Voila!
-
-### Live Reload!
-
-`oms-happathon` also includes [Live Reload](http://livereload.com/), so you no
-longer have to refresh your page after making changes! You need a Live Reload
-browser plugin for this:
-
-- Chrome - [Chrome Webstore](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
-- Firefox - [Download from Live Reload](http://download.livereload.com/2.0.8/LiveReload-2.0.8.xpi)
-- Safari - [Download from Live Reload](http://download.livereload.com/2.0.9/LiveReload-2.0.9.safariextz)
-- Internet Explorer - Surely you jest.
-
-Note that if you're using the Chrome version with `file://` URLs (as is the
-default with `oms-happathon`) you need to tell Live Reload to allow it. Go to
-`Menu -> Tools -> Extensions` and check the "Allow access to file URLs" box next
-to the Live Reload plugin.
-
-When you load your page, click the Live Reload icon in your toolbar and
-everything should work magically. w00t!
-
-If you'd prefer to not install a browser extension, then you must add the
-following to the end of the `body` tag in `index.html`:
-
-```html
-<script src="http://localhost:35729/livereload.js"></script>
-```
-
-Boom!
+uploading to the server! - is located in `dist/`. To test that your full site works as
+expected, open the same url as for build - ```http://localhost:8000``` in your browser. Voila!
 
 ### Continuous Integration
 
@@ -477,5 +299,3 @@ Via our [Github Repository](https://github.com/IDCubed/oms-happathon/issues).  F
 
 ### Licensing
 By submitting a patch, you agree to license your work under the same license as that used by the project.
-
-### Licensing

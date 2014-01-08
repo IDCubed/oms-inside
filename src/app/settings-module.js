@@ -3,7 +3,7 @@ angular.module('happathon.settings',[
 ])
 
 .controller( 'PeopleCtrl', ['$scope', '$log', '$rootScope',
-function PeopleCtrl ( $scope, $log, $rootScope) {
+function ( $scope, $log, $rootScope) {
 
   $scope.addPeople = function(){
     console.log('do stuff when add people button clicked');
@@ -13,7 +13,7 @@ function PeopleCtrl ( $scope, $log, $rootScope) {
 
   var openPeople;
 // toggle menu open - only one at a time
-  $scope.toggleMenu=function($index){
+  $scope.toggleMenu = function($index){
     $log.log('toggling $rootScope.peopleListObj[$index]', $rootScope.peopleListObj[$index]);
     var people = $rootScope.peopleListObj[$index];
     if(openPeople){

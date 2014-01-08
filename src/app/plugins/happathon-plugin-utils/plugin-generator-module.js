@@ -34,7 +34,7 @@ angular.module('happathon-plugin-generator', [])
     type:null, // the type of plugin, e.g., form, insight,
     menu_title:'',// the name used to display the plugin in lists and headers, max 20 chars
     urls:{
-      screenshots:['screenshots/example1.jpg','screenshots/example2.jpg','screenshots/example3.jpg'], // url for screenshots, relative to plugin dir
+      screenshots:['screenshots/example1.jpg','screenshots/example2.jpg','screenshots/example3.jpg'] // url for screenshots, relative to plugin dir
     },
     long_description:'', // to say things too long for the bower.json description. Max 1000 chars.  Falls back to bower desc
     keywords: ["happathon", "plugin","happathon-plugin"], // Used for search by keyword. Helps make your package easier to discover without people needing to know its name.
@@ -45,7 +45,7 @@ angular.module('happathon-plugin-generator', [])
     provided_datasources:[],
     required_apis:[],
     optional_apis:[],
-    provided_apis:[],
+    provided_apis:[]
   };
 }])
 .factory('pluginGenerator', ['happathonJsonBase', function (happathonJsonBase) {
@@ -104,7 +104,6 @@ angular.module('happathon-plugin-generator', [])
           }
         }
       },deviceObj);
-    },
-
+    }
   };
 }]);

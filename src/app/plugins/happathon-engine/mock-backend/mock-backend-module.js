@@ -1,13 +1,9 @@
 angular.module('happathon-engine.mock-backend', [
   'ngMockE2E',
   'restangular',
-  'happathon-engine.people-user',
-  'happathon-engine.people-type-human',
+  'happathon-engine.people-user'
 ])
-.config( ['$stateProvider','$urlRouterProvider','RestangularProvider',
-  function myAppConfig ( $stateProvider, $urlRouterProvider, RestangularProvider) {
-
-    // console.log('RestangularProvider',RestangularProvider);
+.config( ['RestangularProvider', function (RestangularProvider) {
     // Define Restangular settings for back-end sync
     RestangularProvider.setBaseUrl('/api/v0/');
     RestangularProvider.setListTypeIsArray(false);
@@ -32,7 +28,7 @@ angular.module('happathon-engine.mock-backend', [
 .run([
   'user',
   '$httpBackend',
-  function happathonEngineMockBackend (user,$httpBackend) {
+  function (user, $httpBackend) {
     // console.log('running backend module');
     $httpBackend.whenGET(/\.|tpl/g).passThrough();
     var userCopy = angular.copy(user);
@@ -42,13 +38,13 @@ angular.module('happathon-engine.mock-backend', [
     .respond(function(url, data, headers){
       // console.log('responding in user whenGET: url, data, headers : ',url, data, headers);
       console.log('responding with userCopy',userCopy);
-      return [200, [userCopy],{}];
+      return [200, [userCopy], {}];
     });
 
     $httpBackend.whenPOST(/\/api\/v0\/user/)
     .respond(function(url, data, headers){
       console.log('add people',url, data, headers);
-      user.installed_tabs.happathon_app.plugins.installed[data.name]=data;
+      user.installed_tabs.happathon_app.plugins.installed[data.name] = data;
       return [200,[angular.copy(user)],{}];
     });
 
@@ -68,7 +64,7 @@ angular.module('happathon-engine.mock-backend', [
     // // create a different api for settings, so the app doesn't
     // $httpBackend.whenGET(/\/api\/v0\/app-data/)
     // .respond(function(url, data, headers){
-    //   // var peopleID=url.match(/\/api\/v0\/app-data\/([0-9]+)?/gi);
+    //   // var peopleID = url.match(/\/api\/v0\/app-data\/([0-9]+)?/gi);
     //   console.log('responding with app-data: url, data, headers : ',url, data, headers);
     //   console.log('responding with app-data: peopleCopiesArr[0].installed_tabs.happathon_app : ',peopleCopiesArr[0].installed_tabs.happathon_app);
     //   return [200, [peopleCopiesArr[0].installed_tabs.happathon_app],{}];

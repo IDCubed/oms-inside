@@ -1,13 +1,9 @@
 angular.module( 'happathon-engine.people-user', [
-  'happathon-engine.people-type-human',
-  'happathon-engine.people-type-city',
   'happathon-plugin-generator'
 ])
 .service('user', [
-  'happathon-engine.people-type-human',
-  'happathon-engine.people-type-city',
   'pluginGenerator',
-  function (peopleTypeHuman,peopleTypeCity,pluginGenerator) {
+  function (pluginGenerator) {
     return pluginGenerator.people({
       name:'happathon-people-john_doe_2014',
       version: "0.0.1",
@@ -57,7 +53,7 @@ angular.module( 'happathon-engine.people-user', [
                 name_full:"City of Somerville",
                 menu_title:"Somerville",
                 user_shared_apis:[],
-                people_shared_apis:[],
+                people_shared_apis:[]
               }),
               'happathon-people-johns_sister_123':pluginGenerator.people({
                 name:'happathon-people-johns_sister_123',
@@ -65,7 +61,7 @@ angular.module( 'happathon-engine.people-user', [
                 name_full:"Jane D'oh!",
                 menu_title:"Jane D'oh!",
                 user_shared_apis:[],
-                people_shared_apis:[],
+                people_shared_apis:[]
               }),
               'happathon-people-user_family':pluginGenerator.people({
                 name:'happathon-people-user_family',
@@ -74,7 +70,7 @@ angular.module( 'happathon-engine.people-user', [
                 menu_title:"My Family",
                 in_groups:['johndoe_family'],
                 user_shared_apis:[],
-                people_shared_apis:[],
+                people_shared_apis:[]
               }),
               'happathon-people-boston_qs':pluginGenerator.people({
                 name:'happathon-people-boston_qs',
@@ -86,14 +82,14 @@ angular.module( 'happathon-engine.people-user', [
                 name:'happathon-people-acme_widgets_company_employees',
                 tags:['group','work','private'],
                 name_full:"Acme Staff",
-                menu_title:"Acme Staff",
+                menu_title:"Acme Staff"
               }),
               'happathon-people-friend_bob_123':pluginGenerator.people({
                 name:'happathon-people-friend_bob_123',
                 tags:['individual','private','work'],
                 name_full:"Friend Bob",
                 menu_title:"Friend Bob",
-                in_groups:['acme_widgets_company_employees'],
+                in_groups:['acme_widgets_company_employees']
               }),
               // not adding people yet since we're dynamically constructing them
               // with angular.  That needs to happen on the backend. Perhaps feed
@@ -101,14 +97,14 @@ angular.module( 'happathon-engine.people-user', [
               // adding a new one
               'add plugin configs here via grunt':''
             },
-            market:[],
+            market:[]
           }
         },
         happathon_engine:{ // we populate the data here.  We need to define the schema in the happathon engine module
           data:[], // populated by plugin's engine schema
           settings:{
-            apis:[] // set by default by the plugin's engine schema defaults,
-          },
+            apis:[] // set by default by the plugin's engine schema defaults
+          }
 
           // app installed
           // app registers with engine

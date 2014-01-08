@@ -1,5 +1,5 @@
 /**
- * happathon - v0.0.1 - 2014-01-03
+ * happathon - v0.0.1 - 2014-01-07
  * https://github.com/IDCubed/oms-happathon
  *
  * Copyright (c) 2014 Adam Laughlin
@@ -15,11 +15,11 @@ angular.module('happathon-app-utils', [])
 
 .factory("utils", ['$templateCache','$rootScope','lodash',function($templateCache, $rootScope, _) {
   return {
-    // dynamically assembles templates from urls
+    // dynamically assembles templates for each state from multiple partials
     lazyCompileStateTemplate: function(pluginObj) {
       // check if we've already cached this state's template
-      var forGroupOrIndiv = _.contains($rootScope.people.tags,'group') ? 'group':'individual';
-      var templateName = 'plugins/'+pluginObj.name+'/'+forGroupOrIndiv;
+      var forGroupOrIndiv = _.contains($rootScope.people.tags,'group') ? 'group' : 'individual';
+      var templateName = 'plugins/' + pluginObj.name + '/' + forGroupOrIndiv;
       var cachedStateTemplate = $templateCache.get(templateName);
       if(cachedStateTemplate){
         return cachedStateTemplate;
@@ -30,29 +30,30 @@ angular.module('happathon-app-utils', [])
       // loop over all the templates specified in this plugin
       _.forEach(pluginObj.display_templates[forGroupOrIndiv],function(obj){
         // get the partials from the cache and compile them into a single template
-        templateStr += $templateCache.get('plugins/'+obj.template.split(' : ').join('/'))+'\n';
+        templateStr += $templateCache.get('plugins/' + obj.template.split(' : ').join('/')) + '\n';
         // $rootScope.templateDataroot.temp
       });
       // if the template str is still blank, return a message;
-      templateStr = templateStr || '<div>No '+forGroupOrIndiv+' template defined by this plugin</div>';
+      templateStr = templateStr || '<div>No ' + forGroupOrIndiv + ' template defined by this plugin</div>';
       // cache the template
       $templateCache.put(templateName,templateStr);
       return templateStr;
     },
 
+    // debugging for UI router
     enableDebugging: function() {
       $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
-        console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
+        console.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n',toState, toParams);
       });
       $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
         console.log('$stateChangeError - fired when an error occurs during transition.');
         console.log(arguments);
       });
       $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
-        console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
+        console.log('$stateChangeSuccess to ' + toState.name + '- fired once the state transition is complete.');
       });
       $rootScope.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
-        console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
+        console.log('$stateNotFound ' + unfoundState.to + '  - fired when a state cannot be found by its name.');
         console.log(unfoundState, fromState, fromParams);
       });
       // $rootScope.$on('$viewContentLoading',function(event, viewConfig){
@@ -64,14 +65,19 @@ angular.module('happathon-app-utils', [])
       });
     },
 
-    getPluginObj:function(name){
-      return $rootScope.pluginsListObj[name.indexOf('root.')===0?name.slice(5):name];
+    getPluginObj:function(pluginOrStateName){ // gets a plugin object by plugin or state name
+      return $rootScope.pluginsListObj[pluginOrStateName.indexOf('root.') === 0 ? pluginOrStateName.slice(5) : pluginOrStateName];
     },
+
+    detectMobileBrowser:function(){
+      return (function(a){return !!(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a) || (/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i).test(a.substr(0,4)));})(navigator.userAgent || navigator.vendor || window.opera);
+    }
+
   };
 }]);
 
 var STATE_PROVIDER; // ugly global workaround for lazy loading states.  Only used in app.js file.
-var DEBUG_MODE=false;
+var DEBUG_MODE = false;
 var happ = angular.module( 'happathon', [
   'html_templates_jsfied',
   'ui.router',
@@ -81,7 +87,7 @@ var happ = angular.module( 'happathon', [
   'happathon-app-utils'
 ])
 .config( ['$stateProvider','$urlRouterProvider',
-  function myAppConfig ($stateProvider , $urlRouterProvider) {
+  function ($stateProvider , $urlRouterProvider) {
     // store the state provider for lazy loading states
     STATE_PROVIDER = $stateProvider;
     // console.log('$rootScope',$rootScope);
@@ -90,15 +96,15 @@ var happ = angular.module( 'happathon', [
      * States
      */
     // convert the routing request to a state request to use the state events
-    var freshSession=true;
+    var freshSession = true;
     $urlRouterProvider.otherwise(function($injector,$location){
       console.log('$location','hash:',$location.hash(),'path:',$location.path());
       var redirectTo = $location.path().slice(1);
       var $state = $injector.get('$state');
       var apiPromise = $injector.get('happathon-engine-apis-promise');
       apiPromise.then(function (api) {
-        if(freshSession===true){
-          freshSession=false;
+        if(freshSession === true){
+          freshSession = false;
           redirectTo = api.read('settings',{one:'default_plugin'}).value;
         }
         $state.go(redirectTo,{freshSession:true});
@@ -128,7 +134,7 @@ var happ = angular.module( 'happathon', [
         },
         'main':{
           template:'<ui-view/>'
-        },
+        }
       }
     });
   }
@@ -141,10 +147,9 @@ var happ = angular.module( 'happathon', [
   'utils',
   'stateFactory',
   '$stateParams',
-  '$q',
   'lodash',
   '$timeout',
-  function ($root, $state, engineApiPromise,utils,stateFactory,$stateParams,$q,_,$timeout) {
+  function ($root, $state, engineApiPromise,utils,stateFactory,$stateParams,_,$timeout) {
     // This section is fugly!
     // Lazy loading templates and states is not something UI router handles well.
     // utils.enableDebugging();
@@ -158,23 +163,22 @@ var happ = angular.module( 'happathon', [
       $root.pluginsListObj = api.read('plugins');
       $root.settings = $root.plugin.settings;
       $root.$state = $state;
-      $root.pluginOrPeopleChanged=false;
+      $root.pluginOrPeopleChanged = false;
       $root.$stateParams = $stateParams;
       $root.pluginsByType = api.read('plugins',{groupBy:'type'});
       $root.pluginsByType.people.push($root.people); // add the user to the list for managing settings consistently
       console.log('$root.pluginsByType',$root.pluginsByType);
       $root.pluginListType = $root.plugin.type; // set the initial active list type
-
       $root.closeMenus = function(){
-        var open=false;
-        if($root.pluginListSelectorVisible){open=true;$root.pluginListSelectorVisible=0;}
-        if($root.showleftmenu){open=true;$root.showleftmenu=0;}
-        if($root.showrightmenu){open=true;$root.showrightmenu=0;}
+        var open = false;
+        if($root.pluginListSelectorVisible){open = true;$root.pluginListSelectorVisible = 0;}
+        if($root.showleftmenu){open = true;$root.showleftmenu = 0;}
+        if($root.showrightmenu){open = true;$root.showrightmenu = 0;}
         return open;
       };
       $root.switchPluginListType = function (typeStr) {
-        $root.pluginListSelectorVisible=0; // yes, just close the selector
-        if($root.pluginListType!==typeStr){ // already on the clicked type?
+        $root.pluginListSelectorVisible = 0; // yes, just close the selector
+        if($root.pluginListType !== typeStr){ // already on the clicked type?
           $root.pluginListType = typeStr; // no, set the new type and show
         }
       };
@@ -186,34 +190,34 @@ var happ = angular.module( 'happathon', [
         var menusOpen = $root.closeMenus();
         // don't switch states for people changes.
 
-        var pluginObj = stateName===$root.user.name ? $root.user : utils.getPluginObj(stateName);
+        var pluginObj = stateName === $root.user.name ? $root.user : utils.getPluginObj(stateName);
 
         if (pluginObj && pluginObj.display_templates) {
           $root.plugin = pluginObj;
           $root.switchPluginListType(pluginObj.type);
-          $root.pluginOrPeopleChanged=!$root.pluginOrPeopleChanged;
+          $root.pluginOrPeopleChanged = !$root.pluginOrPeopleChanged;
           if(menusOpen){
             $timeout(function(){
               // $state.transitionTo(stateName,{notify:true});
-              $state.go('root.'+pluginObj.name);
+              $state.go('root.' + pluginObj.name);
             },1050); // wait for menu close
           } else {
-            $state.go('root.'+pluginObj.name);
+            $state.go('root.' + pluginObj.name);
             console.log('switching plugin');
           }
           return true;
         }
         $root.people = _.find($root.peopleListObj,{name:pluginObj.name});
-        $root.pluginOrPeopleChanged=!$root.pluginOrPeopleChanged;
+        $root.pluginOrPeopleChanged = !$root.pluginOrPeopleChanged;
         console.log('switching people');
         return false;
       };
     });
     $root.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
-      console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
+      console.log('$stateNotFound ' + unfoundState.to + '  - fired when a state cannot be found by its name.');
       var pluginObj = utils.getPluginObj(unfoundState.to);
       // if there are display templates, create the state and retry it
-      if (pluginObj&&pluginObj.display_templates) {
+      if (pluginObj && pluginObj.display_templates) {
         // $root.closeMenus();
         // event.retry = stateFactory(unfoundState.to);
         event.preventDefault();
@@ -234,11 +238,10 @@ var happ = angular.module( 'happathon', [
 // returns a promise for when the state is done loading
 .service('stateFactory', [
   'happathon-engine-apis-promise',
-  'utils',
   '$q',
-  function (engineApiPromise, utils,$q) {
+  function (engineApiPromise, $q) {
     return function(stateName){
-      var stateObjDeferred=$q.defer();
+      var stateObjDeferred = $q.defer();
         // parse plugins here.
       engineApiPromise.then(function(api){
 
@@ -246,11 +249,11 @@ var happ = angular.module( 'happathon', [
         var pluginObj = api.read('plugins',{one:stateName});
 
         var stateObj = {
-          name:'root.'+pluginObj.name,
+          name:'root.' + pluginObj.name,
           url:pluginObj.name,
           data:{},
           controller:'MainViewCtrl',
-          template:'<partials-container template-objects-array="display_templates"/>', // gets replaced by the partialsContainer directive
+          template:'<partials-container template-objects-array = "display_templates"/>' // gets replaced by the partialsContainer directive
         };
 
         // create the state
@@ -268,35 +271,31 @@ var happ = angular.module( 'happathon', [
  * Controllers
  */
 
-.controller("MainViewCtrl", ['$scope','$state','$rootScope',function($scope,$state,$root){
-
-  // console.log('MainViewCtrl $scope',$scope);
-  // console.log('MainViewCtrl $state',$state);
+.controller("MainViewCtrl", ['$scope', function($scope){
+  console.log('MainViewCtrl $scope',$scope);
 }])
 
 // Top Nav
-.controller("TopNavCtrl", ['$scope','$state','$rootScope',function($scope,$state,$root){
+.controller("TopNavCtrl", ['$scope', function($scope){
   console.log('TopNavCtrl $scope',$scope);
 }])
 
 
-.controller("LeftMenuCtrl", ['$scope','$state','$rootScope',function($scope,$state,$root){
-  $scope.pluginListSource='installed';
-  console.log('LeftMenuCtrl $scope',$.extend({},$scope));
-  //
+.controller("LeftMenuCtrl", ['$scope', function($scope){
+  $scope.pluginListSource = 'installed';
+  console.log('LeftMenuCtrl $scope',$scope);
 }])
 
 
-.controller("RightMenuCtrl", ['$scope','$state','$rootScope',function($scope,$state,$rootScope){
-  // $scope.showmenu=false;
+.controller("RightMenuCtrl", ['$scope', function($scope){
+  console.log('RightMenuCtrl $scope',$scope);
 }])
 
-
-.directive('hapSize', ['$timeout','$window', function ($timeout, $window) {
-  var runs = 0;
+// adds a pseudo phone body around the content when on a desktop, for pre-beta evaluation
+.directive('hapSize', ['$timeout','$window', 'utils', function ($timeout, $window, utils) {
   return {
     restrict: 'A',
-    link: function (scope, iElement, iAttrs, people) {
+    link: function (scope) { // scope, iElement, iAttrs
 
 
       function size(){
@@ -306,19 +305,19 @@ var happ = angular.module( 'happathon', [
         var container = angular.element('.root-container');
 
         function px(percent){
-          return Math.floor((wWidth*percent)/100) + 'px';
+          return Math.floor((wWidth * percent) / 100) + 'px';
         }
 
         // resize the container
         /* global detectMobileBrowser */
-        if(detectMobileBrowser() === false){
+        if(utils.detectMobileBrowser() === false){
           // could use a media query for some of this, but doing it here
           // to keep all beta-testing resize code in one place.
 
           if (wHeight > 800) {
             // 1000 pics is a mobile screen, but it often requires
             // scrolling on conventional browsers, so limit the size here.
-            wHeight=800;
+            wHeight = 800;
           }
           // maintain a 16:9 aspect ratio
           var maxWidth = Math.floor(wHeight / 16 * 9);
@@ -363,7 +362,7 @@ var happ = angular.module( 'happathon', [
 
 
         // var menu = angular.element('.panel');
-        // // console.log('(menuToggleSize+30)+px',(menuToggleSize+30)+'px');
+        // // console.log('(menuToggleSize + 30)+px',(menuToggleSize + 30)+'px');
         // menu.css({
         //   bottom:px(26),
         //   fontSize:px(3.5)
@@ -399,7 +398,7 @@ var happ = angular.module( 'happathon', [
   };
 }])
 
-
+// renders a series of plugin display template partials as individually scoped elements
 .directive('partialsContainer',
 ['$rootScope','$templateCache','$compile',
 function ($root, $templateCache, $compile) {
@@ -409,9 +408,9 @@ function ($root, $templateCache, $compile) {
     restrict: 'E',
     // compile runs digest once.
     // link would run digest each time the model changes, including each time a new child is appended.
-    compile:function(tElement, tAttrs, transclude){
+    compile:function(){ // tElement, tAttrs, transclude
       return {
-        pre:function(scope, iElement, iAttrs,controller){
+        pre:function(scope, iElement, iAttrs){ // scope, iElement, iAttrs, controller
           var counter = 0;
           // for some reason, making this $root.$watch causes the counter to log 3, 2, 1;
           // where making it scope.$watch only makes it render 1 each time.
@@ -426,29 +425,29 @@ function ($root, $templateCache, $compile) {
             var groupOrIndividual = $root.people.tags.indexOf('group') < 0 ? 'individual' : 'group';
             // loop over the plugin's display templates
             console.log('iAttrs',iAttrs);
-            var templateObj = iAttrs.templateObjectsArray==='appSettings'?
-              $root.user.installed_tabs.happathon_app.settings:
+            var templateObj = iAttrs.templateObjectsArray === 'appSettings' ?
+              $root.user.installed_tabs.happathon_app.settings :
               $root.plugin[iAttrs.templateObjectsArray];
             var templateArray;
-            if(templateObj===undefined||templateObj[groupOrIndividual]===undefined||!templateObj[groupOrIndividual].length){
+            if(templateObj === undefined || templateObj[groupOrIndividual] === undefined || !templateObj[groupOrIndividual].length){
               templateArray = [{template:''}];
-              console.log('No templates defined for plugin: '+ $root.plugin.name);
-              console.log('templateObj: '+ templateObj);
+              console.log('No templates defined for plugin: ' + $root.plugin.name);
+              console.log('templateObj: ' + templateObj);
             } else{
               templateArray = templateObj[groupOrIndividual];
             }
             // var tempDom = angular.element('<div></div>');
             angular.forEach(templateArray,function(obj,idx){
               // create a new child scope for each
-              var childScope=scope.$new();
+              var childScope = scope.$new();
               // add the template's data to its scope
-              childScope.template_data=obj;
-              childScope.idx=idx;
+              childScope.template_data = obj;
+              childScope.idx = idx;
               // get the partials from the cache
-              var templateStr = $templateCache.get('plugins/'+obj.template.split(' : ').join('/'));
+              var templateStr = $templateCache.get('plugins/' + obj.template.split(' : ').join('/'));
               // if the template str is still blank, return a message;
               // console.log('templateStr',templateStr);
-              templateStr = templateStr || '<div>The author of plugin "'+$root.plugin.name+'" did not specify a template to display '+groupOrIndividual+'s.</div>';
+              templateStr = templateStr || '<div>The author of plugin "' + $root.plugin.name + '" did not specify a template to display ' + groupOrIndividual + 's.</div>';
               // append the element to the dom - can batch these into one dom write for performance
               iElement.append($compile(templateStr)(childScope));
             });
@@ -458,7 +457,6 @@ function ($root, $templateCache, $compile) {
     }
   };
 }]);
-function detectMobileBrowser(){return(function(a){return !!(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)));})(navigator.userAgent||navigator.vendor||window.opera);}
 angular.module('html_templates_jsfied', ['left-menu.tpl.html', 'plugins/happathon-challenge-2kind/2kind.tpl.html', 'plugins/happathon-challenge-utils_angular/challenge-base.tpl.html', 'plugins/happathon-challenge-utils_angular/challenge-part-analysis.tpl.html', 'plugins/happathon-challenge-utils_angular/challenge-part-chart.tpl.html', 'plugins/happathon-engine/settings/settings.tpl.html', 'plugins/happathon-form-utils_angular/add-custom-with-relationship.tpl.partial', 'plugins/happathon-form-utils_angular/add-custom.tpl.partial', 'plugins/happathon-form-utils_angular/button-continue.tpl.partial', 'plugins/happathon-form-utils_angular/button-submit.tpl.partial', 'plugins/happathon-form-utils_angular/checkbox.tpl.partial', 'plugins/happathon-form-utils_angular/grid-10x10.tpl.partial', 'plugins/happathon-form-utils_angular/heading.tpl.partial', 'plugins/happathon-form-utils_angular/multiselect.tpl.partial', 'plugins/happathon-form-utils_angular/radio.tpl.partial', 'plugins/happathon-form-utils_angular/select.tpl.partial', 'plugins/happathon-form-utils_angular/slider-7point.tpl.partial', 'plugins/happathon-form-utils_angular/text.tpl.partial', 'plugins/happathon-form-utils_angular/textarea.tpl.partial', 'plugins/happathon-form-utils_angular/time-range.tpl.partial', 'plugins/happathon-insight-explorer/insight-miner.tpl.html', 'plugins/happathon-insight-status/status-custom-test.tpl.partial', 'plugins/happathon-insight-utils_angular/all-attributes.tpl.partial', 'plugins/happathon-insight-utils_angular/heading.tpl.partial', 'right-menu.tpl.html', 'top-nav.tpl.html']);
 
 angular.module("left-menu.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -725,7 +723,7 @@ angular.module('happathon.settings',[
 ])
 
 .controller( 'PeopleCtrl', ['$scope', '$log', '$rootScope',
-function PeopleCtrl ( $scope, $log, $rootScope) {
+function ( $scope, $log, $rootScope) {
 
   $scope.addPeople = function(){
     console.log('do stuff when add people button clicked');
@@ -735,7 +733,7 @@ function PeopleCtrl ( $scope, $log, $rootScope) {
 
   var openPeople;
 // toggle menu open - only one at a time
-  $scope.toggleMenu=function($index){
+  $scope.toggleMenu = function($index){
     $log.log('toggling $rootScope.peopleListObj[$index]', $rootScope.peopleListObj[$index]);
     var people = $rootScope.peopleListObj[$index];
     if(openPeople){
@@ -777,34 +775,32 @@ angular.module( 'happathon-api-app_angular', [
   var userObj;
   var appData;
   var options;
-  var installedPlugins;
   var appAPI = {
     create:function(){
       // peopleObj;
     },
     read:function(argStr,optionsObj){
       // TODO: convert this all over to just use lodash on the collections.
-      options=optionsObj||{};
+      options = optionsObj || {};
       switch(argStr){
       case 'plugin':
         return appData.settings.default_plugin.value;
       case 'people':
         if(options.one){
-          // if(options.one==='active'){
+          // if(options.one ==='active'){
           //   return appData.settings.default_people_id.value;
           // } else
-          if (options.one==='user'){
+          if (options.one === 'user'){
             return userObj;
-          } else{
-            return 'one supports "user" currently';
           }
+          return 'one supports "user" currently';
         }
         var listObj = appAPI.read('plugins',{filter:'-people-'});
         listObj[userObj.name] = userObj;
         return listObj;
       case 'plugins':
         if(options.one){
-          if(options.one==='active'){
+          if(options.one === 'active'){
             var set = appAPI.read('settings',{one:'default_plugin'}).value;
             console.log("appAPI.read('settings',{one:'default_plugin'})",appAPI.read('settings',{one:'default_plugin'}));
             return appData.plugins.installed[set];
@@ -817,21 +813,21 @@ angular.module( 'happathon-api-app_angular', [
         if(options.filter){
           var pluginListObj = {};
           for (var pluginName in appData.plugins.installed){
-            if(pluginName.indexOf(options.filter)>-1){
-              pluginListObj[pluginName]=appData.plugins.installed[pluginName];
+            if(pluginName.indexOf(options.filter) > -1){
+              pluginListObj[pluginName] = appData.plugins.installed[pluginName];
             }
           }
           return pluginListObj;
         }
         if(options.groupBy){
-          if(options.groupBy==='type'){
+          if(options.groupBy === 'type'){
             // transform {'plugin-type1-foo':{}
-            var plugLists={};
+            var plugLists = {};
             var pluginType;
             for (var plugName in appData.plugins.installed){
-              pluginType=plugName.replace(/^.+?-|-.+$/g,'');
+              pluginType = plugName.replace(/^.+?-|-.+$/g,'');
               if(!plugLists[pluginType]){
-                plugLists[pluginType]=[];
+                plugLists[pluginType] = [];
               }
               plugLists[pluginType].push(appData.plugins.installed[plugName]);
             }
@@ -860,16 +856,16 @@ angular.module( 'happathon-api-app_angular', [
     update:function(){
     },
     delete:function(){
-    },
+    }
   };
   var apisDeferred = $q.defer();
   var userPromise = Restangular.all('user').getList();
   userPromise.then(function(user){
     console.log('user',user);
-    if(user.constructor !== Array || user.length!==1){
+    if(user.constructor !== Array || user.length !== 1){
       return console.error('engine API should return a length 1 array of the user, not: ',user);
     }
-    userObj=user[0];
+    userObj = user[0];
     appData = userObj.installed_tabs.happathon_app;
     apisDeferred.resolve(appAPI);
   });
@@ -890,13 +886,9 @@ angular.module( 'happathon-engine', [
 angular.module('happathon-engine.mock-backend', [
   'ngMockE2E',
   'restangular',
-  'happathon-engine.people-user',
-  'happathon-engine.people-type-human',
+  'happathon-engine.people-user'
 ])
-.config( ['$stateProvider','$urlRouterProvider','RestangularProvider',
-  function myAppConfig ( $stateProvider, $urlRouterProvider, RestangularProvider) {
-
-    // console.log('RestangularProvider',RestangularProvider);
+.config( ['RestangularProvider', function (RestangularProvider) {
     // Define Restangular settings for back-end sync
     RestangularProvider.setBaseUrl('/api/v0/');
     RestangularProvider.setListTypeIsArray(false);
@@ -921,7 +913,7 @@ angular.module('happathon-engine.mock-backend', [
 .run([
   'user',
   '$httpBackend',
-  function happathonEngineMockBackend (user,$httpBackend) {
+  function (user, $httpBackend) {
     // console.log('running backend module');
     $httpBackend.whenGET(/\.|tpl/g).passThrough();
     var userCopy = angular.copy(user);
@@ -931,13 +923,13 @@ angular.module('happathon-engine.mock-backend', [
     .respond(function(url, data, headers){
       // console.log('responding in user whenGET: url, data, headers : ',url, data, headers);
       console.log('responding with userCopy',userCopy);
-      return [200, [userCopy],{}];
+      return [200, [userCopy], {}];
     });
 
     $httpBackend.whenPOST(/\/api\/v0\/user/)
     .respond(function(url, data, headers){
       console.log('add people',url, data, headers);
-      user.installed_tabs.happathon_app.plugins.installed[data.name]=data;
+      user.installed_tabs.happathon_app.plugins.installed[data.name] = data;
       return [200,[angular.copy(user)],{}];
     });
 
@@ -957,7 +949,7 @@ angular.module('happathon-engine.mock-backend', [
     // // create a different api for settings, so the app doesn't
     // $httpBackend.whenGET(/\/api\/v0\/app-data/)
     // .respond(function(url, data, headers){
-    //   // var peopleID=url.match(/\/api\/v0\/app-data\/([0-9]+)?/gi);
+    //   // var peopleID = url.match(/\/api\/v0\/app-data\/([0-9]+)?/gi);
     //   console.log('responding with app-data: url, data, headers : ',url, data, headers);
     //   console.log('responding with app-data: peopleCopiesArr[0].installed_tabs.happathon_app : ',peopleCopiesArr[0].installed_tabs.happathon_app);
     //   return [200, [peopleCopiesArr[0].installed_tabs.happathon_app],{}];
@@ -988,15 +980,11 @@ angular.module('happathon-engine.mock-backend', [
 
 
 angular.module( 'happathon-engine.people-user', [
-  'happathon-engine.people-type-human',
-  'happathon-engine.people-type-city',
   'happathon-plugin-generator'
 ])
 .service('user', [
-  'happathon-engine.people-type-human',
-  'happathon-engine.people-type-city',
   'pluginGenerator',
-  function (peopleTypeHuman,peopleTypeCity,pluginGenerator) {
+  function (pluginGenerator) {
     return pluginGenerator.people({
       name:'happathon-people-john_doe_2014',
       version: "0.0.1",
@@ -1046,7 +1034,7 @@ angular.module( 'happathon-engine.people-user', [
                 name_full:"City of Somerville",
                 menu_title:"Somerville",
                 user_shared_apis:[],
-                people_shared_apis:[],
+                people_shared_apis:[]
               }),
               'happathon-people-johns_sister_123':pluginGenerator.people({
                 name:'happathon-people-johns_sister_123',
@@ -1054,7 +1042,7 @@ angular.module( 'happathon-engine.people-user', [
                 name_full:"Jane D'oh!",
                 menu_title:"Jane D'oh!",
                 user_shared_apis:[],
-                people_shared_apis:[],
+                people_shared_apis:[]
               }),
               'happathon-people-user_family':pluginGenerator.people({
                 name:'happathon-people-user_family',
@@ -1063,7 +1051,7 @@ angular.module( 'happathon-engine.people-user', [
                 menu_title:"My Family",
                 in_groups:['johndoe_family'],
                 user_shared_apis:[],
-                people_shared_apis:[],
+                people_shared_apis:[]
               }),
               'happathon-people-boston_qs':pluginGenerator.people({
                 name:'happathon-people-boston_qs',
@@ -1075,14 +1063,14 @@ angular.module( 'happathon-engine.people-user', [
                 name:'happathon-people-acme_widgets_company_employees',
                 tags:['group','work','private'],
                 name_full:"Acme Staff",
-                menu_title:"Acme Staff",
+                menu_title:"Acme Staff"
               }),
               'happathon-people-friend_bob_123':pluginGenerator.people({
                 name:'happathon-people-friend_bob_123',
                 tags:['individual','private','work'],
                 name_full:"Friend Bob",
                 menu_title:"Friend Bob",
-                in_groups:['acme_widgets_company_employees'],
+                in_groups:['acme_widgets_company_employees']
               }),
               // not adding people yet since we're dynamically constructing them
               // with angular.  That needs to happen on the backend. Perhaps feed
@@ -1090,14 +1078,14 @@ angular.module( 'happathon-engine.people-user', [
               // adding a new one
               "happathon-form-daily":{"name":"happathon-form-daily","menu_title":"Daily Journal","type":"form","display_templates":{"group":["happathon-insight-status : status-custom-test.tpl.html"],"individual":["happathon-insight-utils_angular : heading.tpl.partial","happathon-insight-utils_angular : all-attributes.tpl.partial"]}},"happathon-form-moment":{"type":"form","name":"happathon-form-moment","menu_title":"Capture the Moment","extendable":true,"settings":{"individual":[{"name":"allowed_notification_times","value":{"start":"08:30","end":"21:30"},"template":"happathon-form-utils_angular : time-range.tpl.partial"}]},"display_templates":{"individual":[{"question":"Heading?","placeholder":"placeholderHeading","type":"text","template":"happathon-form-utils_angular : heading.tpl.partial"},{"question":"Text?","placeholder":"placeholderText","type":"text","template":"happathon-form-utils_angular : text.tpl.partial"},{"question":"Where are you?","answers":["Indoors","Outdoors","Home","Work","In transit","Public place"],"others":[],"persist_others":true,"delete_others":true,"other_placement":"append","template":"happathon-form-utils_angular : checkbox.tpl.partial"}],"group":[]}},"happathon-form-values":{"name":"happathon-form-values","type":"form","menu_title":"Values","display_templates":{"group":[],"individual":[{"template":"happathon-insight-utils_angular : heading.tpl.partial"},{"template":"happathon-insight-utils_angular : all-attributes.tpl.partial"}]}},"happathon-insight-explorer":{"name":"happathon-insight-explorer","type":"insight","menu_title":"Explorer","long_description":"Graph two data sources over time.","display_templates":{"group":[{"template":"happathon-insight-status : status-custom-test.tpl.partial"}],"individual":[{"template":"happathon-insight-utils_angular : heading.tpl.partial"},{"template":"happathon-insight-utils_angular : all-attributes.tpl.partial"}]}},"happathon-insight-status":{"name":"happathon-insight-status","type":"insight","menu_title":"Status","long_description":"Overall dashboard. Answers the question 'how is ___ doing?'","display_templates":{"group":[{"template":"happathon-insight-status : status-custom-test.tpl.partial"}],"individual":[{"template":"happathon-insight-utils_angular : heading.tpl.partial"},{"template":"happathon-insight-utils_angular : all-attributes.tpl.partial"}]}}
             },
-            market:[],
+            market:[]
           }
         },
         happathon_engine:{ // we populate the data here.  We need to define the schema in the happathon engine module
           data:[], // populated by plugin's engine schema
           settings:{
-            apis:[] // set by default by the plugin's engine schema defaults,
-          },
+            apis:[] // set by default by the plugin's engine schema defaults
+          }
 
           // app installed
           // app registers with engine
@@ -1152,234 +1140,6 @@ angular.module( 'happathon-engine.people-user', [
         //   ]
         // },
 
-angular.module( 'happathon-engine.people-base', [
-  'happathon-plugin-generator'
-])
-.service('happathon-engine.people-base', ['happathonJsonBase', function (happathonJsonBase) {
-  return angular.extend({},happathonJsonBase,{
-    id:null,
-    core_id:null,
-    type:'people',
-    subtype:'default',
-    version: '0.0.1',
-    user_shared_apis:[],
-    people_shared_apis:[],
-    user_shared_datasources:[],
-    people_shared_datasources:[],
-    settings:{
-      // each installed tab extends these settings
-      // each installed tab can also change the default settings of its dependencies
-    },
-    installed_tabs:{
-
-    }
-  });
-}]);
-
-
-// copied from previous types module;
-
-// providing the people type data as a service to other modules
-/*
-ngular.module('happathon.people.types',[
-  'happathon.people.base'
-])
-.service('peopleCity', ['peopleBase',function (peopleBase) {
-  return angular.extend({},peopleBase,{
-    type:'people',
-    subtype:'city',
-    name_first:"default_name_first",
-    name_last:"default_name_first",
-    menu_title:"default_menu_title",
-    is_user:false,
-    providedData:[],
-    email:'',
-    address1:'',
-    address2:'',
-    phone_mobile_num:'',
-    phone_alt_num:''
-  });
-}])
-
-ervice('peopleHuman', ['peopleBase',function (peopleBase) {
-  return angular.extend({},peopleBase,{
-    type:'people',
-    subtype:'human',
-    version: "0.0.1",
-    persona_id:0,
-    core_id:0,
-    required_attributes:{
-      name_full:'default_name_full',
-      name_first:"default_name_first",
-      name_last:"default_name_first",
-      menu_title:"default_menu_title",
-      is_user:false,
-      email:'',
-      address1:'',
-      address2:'',
-      phone_mobile_num:'',
-      phone_alt_num:'',
-      age:0,
-      birth_year:0,
-      birth_month:0,
-      birth_day:0,
-      time_zone:'GMT-5'
-    },
-    optional_attributes:{},
-    required_tabs:{
-      happathon_engine_data:'0.0.1',
-      happathon_plugin_market:'0.0.1'
-    },
-    installed_tabs:{
-      happathon_engine:{},
-      happathon_plugin_repo:{},
-      happathon_app:{
-        version:'0.0.1',
-        happathon_engine_data:{
-          sensors:{
-            gps:{
-              identifier:"foo_identifier_1",
-              name:"default_accelerometer",
-              source:"phone",
-              source_make:"samsung",
-              source_model:"galaxy",
-              source_os:"android",
-              imei:"",
-              data:{}
-            },
-            accelerometer:{
-              identifier:"foo_identifier_2",
-              name:"default_gps",
-              source:"phone",
-              source_make:"samsung",
-              source_model:"galaxy",
-              source_os:"android",
-              imei:"",
-              data:{}
-            }
-          }
-        },
-        happathon_settings:{
-          meta:{
-            update_link:'/api/v0/people/0'
-          },
-          question_forms:{
-            moment:{
-              base:'happathon_engine.moment',
-              additions:{
-                people:[],
-                locations:[]
-              },
-              allowed_times:{
-                start:'08:30',
-                end:'21:30'
-              }
-            },
-            daily:{
-              base:'happathon_engine.daily',
-              additions:{
-                values:['marshmallows','petting animals'],
-                people:[1,2,3],
-                locations:[]
-              },
-              allowed_times:{
-                start:'08:30',
-                end:'21:30'
-              }
-            },
-            starting:{
-              base:'happathon_engine.starting',
-              additions:{},
-              allowed_times:{
-                start:'08:30',
-                end:'21:30'
-              }
-            }
-          },
-          plugins:{
-            people:[{
-              id:1, // somerville
-              shared_attributes:['name_first','name_last'],
-              visible_in_menu:true
-            }],
-            insights:{
-              time_explorer:{
-                version:'0.0.1',
-                settings:{}
-              },
-              location_explorer:{
-                version:'0.0.1',
-                settings:{}
-              },
-              relationship_explorer:{
-                version:'0.0.1',
-                settings:{}
-              },
-              status:{
-                version:'0.0.1',
-                settings:{}
-              },
-              values_by_time:{
-                version:'0.0.1',
-                settings:{}
-              }
-            },
-            challenges:{
-              somerville_survey:{
-                version:'0.0.1',
-                settings:{}
-              },
-              '2kind':{
-                version:'0.0.1',
-                settings:{}
-              }
-            }
-          }
-        }
-      }
-    }
-  });
-
-}]);
-*/
-angular.module( 'happathon-engine.people-type-city', [
-  'happathon-engine.people-base'
-])
-.service('happathon-engine.people-type-city', [
-  'happathon-engine.people-base',
-  function (peopleBase) {
-    return angular.extend({},peopleBase,{
-      id:null,
-      type:'people',
-      version: '0.0.1',
-      name_first:"default",
-      name_last:"default",
-      menu_title:"default",
-      name_full:'default'
-    });
-  }
-]);
-angular.module( 'happathon-engine.people-type-human', [
-  'happathon-engine.people-base'
-])
-.service('happathon-engine.people-type-human', ['happathon-engine.people-base', function (peopleBase) {
-  return angular.extend({},peopleBase,{
-    id:null,
-    type:'people',
-    version: '0.0.1',
-    name_first:"default",
-    name_last:"default",
-    menu_title:"default",
-    name_full:'default',
-    settings:{
-      // each installed tab extends these settings
-      // each installed tab can also change the default settings of its dependencies
-    },
-    installed_tabs:{
-
-    }
-  });
-}]);
 
 
 
@@ -1420,7 +1180,7 @@ angular.module('happathon-plugin-generator', [])
     type:null, // the type of plugin, e.g., form, insight,
     menu_title:'',// the name used to display the plugin in lists and headers, max 20 chars
     urls:{
-      screenshots:['screenshots/example1.jpg','screenshots/example2.jpg','screenshots/example3.jpg'], // url for screenshots, relative to plugin dir
+      screenshots:['screenshots/example1.jpg','screenshots/example2.jpg','screenshots/example3.jpg'] // url for screenshots, relative to plugin dir
     },
     long_description:'', // to say things too long for the bower.json description. Max 1000 chars.  Falls back to bower desc
     keywords: ["happathon", "plugin","happathon-plugin"], // Used for search by keyword. Helps make your package easier to discover without people needing to know its name.
@@ -1431,7 +1191,7 @@ angular.module('happathon-plugin-generator', [])
     provided_datasources:[],
     required_apis:[],
     optional_apis:[],
-    provided_apis:[],
+    provided_apis:[]
   };
 }])
 .factory('pluginGenerator', ['happathonJsonBase', function (happathonJsonBase) {
@@ -1490,8 +1250,7 @@ angular.module('happathon-plugin-generator', [])
           }
         }
       },deviceObj);
-    },
-
+    }
   };
 }]);
 })( window, window.angular );

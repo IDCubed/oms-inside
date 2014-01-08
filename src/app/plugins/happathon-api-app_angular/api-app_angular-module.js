@@ -16,34 +16,32 @@ angular.module( 'happathon-api-app_angular', [
   var userObj;
   var appData;
   var options;
-  var installedPlugins;
   var appAPI = {
     create:function(){
       // peopleObj;
     },
     read:function(argStr,optionsObj){
       // TODO: convert this all over to just use lodash on the collections.
-      options=optionsObj||{};
+      options = optionsObj || {};
       switch(argStr){
       case 'plugin':
         return appData.settings.default_plugin.value;
       case 'people':
         if(options.one){
-          // if(options.one==='active'){
+          // if(options.one ==='active'){
           //   return appData.settings.default_people_id.value;
           // } else
-          if (options.one==='user'){
+          if (options.one === 'user'){
             return userObj;
-          } else{
-            return 'one supports "user" currently';
           }
+          return 'one supports "user" currently';
         }
         var listObj = appAPI.read('plugins',{filter:'-people-'});
         listObj[userObj.name] = userObj;
         return listObj;
       case 'plugins':
         if(options.one){
-          if(options.one==='active'){
+          if(options.one === 'active'){
             var set = appAPI.read('settings',{one:'default_plugin'}).value;
             console.log("appAPI.read('settings',{one:'default_plugin'})",appAPI.read('settings',{one:'default_plugin'}));
             return appData.plugins.installed[set];
@@ -56,21 +54,21 @@ angular.module( 'happathon-api-app_angular', [
         if(options.filter){
           var pluginListObj = {};
           for (var pluginName in appData.plugins.installed){
-            if(pluginName.indexOf(options.filter)>-1){
-              pluginListObj[pluginName]=appData.plugins.installed[pluginName];
+            if(pluginName.indexOf(options.filter) > -1){
+              pluginListObj[pluginName] = appData.plugins.installed[pluginName];
             }
           }
           return pluginListObj;
         }
         if(options.groupBy){
-          if(options.groupBy==='type'){
+          if(options.groupBy === 'type'){
             // transform {'plugin-type1-foo':{}
-            var plugLists={};
+            var plugLists = {};
             var pluginType;
             for (var plugName in appData.plugins.installed){
-              pluginType=plugName.replace(/^.+?-|-.+$/g,'');
+              pluginType = plugName.replace(/^.+?-|-.+$/g,'');
               if(!plugLists[pluginType]){
-                plugLists[pluginType]=[];
+                plugLists[pluginType] = [];
               }
               plugLists[pluginType].push(appData.plugins.installed[plugName]);
             }
@@ -99,16 +97,16 @@ angular.module( 'happathon-api-app_angular', [
     update:function(){
     },
     delete:function(){
-    },
+    }
   };
   var apisDeferred = $q.defer();
   var userPromise = Restangular.all('user').getList();
   userPromise.then(function(user){
     console.log('user',user);
-    if(user.constructor !== Array || user.length!==1){
+    if(user.constructor !== Array || user.length !== 1){
       return console.error('engine API should return a length 1 array of the user, not: ',user);
     }
-    userObj=user[0];
+    userObj = user[0];
     appData = userObj.installed_tabs.happathon_app;
     apisDeferred.resolve(appAPI);
   });
