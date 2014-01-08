@@ -1,0 +1,15 @@
+{
+  "name": "happathon-insight-status",
+  "type":"insight",
+  "menu_title":"Status",
+  "long_description":"Overall dashboard. Answers the question 'how is ___ doing?'",
+  "display_templates":{
+    "group":[
+      {"template":"happathon-insight-status : status-custom-test.tpl.partial"}
+    ],
+    "individual":[
+      {"template":"happathon-insight-utils_angular : heading.tpl.partial"},
+      {"template":"happathon-insight-utils_angular : all-attributes.tpl.partial"}
+    ]
+  }
+}

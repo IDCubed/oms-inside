@@ -1,6 +1,8 @@
 *.sw*
 *~
 build/
-bin/
 node_modules/
-vendor/
+bower_components/
+*demo/
+.jshintrc
+*tpl-compiled.html

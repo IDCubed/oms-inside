@@ -1,0 +1,4 @@
+<label for="{{idx}}">No Notifications Before:</label>
+<input name="{{idx}} "type="text" placeholder="{{template_data.value.start}}"/>
+<label for="{{idx}}">No Notifications After:</label>
+<input name="{{idx}} "type="text" placeholder="{{template_data.value.end}}"/>

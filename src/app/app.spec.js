@@ -1,19 +1,22 @@
-/* globals describe, beforeEach, inject, it, expect */
+/* globals describe, beforeEach, inject, it, chai */
 
 describe( 'AppCtrl', function() {
   describe( 'isCurrentUrl', function() {
-    var AppCtrl, $location, $scope;
+    // var $location, $scope, AppCtrl;
+    var expect = chai.expect;
 
-    beforeEach( module( 'happathon' ) );
+    // beforeEach( inject( function( $controller, _$location_, $rootScope ) {
+    //   $location = _$location_;
+    //   $scope = $rootScope.$new();
+    //   AppCtrl = $controller( 'AppCtrl', { $location: $location, $scope: $scope });
+    // }));
+    angular.mock.module('happathon',function(utils){
+      console.log(utils);
+    });
 
-    beforeEach( inject( function( $controller, _$location_, $rootScope ) {
-      $location = _$location_;
-      $scope = $rootScope.$new();
-      AppCtrl = $controller( 'AppCtrl', { $location: $location, $scope: $scope });
-    }));
 
-    it( 'should pass a dummy test', inject( function() {
-      expect( true ).toBeTruthy();
-    }));
+    it( 'should pass a dummy test', function() {
+      expect( true ).to.be.ok;
+    });
   });
 });

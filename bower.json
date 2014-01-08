@@ -1,18 +1,38 @@
 {
   "name": "happathon",
   "version": "0.0.1",
-  "devDependencies": {
-    "angular": "~1.2.2",
-    "angular-mocks": "~1.2.2",
-    "restangular":"~1.1.8",
-    "angular-touch":"~1.2.2",
-    "bootstrap": "~3.0.2",
+  "dependencies": {
+    "angular": "~1.2.5",
     "angular-bootstrap": "~0.6.0",
-    "angular-ui-router": "~0.2.0",
+    "angular-gesture": "~1.3.0",
+    "angular-mocks": "~1.2.2",
+    "angular-touch": "~1.2.2",
+    "angular-ui-router": "~0.2.7",
     "angular-ui-utils": "~0.0.4",
-    "angular-resource": "~1.2.2",
+    "bootstrap": "~3.0.3",
+    "d3": "~3.3.12",
+    "d3.chart": "~0.1.3",
     "Faker": "~0.5.11",
-    "jQuery": "~2.0.3"
+    "jQuery": "~2.0.3",
+    "lodash": "~2.4.1",
+    "restangular": "~1.2.1"
   },
-  "dependencies": {}
+  "authors": [
+    "Adam Laughlin <adam.laughlin@gmail.com>"
+  ],
+  "description": "The Happathon Project Application & Engine",
+  "keywords": [
+    "happathon",
+    "happiness",
+    "well-being",
+    "big-data",
+    "data-visualization",
+    "quantified-self",
+    "self-improvement"
+  ],
+  "license": "MIT",
+  "homepage": "happathon.com",
+  "resolutions": {
+    "angular": "~1.2.5"
+  }
 }

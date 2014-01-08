@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="happathon">
+  <head>
+    <title ng-bind-template="{{$root.people.menuTitle}}"></title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <!-- font awesome from BootstrapCDN -->
+<!--     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+ -->
+    <!-- compiled CSS -->
+    <!-- token_replace_css_here -->
+
+    <!-- compiled Third Party JavaScript -->
+    <!-- token_replace_thirdparty_js_here -->
+
+    <!-- compiled App JavaScript -->
+    <!-- token_replace_js_here -->
+  </head>
+  <body ng-cloak>
+    <div  class="root-container"
+          ng-swipe-left="$root.showleftmenu=0;"
+          ng-swipe-right="$root.showrightmenu=0;"
+          ng-click="$root.closeMenus();"
+          hap-size>
+
+<!--
+      <div  class="menuleft"
+            ng-class="{hide:!showleftmenu, slide:showleftmenu}"
+            left-menu> -->
+
+      <div ui-view="menuleft">
+      </div>
+      <div ui-view="menuright">
+      </div>
+      <div class="topnav" ui-view="topnav">
+      </div>
+      <div  class="mainview" ui-view="main">
+      </div>
+    </div>
+  </body>
+</html>

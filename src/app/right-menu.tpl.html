@@ -1,0 +1,13 @@
+<div class="menuright"
+    ng-class="{active:$root.showrightmenu}"
+    ng-click="$event.stopPropagation();">
+  <div class="menu-title">Settings</div>
+  <div class="settings-section">App Settings</div>
+  <form>
+    <partials-container template-objects-array="appSettings"></partials-container>
+  </form>
+  <div class="settings-section plugin">Plugin Settings</div>
+  <form>
+    <partials-container template-objects-array="settings"></partials-container>
+  </form>
+</div>

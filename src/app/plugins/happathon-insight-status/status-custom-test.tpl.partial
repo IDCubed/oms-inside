@@ -1,0 +1,9 @@
+<div>
+  <h1>Status</h1>
+  <div>type: {{$root.people.type}}</div>
+  <div>subtype: {{$root.people.subtype}}</div>
+  <div>People is_user: {{$root.people.is_user}}</div>
+  <div>People name_first: {{$root.people.name_first}}</div>
+  <div>People name_last: {{$root.people.name_last}}</div>
+  <div>People name_full: {{$root.people.name_last}}</div>
+</div>
