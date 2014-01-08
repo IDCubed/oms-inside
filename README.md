@@ -104,21 +104,18 @@ oms-happathon/
   |- travis.yml // enables continuous integration via TravisCI
   |- src/ // contains all the raw source files
   |  |- happathon-android/ // contains all code that runs on android
-  |  |- assets/
-  |  |  |- <static files>
   |  |- app/ // the happathon app
-  |  |  |- index.html
+  |  |  |- app-utils-module.js // utilities for app.js
   |  |  |- app.js // routing, rendering, and plugin control
   |  |  |- app.less // app-wide styles
   |  |  |- app.spec.js // tests for app.js
-  |  |  |- people-module.js // handles people display
-  |  |  |- people-spec.js
-  |  |  |- insight-base.tpl.html
-  |  |  |- plugin-list.tpl.html
-  |  |  |- plugin-adding-instructions.tpl.html  // instructions for how to add a plugin
-  |  |  |- mock-backend-module.js
-  |  |  |- settings-config-module.js // provides app specific settings schema with default for the engine to store
-  |  |  |- people-type-base-module.js // contains the base people json for new people types to extend
+  |  |  |- assets/
+  |  |  |  |- <static files>  // images, fonts, etc.
+  |  |  |- index.html // the main html file that contains all our views
+  |  |  |- left-menu.tpl.html  // template for the left nav (plugins) menu
+  |  |  |- right-menu.tpl.html  // template for the right nav (settings) menu
+  |  |  |- thirdparty/  //third party libs
+  |  |  |- top-nav.tpl.html  // template for the top nav bar
   |  |  |- plugins/
   |  |  |  |- happathon-api-app_angular/
   |  |  |  |  |- api-app_angular-module.js // wraps the raw data api for angular-specific performance improvements
@@ -147,10 +144,6 @@ oms-happathon/
                                      // happathon-engine/mock-backend/people-user-module.js
 
 ```
-
-What follows is a brief description of each entry, but most directories contain
-their own `README.md` file with additional documentation, so browse around to
-learn more.
 
 ### Detailed Installation
 
