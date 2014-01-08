@@ -61,7 +61,7 @@ var happ = angular.module( 'happathon', [
     });
   }
 ])
-
+// run is where we set initial rootscope properties
 .run([
   '$rootScope',
   '$state',
