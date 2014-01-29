@@ -20,26 +20,29 @@ Click [http://localhost:8000](http://localhost:8000) to open the application in 
 
 And Boom!  You're set up to hack on any of the project's HTML/JavaScript/AngularJS code.  Making changes to those files in the src/ directory will also reload your page automatically.  Happy hacking!
 
-##What next?
+## Inside: Because What's Inside is What Matters
 
-For issues to get started on, check out our [issues page](issues).  If you don't see one that interests you, ask!  There are other things not on that list.
+This project's purpose is to advance progress in the mental measurement space in order to complement society's current external metrics with a new breed of measurements based on thought, emotion, learning, well-being, and other internal aspects, so that we may all live more satisfying, healthier lives.
 
-We're currently looking for:
-- Data Visualizers to make well-being insights intuitive
-- Android developer(s) to display html app in webview, set up notifications, and integrate sensor library
-- iPhone developer(s) for the same
-- UI Developers (HTML/JavaScript/CSS/Angular)
-- UX designers to make the app is useful and enjoyable
-- Beta Testers: To Beta test the app when it's ready, join the [Beta Testers Google Group](https://groups.google.com/forum/#!forum/happathon).
+### The Problem:
+Our society's current metrics are based on external measures like products produced and students educated.  While cutting edge a thousand years ago, or even twenty years ago, external metrics oversimplify today's diverse, mobile, networked societies.  Take education for example, where the "common core" evaluates teacher effectiveness based on test scores, while ignoring whether students are reaching their potential, or thinking flexibly and creatively about problems, or even growing to enjoy learning.  Or consider the economy, where national GDP increases with antidepressant drug sales, oil spills, and crime.
 
-Learn more about or the project in general at [Meetup](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/about/), and tech in particular by reading on below.
+### The Alternative:
+Modern sensor technologies and machine learning enable complementary metrics that more deeply reflect our humanity.  Imagine a common core based on metrics like 90% of students learning at or above 90% of their potential each day, or where teachers are evaluated by the percent of students that emotionally loved learning more this year.  Consider a world where the success of a nation depends on it's people's resilience, creativity, peacefulness and happiness, not just the pace at which they consume its resources.
 
-To ask questions, check out our [Communication Channels](#communication) or join one of the [Meetups](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/).
+### The Tech:
+At present, Inside is an an open source, free, customizable platform for Data Scientists, Researchers, Quantified Selfers, and Companies to collectively experiment with past and present mental life data contributed by many individuals and groups.  It's initially designed to run on mobile phones since many of us carry them.  Eventually it will extend to other platforms.
 
+## Audience
 
-## Pilot Goal
+### For Researchers:
+Add your own groups.  Run your own studies.  Include your own surveys.  Get bonus past and present sensor data, including the data collected from other studies.
 
-Increase participating Somerville residents' well-being (as each defines it) by 2% over baseline by 12/31/2014.
+### For Quantified Selfers:
+Know yourself better through data that provides new perspectives on your subjective experience.  Learn with others by creating your own groups, forms, and data mashups with family, friends, colleagues, other QSers... anyone.  Build, share, and mash up algorithms, visualizations, and data sources with others in the community.  Even monetize the data you've collected.  Again, all for free.  This project is by QSers for QSers.
+
+### For Companies:
+Collect, mine, and visualize data via plugins without the development and maintenance costs of creating a full sensor data platform.  Build on community-contributed plugins and eventually create both free and paid versions.  (Want that functionality sooner?  You can help make it happen!)
 
 ## Philosophy
 
