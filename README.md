@@ -1,6 +1,8 @@
-# [The H(app)athon Project](https://github.com/IDCubed/oms-happathon) [![Build Status](https://travis-ci.org/IDCubed/oms-happathon.png?branch=master)](https://travis-ci.org/IDCubed/oms-happathon)
+# [The H(app)athon Project](https://github.com/IDCubed/oms-inside) [![Build Status](https://travis-ci.org/IDCubed/oms-inside.png?branch=master)](https://travis-ci.org/IDCubed/oms-inside)
 
 ***
+
+note: We're in the process of changing names from Happathon to Inside as we decouple the platform from the applications.  We'll still have a somerville application, but it's a separate project from the Inside platform.
 
 ## Quick Start
 
@@ -8,8 +10,8 @@
 
 ```sh
 (Note: on Windows, you can ignore the "sudo" part)
-$ git clone git@github.com:IDCubed/oms-happathon.git    # copy repo to your computer
-$ cd oms-happathon    # change to happathon directory
+$ git clone git@github.com:IDCubed/oms-inside.git    # copy repo to your computer
+$ cd oms-inside    # change to inside directory
 $ sudo npm -g install grunt-cli karma bower    # installs grunt-cli,karma,bower
 $ sudo npm install    # installs node dependencies in a /node_modules/ directory
 $ bower install    # installs js/css dependencies in your /bower_components/ directory
@@ -46,23 +48,8 @@ Collect, mine, and visualize data via plugins without the development and mainte
 
 ## Philosophy
 
-**Self-defined well-being**
-Our key differentiator is that we do not attempt to apply a “one size fits all” approach. Well-being is inherently subjective and differs with different people’s needs and perceptions. Thus this application will apply machine learning to customize a personal wellbeing index for each user, then aggregate our personal indices for a community index. As our perceptions and communities change over time, the aggregate indices change with us.
-
-**Separate Measure from Improve (Engine and Application)**
-There are [many](http://emotionsense.org/) [happiness-related](https://www.happier.com/) [applications](http://www.happsee.com/).  There is no standard way mobile applications measure happiness.  We're building the Happathon Engine, a happiness measurement tool co-designed with psychologists that any mobile happiness app can include.  That way developers can spend less time measuring well-being, and more time improving it.  To [dogfood](http://en.wikipedia.org/wiki/Eating_your_own_dog_food) it, we're also building the Happathon Application designed to measurably improve well-being.
-
-**Empower Community**
-TODO (community visualizations, question additions, challenges)
-
-**Rapid Iteration**
-A web app to run in iPhone and Android to iterate quickly, combined with a mobile sensor library to gain rich data for insights.  On Android, the application runs in a webview paired with the sensor library funf journal or emotionsense libraries.
-
-**Usefulness**
-Only questions that have obvious usefulness.
-
-
-
+**Unique solutions. Common plumbing**
+Solutions, perspectives, insights, are what make a difference.  The authentication architecture or button click code adds no value for end users.  So we're commoditizing the valueless, mundane parts of apps while while providing developers a fast, easy, common platform for creating and distributing internal measurement applications.
 
 ## Architecture
 - Nearly everything is a plugin so it's easy to extend the app's functionality
@@ -84,7 +71,7 @@ Only questions that have obvious usefulness.
 
 \* Note: All plugins will eventually be separate git repositories. They're placed a plugins directory to encourage modularity and act as if they were installed.
 
-All plugin directories (those starting with ```happathon-```) contain a ```happathon.json``` file that defines the plugin configuration.  It will have differences depending on the type of plugin.  The different plugin types, and their JSON structure are defined in the [happathon.json spec](https://docs.google.com/document/d/10c_P2pixt1jjV0sPP86JDx1RAvLwvfJpFYM7ISh3Pls/edit#).
+All plugin directories (those starting with ```inside-```) contain a ```inside.json``` file that defines the plugin configuration.  It will have differences depending on the type of plugin.  The different plugin types, and their JSON structure are defined in the [inside.json spec](https://docs.google.com/document/d/10c_P2pixt1jjV0sPP86JDx1RAvLwvfJpFYM7ISh3Pls/edit#).
 
 Plugins central to the app cannot be removed, but community-contributed plugins may be added and removed as desired.
 
@@ -92,8 +79,9 @@ Plugins central to the app cannot be removed, but community-contributed plugins 
 
 At a high level, the structure looks roughly like this:
 
+note: This directory structure is outdated due to project changes.  I'll update it as soon as I get the repo's files all updated, and names changed. See [#49](https://github.com/IDCubed/oms-inside/issues/49)- Adam
 ```
-oms-happathon/
+oms-inside/
   |- eslint.json // file syntax checking
   |- bower_components/ // all thirdparty libraries before they get copied to src/app/thirdparty
   |- bower.json // bower dependencies stored in bower_components
@@ -106,8 +94,8 @@ oms-happathon/
   |- package.json // node package dependencies
   |- travis.yml // enables continuous integration via TravisCI
   |- src/ // contains all the raw source files
-  |  |- happathon-android/ // contains all code that runs on android
-  |  |- app/ // the happathon app
+  |  |- inside-android/ // contains all code that runs on android
+  |  |- app/ // the inside app
   |  |  |- app-utils-module.js // utilities for app.js
   |  |  |- app.js // routing, rendering, and plugin control
   |  |  |- app.less // app-wide styles
@@ -120,16 +108,16 @@ oms-happathon/
   |  |  |- thirdparty/  //third party libs
   |  |  |- top-nav.tpl.html  // template for the top nav bar
   |  |  |- plugins/
-  |  |  |  |- happathon-api-app_angular/
+  |  |  |  |- inside-api-app_angular/
   |  |  |  |  |- api-app_angular-module.js // wraps the raw data api for angular-specific performance improvements
-  |  |  |  |  |- happathon.json // (these will be in every directory. We won't take up space with them below this)
-  |  |  |  |- happathon-challenge-2kind/  // initial campaign
-  |  |  |  |- happathon-challenge-happathon-research/ // provides json for starting questions
-  |  |  |  |- happathon-challenge-somerville-happiness-research/ // somerville happiness survey
-  |  |  |  |- happathon-challenge-utils_angular/ // angular-specific templates for challenges to reference
-  |  |  |  |- happathon-engine/ // the engine is required for any happathon app.  It takes care of user data,
+  |  |  |  |  |- inside.json // (these will be in every directory. We won't take up space with them below this)
+  |  |  |  |- inside-challenge-2kind/  // initial campaign
+  |  |  |  |- inside-challenge-inside-research/ // provides json for starting questions
+  |  |  |  |- inside-challenge-somerville-happiness-research/ // somerville happiness survey
+  |  |  |  |- inside-challenge-utils_angular/ // angular-specific templates for challenges to reference
+  |  |  |  |- inside-engine/ // the engine is required for any inside app.  It takes care of user data,
                                 // authentication, settings management, and any other CRUD operations
-                                // it doesn't belong in plugins since it's a separate app from the happathon app
+                                // it doesn't belong in plugins since it's a separate app from the inside app
                                 // putting it here for mocking until we implement it in the backend
   |  |  |  |  |- engine-module.js // temporary angular module to mock the engine
   |  |  |  |  |- assets/
@@ -138,20 +126,20 @@ oms-happathon/
   |  |  |  |  |  |- mock-backend-module.js // provides raw data CRUD interface to all API plugins
   |  |  |  |  |  |- mock-backend-spec.js // unit tests for the above
   |  |  |  |  |  |- people-user-module.js // temporary angular module to load the user object - this should be in db
-  |  |  |  |- happathon-insight-explorer/ // explorers let you explore various aspects of your data
-  |  |  |  |- happathon-insight-status/ // people (individual or group) status dashboard
-  |  |  |  |- happathon-insight-utils_angular/ // angular-specific templates for insight plugins to reference
-  |  |  |  |- happathon-org_customization-somerville/ // somerville customizations
-  |  |  |  |- happathon-people-xxxx/ // eventually discoverable people (groups & individuals) will be listed as
+  |  |  |  |- inside-insight-explorer/ // explorers let you explore various aspects of your data
+  |  |  |  |- inside-insight-status/ // people (individual or group) status dashboard
+  |  |  |  |- inside-insight-utils_angular/ // angular-specific templates for insight plugins to reference
+  |  |  |  |- inside-org_customization-somerville/ // somerville customizations
+  |  |  |  |- inside-people-xxxx/ // eventually discoverable people (groups & individuals) will be listed as
                                      // installable plugins.  for now they're hard coded into
-                                     // happathon-engine/mock-backend/people-user-module.js
+                                     // inside-engine/mock-backend/people-user-module.js
 
 ```
 
 ### Detailed Installation
 
 This section provides a little more detailed understanding of what goes into
-getting `oms-happathon` up and running. Though `oms-happathon` is really simple
+getting `oms-inside` up and running. Though `oms-inside` is really simple
 to use, it might help to have an understanding of the tools involved here, like
 Node.js and Grunt and Bower. If you're completely new to highly organized,
 modern JavaScript development, take a few short minutes to read [this overview
@@ -159,7 +147,7 @@ of the tools](tools.md) before continuing with this section.
 
 Okay, ready to go? Here it is:
 
-`oms-happathon` uses [Grunt](http://gruntjs.org) as its build system, so
+`oms-inside` uses [Grunt](http://gruntjs.org) as its build system, so
 [Node.js](http://nodejs.org) is required. Also, Grunt by default no longer comes
 with a command-line utility and Karma and Bower must end up in your global path
 for the build system to find it, so they must be installed independently. Once
@@ -176,8 +164,8 @@ from GitHub, or merge the branch into your existing repository. Assuming you're
 starting from scratch, simply clone this repository using git:
 
 ```sh
-$ git clone git@github.com:IDCubed/oms-happathon.git oms-happathon
-$ cd oms-happathon
+$ git clone git@github.com:IDCubed/oms-inside.git oms-inside
+$ cd oms-inside
 ```
 
 And then install the remaining build dependencies locally:
@@ -190,9 +178,9 @@ This will read the `dependencies` (empty by default) and the `devDependencies`
 (which contains our build requirements) from `package.json` and install
 everything needed into a folder called `node_modules/`.
 
-There are many Bower packages used by `oms-happathon`, like Twitter Bootstrap
+There are many Bower packages used by `oms-inside`, like Twitter Bootstrap
 and Angular UI, which are listed in `bower.js`. To install them into the
-`vendor/` directory, simply run:
+`bower_components/` directory, simply run:
 
 ```sh
 $ bower install
@@ -211,7 +199,7 @@ application (or we download it from a different computer), we can simply run the
 `bower install` command as above and all our dependencies will be installed for
 us. Neat!
 
-Technically, `oms-happathon` is now ready to go.
+Technically, `oms-inside` is now ready to go.
 
 However, prior to hacking on your application, you will want to modify the
 `package.json` file to contain your project's information. Do not remove any
@@ -241,7 +229,7 @@ This will build, concatenate and minify your sources and place them by default i
 The best way to learn about the build system is by familiarizing yourself with
 Grunt and then reading through the heavily documented build script,
 `Gruntfile.js`. But you don't need to do that to be very productive with
-`oms-happathon`. What follows in this section is a quick introduction to the
+`oms-inside`. What follows in this section is a quick introduction to the
 tasks provided and should be plenty to get you started.  TODO, generate this from the
 Gruntfile.js 'build' section comments
 
@@ -268,9 +256,11 @@ expected, open the same url as for build - ```http://localhost:8000``` in your b
 
 ### Continuous Integration
 
+We're currently using Travis-CI for integration.
+
 ## Roadmap
 
-For now, check out [the pilot roadmap](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/about/)
+[Our Roadmap](ROADMAP.md)
 
 
 ## Contributing
@@ -283,15 +273,15 @@ Then check out [Contributing](CONTRIBUTING.md)
 
 **Chat**
 
-Our IRC channel on freenode is #happathon.  If you're unfamiliar with IRC, use Freenode's webchat.  Go to http://webchat.freenode.net/, pick a nickname, and enter #happathon for the channel, [like so](http://photos1.meetupstatic.com/photos/event/3/8/5/6/highres_305894422.jpeg).  That will connect you to our chat channel.
+We're currently using the #oms channel on freenode.  If you're unfamiliar with IRC, use Freenode's webchat.  Go to http://webchat.freenode.net/, pick a nickname, and enter #oms for the channel, [like so](http://photos1.meetupstatic.com/photos/event/3/8/5/6/highres_305894422.jpeg).  That will connect you to our chat channel.
 
 **Event Coordination**
 
-On [Meetup](http://www.meetup.com/The-Happathon-Project-Hacking-Somerville-Happiness/)
+On [Meetup](http://www.meetup.com/Hacking-Somerville-Happiness/)
 
 **Application issues/feedback **
 
-Via our [Github Repository](https://github.com/IDCubed/oms-happathon/issues).  Feel free to submit issues if you find bugs or see something that needs doing.  Even better, do it and submit a pull request. :)
+Via our [Github Repository](https://github.com/IDCubed/oms-inside/issues).  Feel free to submit issues if you find bugs or see something that needs doing.  Even better, do it and submit a pull request. :)
 
 ### Licensing
 By submitting a patch, you agree to license your work under the same license as that used by the project.
