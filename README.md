@@ -1,4 +1,4 @@
-# [The H(app)athon Project](https://github.com/IDCubed/oms-inside) [![Build Status](https://travis-ci.org/IDCubed/oms-inside.png?branch=master)](https://travis-ci.org/IDCubed/oms-inside)
+# [Inside: Because What's Inside is What Matters](https://github.com/IDCubed/oms-inside) [![Build Status](https://travis-ci.org/IDCubed/oms-inside.png?branch=master)](https://travis-ci.org/IDCubed/oms-inside)
 
 ***
 
