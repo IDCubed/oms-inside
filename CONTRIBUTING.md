@@ -91,7 +91,7 @@ Following this process is the best way to get your work included.  (we're happy 
    ```
 
 4. For JavaScript and Angular expressions in the html, make sure to add tests.
-   Patches and features will not be accepted without tests. If you're running `grunt watch` while developing (and you should be!), you should see these fail in the terminal window where you ran `grunt watch`.
+   Patches and features will not be accepted without tests. If you're running `grunt dev` while developing (and you should be!), you should see these fail in the terminal window where you ran `grunt dev`.
 
    For more, see TODO(how to write tests).
 
