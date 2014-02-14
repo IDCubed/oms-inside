@@ -65,13 +65,13 @@ angular.module( 'happathon-api-app_angular', [
             // transform {'plugin-type1-foo':{}
             var plugLists = {};
             var pluginType;
-            for (var plugName in appData.plugins.installed){
+            angular.forEach(appData.plugins.installed,function(plugName,plugObj){
               pluginType = plugName.replace(/^.+?-|-.+$/g,'');
               if(!plugLists[pluginType]){
                 plugLists[pluginType] = [];
               }
-              plugLists[pluginType].push(appData.plugins.installed[plugName]);
-            }
+              plugLists[pluginType].push(plugObj);
+            });
             return plugLists;
           }
           return 'options groupBy only supports "type"';

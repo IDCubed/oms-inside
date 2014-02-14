@@ -326,6 +326,7 @@ module.exports = function ( grunt ) {
       // src_js:{
       //   src:'<%= src.dirs.app %>app.js'
       // },
+      // gruntfile:'Gruntfile.js',
       src_js:['<%= src.dirs.app %>**/*.js', '!<%= src.dirs.thirdparty %>**'],
       built_appjs: '<%= build.dirs.js %>app.js',
       built_html_templates: '<%= build.dirs.app %>html_templates_jsfied.js',
