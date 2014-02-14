@@ -1,4 +1,4 @@
-# Contributing to The H(app)athon Project
+# Contributing to Inside
 
 Please take a moment to review this document in order to make the contribution
 process easy and effective for everyone involved.
@@ -77,7 +77,7 @@ request (e.g. implementing features, refactoring code), otherwise you may spend
 a lot of time working on something that the project's maintainers may not
 want to merge into the project.
 
-Following this process is the best way to get your work included.  (we're happy to answer questions on [IRC](https://github.com/IDCubed/oms-happathon#communication)):
+Following this process is the best way to get your work included.  (we're happy to answer questions on [IRC](https://github.com/IDCubed/oms-inside#communication)):
 
 1. [Fork](http://help.github.com/fork-a-repo/) the project using the Fork Button on the project's github page.
 
@@ -98,7 +98,7 @@ Following this process is the best way to get your work included.  (we're happy 
 5. If you forked more than a day ago, add the project repo as a remote, get the latest changes, and run the tests:
 
    ```bash
-   git remote add upstream https://github.com/IDCubed/oms-happathon
+   git remote add upstream https://github.com/IDCubed/oms-inside
    git checkout master
    git pull upstream master
    git checkout issue42
