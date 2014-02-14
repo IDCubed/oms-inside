@@ -1,4 +1,4 @@
-## v0.1
+## v0.1 (2014-04-02)
  - Settings API persisting changes
  - Plugins CRUD API Complete
  - People CRUD API Complete
@@ -13,7 +13,7 @@
  - Users can start gathering data for themselves.
  - Custom groups addable via manually creating json for them
 
-## v0.2
+## v0.2 (2014-06-02)
  - Plugin market decided & implemented (e.g., vanilla bower or a custom install)
  - Plugin json specs complete for algorithms & themes
  - 95% test coverage
@@ -22,12 +22,12 @@
  - Data source format decided for devices
  - Users can start visualizing others' data.
 
-## v0.3
+## v0.3 (TBD)
  - Custom groups can be added from the market via Inside UI
  - 98% test coverage
 
-## v0.4
+## v0.4 (TBD)
  - Developers/companies can monetize plugins
 
-## v0.5
+## v0.5 (TBD)
  - Users can monetize data
