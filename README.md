@@ -2,7 +2,7 @@
 
 ***
 
-note: We're in the process of changing names from Happathon to Inside as we decouple the platform from the applications.  We'll still have a somerville application, but it's a separate project from the Inside platform.
+note: This project is no longer affiliated with The Happathon Project, and is not under active development.
 
 ## Quick Start
 
